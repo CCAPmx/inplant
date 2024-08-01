@@ -1,0 +1,88 @@
+[06-Sep-2023 18:10:38 America/Mexico_City] PHP Warning:  include(pages/404.php): Failed to open stream: No such file or directory in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[06-Sep-2023 18:10:38 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[07-Sep-2023 09:25:01 America/Mexico_City] PHP Warning:  include(pages/404.php): Failed to open stream: No such file or directory in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[07-Sep-2023 09:25:01 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[07-Sep-2023 09:26:05 America/Mexico_City] PHP Warning:  include(pages/404.php): Failed to open stream: No such file or directory in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[07-Sep-2023 09:26:05 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[07-Sep-2023 09:26:39 America/Mexico_City] PHP Warning:  include(pages/404.php): Failed to open stream: No such file or directory in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[07-Sep-2023 09:26:39 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[12-Sep-2023 13:45:39 America/Mexico_City] PHP Warning:  include(pages/404.php): Failed to open stream: No such file or directory in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[12-Sep-2023 13:45:39 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 103
+[12-Sep-2023 14:58:26 America/Mexico_City] PHP Warning:  include(pages/404.php): Failed to open stream: No such file or directory in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 104
+[12-Sep-2023 14:58:26 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 104
+[12-Sep-2023 14:58:32 America/Mexico_City] PHP Warning:  include(pages/404.php): Failed to open stream: No such file or directory in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 104
+[12-Sep-2023 14:58:32 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php80/usr/share/pear:/opt/alt/php80/usr/share/php:/usr/share/pear:/usr/share/php') in /home/lersanco/public_html/lersansist/vistas/plantilla.php on line 104
+[20-Sep-2023 20:06:05 America/Mexico_City] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user 'lersanco_lersan'@'localhost' (using password: YES) in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php:10
+Stack trace:
+#0 /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php(10): PDO->__construct('mysql:host=loca...', 'lersanco_lersan', 'Q&h[)#[%C&{K')
+#1 /home/fbp6buih981a/public_html/lersansist/modelos/usuarios.modelo.php(20): Conexion::conectar()
+#2 /home/fbp6buih981a/public_html/lersansist/controladores/usuarios.controlador.php(26): ModeloUsuarios::MdlMostrarUsuariosmod('usuarios', 'usuario', 'test3')
+#3 /home/fbp6buih981a/public_html/lersansist/vistas/pages/login.php(59): ControladorUsuarios::ctrIngresoUsuario()
+#4 /home/fbp6buih981a/public_html/lersansist/vistas/plantilla.php(121): include('/home/fbp6buih9...')
+#5 /home/fbp6buih981a/public_html/lersansist/controladores/plantilla.controlador.php(7): include('/home/fbp6buih9...')
+#6 /home/fbp6buih981a/public_html/lersansist/index.php(25): ControloadorPlantilla:: in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php on line 10
+[20-Sep-2023 20:07:15 America/Mexico_City] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user 'lersanco_lersan'@'localhost' (using password: YES) in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php:10
+Stack trace:
+#0 /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php(10): PDO->__construct('mysql:host=loca...', 'lersanco_lersan', 'Q&h[)#[%C&{K')
+#1 /home/fbp6buih981a/public_html/lersansist/modelos/usuarios.modelo.php(20): Conexion::conectar()
+#2 /home/fbp6buih981a/public_html/lersansist/controladores/usuarios.controlador.php(26): ModeloUsuarios::MdlMostrarUsuariosmod('usuarios', 'usuario', 'test3')
+#3 /home/fbp6buih981a/public_html/lersansist/vistas/pages/login.php(59): ControladorUsuarios::ctrIngresoUsuario()
+#4 /home/fbp6buih981a/public_html/lersansist/vistas/plantilla.php(121): include('/home/fbp6buih9...')
+#5 /home/fbp6buih981a/public_html/lersansist/controladores/plantilla.controlador.php(7): include('/home/fbp6buih9...')
+#6 /home/fbp6buih981a/public_html/lersansist/index.php(25): ControloadorPlantilla:: in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php on line 10
+[20-Sep-2023 20:22:10 America/Mexico_City] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user 'lersanco_lersan'@'localhost' (using password: YES) in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php:10
+Stack trace:
+#0 /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php(10): PDO->__construct('mysql:host=loca...', 'lersanco_lersan', 'Q&h[)#[%C&{K')
+#1 /home/fbp6buih981a/public_html/lersansist/modelos/usuarios.modelo.php(20): Conexion::conectar()
+#2 /home/fbp6buih981a/public_html/lersansist/controladores/usuarios.controlador.php(26): ModeloUsuarios::MdlMostrarUsuariosmod('usuarios', 'usuario', 'test3')
+#3 /home/fbp6buih981a/public_html/lersansist/vistas/pages/login.php(59): ControladorUsuarios::ctrIngresoUsuario()
+#4 /home/fbp6buih981a/public_html/lersansist/vistas/plantilla.php(121): include('/home/fbp6buih9...')
+#5 /home/fbp6buih981a/public_html/lersansist/controladores/plantilla.controlador.php(7): include('/home/fbp6buih9...')
+#6 /home/fbp6buih981a/public_html/lersansist/index.php(25): ControloadorPlantilla:: in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php on line 10
+[20-Sep-2023 20:23:02 America/Mexico_City] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user 'lersanco_lersan'@'localhost' (using password: YES) in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php:10
+Stack trace:
+#0 /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php(10): PDO->__construct('mysql:host=loca...', 'lersanco_lersan', 'Q&h[)#[%C&{K')
+#1 /home/fbp6buih981a/public_html/lersansist/modelos/usuarios.modelo.php(20): Conexion::conectar()
+#2 /home/fbp6buih981a/public_html/lersansist/controladores/usuarios.controlador.php(26): ModeloUsuarios::MdlMostrarUsuariosmod('usuarios', 'usuario', 'test3')
+#3 /home/fbp6buih981a/public_html/lersansist/vistas/pages/login.php(59): ControladorUsuarios::ctrIngresoUsuario()
+#4 /home/fbp6buih981a/public_html/lersansist/vistas/plantilla.php(121): include('/home/fbp6buih9...')
+#5 /home/fbp6buih981a/public_html/lersansist/controladores/plantilla.controlador.php(7): include('/home/fbp6buih9...')
+#6 /home/fbp6buih981a/public_html/lersansist/index.php(25): ControloadorPlantilla:: in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php on line 10
+[03-Oct-2023 14:15:45 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 105
+[03-Oct-2023 14:15:45 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 105
+[03-Oct-2023 14:16:14 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 105
+[03-Oct-2023 14:16:14 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 105
+[04-Oct-2023 18:09:18 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[04-Oct-2023 18:09:18 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[11-Oct-2023 11:55:14 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[11-Oct-2023 11:55:14 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[11-Oct-2023 20:45:47 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[11-Oct-2023 20:45:47 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[16-Oct-2023 23:13:56 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[16-Oct-2023 23:13:56 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[23-Oct-2023 11:23:54 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[23-Oct-2023 11:23:54 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 112
+[01-Nov-2023 09:33:28 America/Mexico_City] PHP Warning:  include(pages/programacionvisitas.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:28 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/programacionvisitas.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:30 America/Mexico_City] PHP Warning:  include(pages/programacionvisitas.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:30 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/programacionvisitas.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:31 America/Mexico_City] PHP Warning:  include(pages/programacionvisitas.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:31 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/programacionvisitas.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:32 America/Mexico_City] PHP Warning:  include(pages/programacionvisitas.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:32 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/programacionvisitas.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:33 America/Mexico_City] PHP Warning:  include(pages/programacionvisitas.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:33 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/programacionvisitas.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:34 America/Mexico_City] PHP Warning:  include(pages/programacionvisitas.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:34 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/programacionvisitas.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:36 America/Mexico_City] PHP Warning:  include(pages/programacionvisitas.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[01-Nov-2023 09:33:36 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/programacionvisitas.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 117
+[25-Jan-2024 18:18:00 America/Mexico_City] PHP Notice:  Trying to access array offset on value of type null in /home/fbp6buih981a/public_html/controladores/usuarios.controlador.php on line 252
+[25-Jan-2024 18:18:00 America/Mexico_City] PHP Notice:  Trying to access array offset on value of type null in /home/fbp6buih981a/public_html/controladores/usuarios.controlador.php on line 252
+[25-Jan-2024 18:18:00 America/Mexico_City] PHP Notice:  Trying to access array offset on value of type null in /home/fbp6buih981a/public_html/controladores/usuarios.controlador.php on line 252
+[25-Jan-2024 18:18:00 America/Mexico_City] PHP Notice:  Trying to access array offset on value of type null in /home/fbp6buih981a/public_html/controladores/usuarios.controlador.php on line 252
+[20-May-2024 12:43:27 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 125
+[20-May-2024 12:43:27 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 125
+[20-May-2024 12:44:15 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 125
+[20-May-2024 12:44:15 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 125
+[20-May-2024 13:18:45 America/Mexico_City] PHP Warning:  include(pages/404.php): failed to open stream: No such file or directory in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 125
+[20-May-2024 13:18:45 America/Mexico_City] PHP Warning:  include(): Failed opening 'pages/404.php' for inclusion (include_path='.:/opt/alt/php74/usr/share/pear') in /home/fbp6buih981a/public_html/vistas/plantilla.php on line 125

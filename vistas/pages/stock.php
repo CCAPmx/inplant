@@ -1,0 +1,336 @@
+<?php
+		if((time() - $_SESSION['time']) > 900){
+            echo "<script>window.location='salir'</script>";
+        }
+	?>
+<style>
+
+    
+    ol li {
+        /* list-style-type: upper-roman; */
+        list-style: none;
+        display: inline;
+        padding-left: 3px;
+        padding-right: 3px;
+        margin-top: 9px;
+
+    }
+
+
+    * #tbusuarios {
+        font-size: 12px;
+    }
+
+    td {
+        font-size: 12px;
+    }
+
+    th {
+        font-size: 12px;
+    }
+
+
+
+
+
+    .loader {
+        border: 8px solid #f3f3f3;
+        border-top: 8px solid #3498db;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    #paginationproy span {
+        display: inline-block;
+        padding: 5px;
+        margin-right: 5px;
+        cursor: pointer;
+        color: #000;
+
+    }
+
+    #paginationproy span.active {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+
+    .fixed-table-loading {
+    visibility: hidden;
+    top: 0px;
+    display: none;
+}
+
+.loading-wrap {
+    visibility: hidden;
+    display: none;
+}
+
+.table-loading {
+    visibility: hidden;
+    display: none;
+}
+
+.loading {
+    visibility: hidden;
+    display: none;
+}
+
+
+.oculto {
+  display: none;
+}
+
+.modal-title {
+    font-size: 15px; /* Ajusta el tamaño de fuente según tus preferencias */
+}
+
+</style>
+
+<div class="container-fluid">
+    <div class="row">
+        <h1 class="text-center fw-bold fs-3" style="color:#07B5E8; padding: -35px;margin-top: -38px;"><?php echo $_SESSION["u_clientes"]; ?></h1>
+    </div>
+    <div class="d-flex bd-highlight p-0 text-white" style="background-color: #07B5E8;">
+        <div class="my-2 mx-2 flex-grow-1 bd-highlight">Lista de vagones</div>
+        <ol class="my-2 mx-2 breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="dashclientes">Inicio</a></li>
+            <li class="breadcrumb-item active">Lista de vagones</li>
+        </ol>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-info">
+                <input type="hidden" class="form-control" id="txtnombre" name="txtnombre" required value="<?php echo  $_SESSION["nombre"]; ?>" readonly>
+                <input type="hidden" class="form-control" id="txtpk" name="txtpk" required value="<?php echo $_SESSION['pk']; ?>" readonly>
+
+
+                <div id="loader" class="loader"></div>
+
+              
+
+
+                <div class="card-body">
+
+
+                    <form class="row text-center">
+                   
+
+                        <div class="row mt-2">
+                            <div class="col-md-2 col-sm-12 my-2 text-center">
+                            <input type="text" class="form-control" id="daypickerhoy" placeholder="Seleccionar Día">
+                            </div>
+                        
+                            <div class="col-md-2 col-sm-12 my-2 text-center">
+                                <button type="button" class="btn btn-outline-info" id="btnsemact" >Semana Actual</button>
+                            </div>
+                           
+                            <div class="col-md-2 col-sm-12 my-2 text-center">
+                                <button type="button" class="btn btn-outline-info" id="btnsempas">Semana Pasada</button>
+                            </div>
+
+                            <div class="col-md-2 col-sm-12 my-2 text-center">
+                                <button type="button" class="btn btn-outline-info" id="btnmesact">Mes Actual</button>
+                            </div>
+
+                            <div class="col-md-2 col-sm-12 my-2 text-center">
+                                <button type="button" class="btn btn-outline-info" id="btnmespas">Mes Pasado</button>
+                            </div>
+
+
+                            <div class="col-md-2 col-sm-12 my-2 text-center">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button id="exportexcel" name="exportexcel" class="btn btn-outline-info btn-sm mx-1"><i class="fa-solid fa-file-excel"></i></button>
+                                    <button id="exportpdf" name="exportpdf" class="btn btn-outline-info btn-sm "><i class="fa-solid fa-file-pdf"></i></button>
+                                </div>
+                            </div>
+
+
+
+                            
+                        </div>
+                    </form>
+                    
+             
+                    <div class="card-body">
+
+                    
+                    <div class="table-responsive">
+
+                        <table id="table" 
+                        data-toggle="table"
+                        data-locale="es-MX"
+                        data-show-button-icons="true"
+                        data-pagination="true"
+                        data-buttons-class="outline-info fa-solid fa-filter-circle-xmark"
+                        data-filter-control="true"
+                        data-show-search-clear-button="true">
+                        <thead>
+                            <tr>
+                            <th data-field="alias_produccion" data-filter-control="input">Nombre de la granalla</th>
+                            <th class="text-center" data-field="veces_regranallado" data-filter-control="input">Entradas</th>
+                            <th data-field="serie_proyecto" data-filter-control="select">Salidas</th>
+                            <th data-field="nombre_cabina" data-filter-control="select">Stock</th>
+                            </tr>
+                        </thead>
+                        </table>
+
+                        <p class="text-center text-white bg-info" id="parrafoinfo" class="mostrar">Favor de seleccionar una fecha ó perido ya sea semanal o mensual</p>
+
+                    </div>
+                   
+
+                  
+                </div>
+
+
+
+
+
+                </div>
+
+                <div class="card-footer text-certer">
+                    <div class="d-flex justify-content-center">
+                       
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalProyecto" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title text-white">Modal Heading</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+
+
+                    <form class="row g-3">
+                        <div class="col-md-6">
+                            <input type="hidden" class="form-control" id="txtFk" name="txtFk" required value="<?php echo $_SESSION['pk']; ?>" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <input type="hidden" class="form-control" id="txtpks" name="txtpks" required value="" readonly>
+                        </div>
+
+                        <div class="col-md-2">
+                            <label for="txtfechahoy" class="form-label">Fecha</label>
+                            <input type="text" class="form-control" id="txtfechahoy" name="txtfechahoy" readonly>
+                        </div>
+
+                        <div class="col-2">
+                            <label for="txtcantidad" class="form-label">Cantidad</label>
+                            <input type="text" maxlength="10" name="txtcantidad" id="txtcantidad" placeholder="Solo caracteres Numericos"   class="form-control"
+                                required autocomplete="off" onkeypress="return (event.charCode >= 48 && event.charCode <= 57)" min="1" />
+                            <!-- <input type="number" class="form-control" id="txtcantidad" name="txtcantidad" value=0 min=0> -->
+                        </div> 
+
+                        <div class="col-md-2">
+
+                            <label for="cbmtipo" class="form-label">Producto</label>
+                            <select class="form-control select2 select2-purple" data-dropdown-css-class="select2-purple" style="width: 100%;" id="cbmtipo" name="cbmtipo"></select>
+                            
+                            <!-- <input type="text" class="form-control" id="txttipovagon" name="txttipovagon" placeholder="Tipo Vagon"> -->
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="txtproyecto" class="form-label">Proyecto</label>
+                            <input type="text" class="form-control" id="txtproyecto" name="txtproyecto" placeholder="Proyecto">
+                        </div>
+                        
+                    
+                        <!-- <div class="col-4">
+                            <label for="txtproducidos" class="form-label">Producidos</label>
+                            <input type="number" class="form-control" id="txtproducidos" name="txtproducidos" value=0 min=0>
+                        </div> -->
+                        
+
+                        <!-- <div class="col-md-12">
+                            <label for="txtproducto" class="form-label">Producto</label>
+                            <input type="text" class="form-control" id="txtproducto" name="txtproducto" placeholder="Producto">
+                        </div> -->
+                        
+                        <div class="col-12 text-center">
+                            <button type="button" class="btn btn-dark" id="btnguardar">Guardar</button>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div class="card-footer text-certer">
+                    <div class="d-flex justify-content-end">
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="ModalVagon" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title text-white">Modal Heading</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table caption-top">
+                            <!-- <caption class="text-center"> <strong>DATOS GENERALES</strong></caption> -->
+                            <table class="table table-bordered table-sm" id="tablaVagon">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="DataResultados">
+                                </tbody>
+                            </table>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="card-footer text-center">
+                    <button type="button" class="btn btn-outline-info" id="btnpdf"><i class="fas fa-file-pdf"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="vistas/js/reportevagon.js"></script>

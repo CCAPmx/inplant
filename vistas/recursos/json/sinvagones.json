@@ -1,0 +1,15 @@
+[
+    {
+        "alias_produccion": "",
+        "fk_maquina": "",
+        "fkProducto": "",
+        "flag_granallado": "",
+        "fk_proyecto": "",
+        "serie_proyecto": "",
+        "consecutivo_cabina": "",
+        "fkCliente": "",
+        "fk_cliente_lersoft": "",
+        "nombre_cabina": "",
+        "fecha_granallado": ""
+    }
+]

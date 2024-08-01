@@ -1,0 +1,18 @@
+[20-Sep-2023 20:01:52 America/Mexico_City] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user 'lersanco_lersan'@'localhost' (using password: YES) in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php:10
+Stack trace:
+#0 /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php(10): PDO->__construct('mysql:host=loca...', 'lersanco_lersan', 'Q&h[)#[%C&{K')
+#1 /home/fbp6buih981a/public_html/lersansist/modelos/notificacion.modelo.php(17): Conexion::conectar()
+#2 /home/fbp6buih981a/public_html/lersansist/controladores/notificacion.controlador.php(8): ModeloNotificacion::MdlCombo()
+#3 /home/fbp6buih981a/public_html/lersansist/ajax/notificacion.ajax.php(12): ControladorNotificacion::ctrCbmnotificacion()
+#4 /home/fbp6buih981a/public_html/lersansist/ajax/notificacion.ajax.php(21): Notificacion->CbmNotificacion()
+#5 {main}
+  thrown in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php on line 10
+[20-Sep-2023 20:23:38 America/Mexico_City] PHP Fatal error:  Uncaught PDOException: SQLSTATE[HY000] [1045] Access denied for user 'lersanco_lersan'@'localhost' (using password: YES) in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php:10
+Stack trace:
+#0 /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php(10): PDO->__construct('mysql:host=loca...', 'lersanco_lersan', 'Q&h[)#[%C&{K')
+#1 /home/fbp6buih981a/public_html/lersansist/modelos/notificacion.modelo.php(17): Conexion::conectar()
+#2 /home/fbp6buih981a/public_html/lersansist/controladores/notificacion.controlador.php(8): ModeloNotificacion::MdlCombo()
+#3 /home/fbp6buih981a/public_html/lersansist/ajax/notificacion.ajax.php(12): ControladorNotificacion::ctrCbmnotificacion()
+#4 /home/fbp6buih981a/public_html/lersansist/ajax/notificacion.ajax.php(21): Notificacion->CbmNotificacion()
+#5 {main}
+  thrown in /home/fbp6buih981a/public_html/lersansist/modelos/conexion.php on line 10

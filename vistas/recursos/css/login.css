@@ -1,0 +1,33 @@
+#particles-js {
+    background: RGB(7, 181, 232);
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    z-index: -1;
+}
+
+#mycard {
+    box-shadow: 10px 11px 24px -2px rgba(255,255,255,0.75);
+    -webkit-box-shadow: 10px 11px 24px -2px rgba(255,255,255,0.75);
+    -moz-box-shadow: 10px 11px 24px -2px rgba(255,255,255,0.75);
+}
+
+.lersan-logo {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+/* Estilos para pantallas grandes (mayor a 768px de ancho) */
+@media screen and (min-width: 768px) {
+    .text-center h1 {
+        font-size: 2rem; /* Tamaño de letra para pantallas grandes */
+    }
+}
+
+/* Estilos para pantallas pequeñas (menor o igual a 768px de ancho) */
+@media screen and (max-width: 768px) {
+    .text-center h1 {
+        font-size: 1rem; /* Tamaño de letra para pantallas pequeñas */
+    }
+}

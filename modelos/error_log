@@ -1,0 +1,2 @@
+[20-May-2024 17:41:27 UTC] PHP Notice:  Undefined property: stdClass::$dataInfo in /home/fbp6buih981a/public_html/modelos/contarmaquinas.php on line 14
+[20-May-2024 17:41:27 UTC] PHP Notice:  Trying to get property 'foundCount' of non-object in /home/fbp6buih981a/public_html/modelos/contarmaquinas.php on line 14
