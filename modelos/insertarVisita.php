@@ -25,6 +25,7 @@ $body = '{
     "fieldData": {
       "fkMaquina": "' . $input['fkMaquina'] . '",
       "fkCliente": "' . $input['fkCliente'] . '",      
+      "nombre_usuario": "' .  $_SESSION["nombre"] . '",      
       "fecha": "'.date("m/d/Y",$timestamp).'"    
     }
   }';
@@ -39,6 +40,7 @@ $requestSupervisor = get_dataOne($host, $token, $body);
 if (intval($requestSupervisor->messages[0]->code) == 0) {
     $array = [
         'success' => true,
+        'response' => $requestSupervisor->response->recordId,
         'message' => 'Visita registrada con exito',
         'status' => 200,
     ];

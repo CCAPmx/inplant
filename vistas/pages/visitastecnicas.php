@@ -8,6 +8,9 @@
 
     <div class="d-flex bd-highlight p-0 text-white" style="background-color: #07B5E8;">
         <div class="my-2 mx-2 flex-grow-1 bd-highlight">Visitas Técnicas</div>
+        <!-- <?php 
+        echo $_SESSION["ccap"];
+        ?> -->
         <ol class="my-2 mx-2 breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="dashclientes">Inicio</a></li>
             <li class="breadcrumb-item active">Visitas Técnicas</li>
@@ -26,9 +29,15 @@
 
 
                 <div class="card-body">
-                    <button type="button" class="btn btn-primary mx-2" id="btnNuevaVisita">
+
+                <div class="d-flex justify-content-end">
+                    <div class="btn-group  my-3 mx-2" role="group" aria-label="Basic example">
+                        <button id="btnNuevaVisita"  class="btn btn-outline-info btn-sm mx-3" > <i class="fas fa-plus-circle"></i></button>
+                    </div>
+                </div>
+                    <!-- <button type="button" class="btn btn-primary mx-2" id="btnNuevaVisita">
                         Nueva Visita
-                    </button>
+                    </button> -->
                     <div class="table-responsive">
                         <table style="visibility: hidden" id="tablaVisitas" data-url="controladores/visitas.controlador.php?action=getAllVisitas" data-pagination="true" data-search="true" data-toggle="table" data-locale="es-MX" data-show-button-icons="true" data-buttons-class="outline-info" data-filter-control="true" data-show-search-clear-button="true">
                             <thead>
@@ -53,8 +62,8 @@
         <div class="modal-content">
 
             <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title text-white">Modal Heading</h4>
+            <div class="modal-header" style="color:black;">
+                <h4 class="modal-title ">Modal Heading</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
@@ -62,10 +71,11 @@
             <form id="FrmVisitas" class="row g-2" role="form" method="post" autocomplete="off">
                 <div class="modal-body">
                 <div class="col-md-4">
-                            <!-- <label for="txtPkempresa" class="form-label">Pkempresa</label> -->
-                            <input type=""  hidden class="form-control" id="txtPkempresa_v1" name="txtPkempresa_v1" required value="<?php echo $_SESSION['pkuser']; ?>" readonly>
+                            
+                            <input type="" hidden  class="form-control" id="txtPkempresa_v1" name="txtPkempresa_v1" required value="" readonly> 
+                            
                         </div>
-                    <div class="row">                    
+                        <div class="row">                    
 
 
 
@@ -82,7 +92,7 @@
 
 
                         <div class="col-md-4">
-                            <label for="cbmmaquina" class="form-label">Maquina</label>
+                            <label for="cbmmaquina" class="form-label">Fecha</label>
                             <input type="date" class="form-control" id="txtFechaVisita" name="txtFechaVisita" onchange="formatoFecha()">
                         </div>
 
@@ -93,8 +103,8 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" id="btnGuardarVisita" class="btn btn-primary">Guardar</button>
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" id="btnGuardarVisita" class="btn btn-primary">CONTINUAR</button>
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">CANCELAR</button>
                 </div>
             
 
@@ -102,7 +112,7 @@
     </div>
 </div>
 
-<div class="modal" id="btnNuevaVisita" tabindex="-1">
+<div class="modal" id="visitaDetailModal" tabindex="-1">
     <div class="modal-dialog modal-xl">
         <div class="modal-content" id="visitaDetailModalContent">
             <div class="modal-header" id="visitaDetailModalTitle">

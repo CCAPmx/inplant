@@ -20,6 +20,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             // header('Content-Type: application/json');
             echo json_encode($data);
             break;
+        case 'getVisitaTecnicaCompletaId':
+            // echo 'getVisitaDetailsId';
+
+            if (isset($_GET['id'])) {
+                $key = $_GET['id'];
+            } else {
+                $key = '';
+            }
+            $data = $visitasTecnicas->getVisitaTecnicaCompletaId($key);
+            echo json_encode($data);
+            break;
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     switch ($_POST['action']) {
@@ -119,6 +130,39 @@ class ControladorVisitasTecnicas
             return false;
         }
     }
+
+    public function getVisitaTecnicaCompletaId($id = '')
+    {
+        $host = 'https://fms.lersan.com/fmi/data/v1/databases/CCAP/layouts/visita_tecnica_web/_find?';
+
+        // var_dump($id);
+        if (!empty($id)) {
+            $body = '{
+                "query": [
+                    {
+                        "recordId": "' . $id . '"
+                    }
+                ]
+                }';
+        } else {
+            $body = '{
+                "query": [
+                    {
+                        "fkCliente": "' . $this->fkCliente . '"
+                    }
+                ]
+                }';
+        }
+
+        $response = $this->curl($host, $body, 'POST');
+        if ($response) {
+            $visitasTecnicas = (isset($response->response->data)) ? $response->response->data : $response;
+            return $visitasTecnicas;
+        } else {
+            echo json_encode(["error" => "Empty data"]);
+            return false;
+        }
+    }
     public function updateVisitaTecnica($recordid, $data)
     {
         $host = 'https://fms.lersan.com/fmi/data/v1/databases/CCAP/layouts/visita_tecnica_web/records/' . $recordid;
@@ -126,6 +170,7 @@ class ControladorVisitasTecnicas
             "fieldData":
                 ' . $data . '
         }';
+        // var_dump($body);
         $response = $this->curl($host, $body, 'PATCH');
         //DEBUG
         /*$response = json_decode('{
@@ -148,7 +193,7 @@ class ControladorVisitasTecnicas
     }
     private function convertArrayForView($data)
     {
-
+        // var_dump($data);
         $dataConverted = [];
         foreach ($data as $key => $value) {
             // Cambiar formato de fecha
@@ -161,6 +206,7 @@ class ControladorVisitasTecnicas
             $dataConverted[$key]['nombre_usuario'] = $value->fieldData->nombre_usuario;
             $dataConverted[$key]['nombre_maquina'] = $value->fieldData->nombre_maquina;
             $dataConverted[$key]['nombre_cliente'] = $value->fieldData->nombre_cliente;
+            $dataConverted[$key]['zzHcreo'] = $value->fieldData->zzHcreo;
         }
 
         return $dataConverted;

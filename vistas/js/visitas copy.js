@@ -2048,7 +2048,7 @@ function esDispositivoMovil() {
 $(document).ready(function () {
   $("#btnNuevaVisita").click(function () {
     $("#Frmusuarios").trigger("reset");
-    $(".modal-header").css("background-color", "#07B5E8");
+    // $(".modal-header").css("background-color", "#07B5E8");
     $(".modal-title").text("Nueva Visita");
     $("#myModal").modal("show");
   });

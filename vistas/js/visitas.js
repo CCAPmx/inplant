@@ -1,6 +1,20 @@
 $(document).ready(function () {
-  $("#tablaVisitas").bootstrapTable();
+	$('#tablaVisitas').bootstrapTable({
+        sortable: true,
+        sortOrder: 'asc',
+        sortName: 'zzHcreo' // El campo por el cual quieres ordenar inicialmente
+    });
   $("#tablaVisitas").css("visibility", "visible");
+
+//   setInterval(function () {
+//     $("#tablaVisitas").bootstrapTable("refresh"); // Recargar la tabla
+// 	console.log("Cargando datos de la tabla");
+//   }, 10000); // 300000 ms = 5 minutos
+
+  // Refrescar la tabla cuando se cierra el modal de detalles de la visita
+  $("#visitaDetailModal").on("hidden.bs.modal", function () {
+    $("#tablaVisitas").bootstrapTable("refresh"); // Recargar la tabla
+  });
 });
 
 $("#tablaVisitas").on("click", ".more-info", async function () {
@@ -18,6 +32,8 @@ $("#tablaVisitas").on("click", ".more-info", async function () {
       $("#visitaDetailModalBody").html("");
       $("#visitaDetailModalBody").html(html.body);
       $("#visitaDetailModalTitle").html(html.title);
+
+      //   alert("pk" + pk);
 
       $("#exportpdf").data("index", pk);
       $(".updateVisit").data("record", responseParsed[0].recordId);
@@ -93,6 +109,11 @@ $("#tablaVisitas").on("click", ".more-info", async function () {
       Swal.close();
 
       $("#visitaDetailModal").modal("toggle");
+
+      // Refrescar la tabla cuando se cierra el modal de detalles de la visita
+      $("#visitaDetailModal").on("hidden.bs.modal", function () {
+        table.ajax.reload(); // Recargar la tabla
+      });
     },
   });
 });
@@ -133,8 +154,11 @@ $(document).on("click", ".updateVisit", async function () {
     confirmButtonText: "Si, guardar",
     cancelButtonText: "Cancelar",
   }).then((result) => {
+    console.log(result);
     if (result.isConfirmed) {
+      console.log("si");
       const recordId = $(this).data("record");
+      console.log($(this).data());
       Swal.fire({
         title: "Preparando actualización...",
         allowOutsideClick: false,
@@ -143,6 +167,7 @@ $(document).on("click", ".updateVisit", async function () {
           Swal.showLoading();
           try {
             const datos = await prepareDataToUpdate();
+            console.log("datos", datos);
             const response = await updateVisit(datos, recordId);
             // Cierra el cargador después de un breve período de tiempo
             setTimeout(() => {
@@ -314,7 +339,7 @@ let printToPDF = function () {
         canvas.width = desiredWidth;
         canvas.height = desiredHeight;
 
-        console.log(canvas.width, canvas.height);
+        // console.log(canvas.width, canvas.height);
       }
     };
     adjustCanvasSize();
@@ -383,8 +408,6 @@ let printToPDF = function () {
   // Cargar el documento HTML externo en el iframe
   iframe.src = "vistas/pagesPdfs/documento.php";
 };
-
-
 
 let printToPDF_v1 = function () {
   const iframe = document.createElement("iframe");
@@ -1777,6 +1800,7 @@ let getVisitDetails = async function (pk) {
     error: function (XMLHttpRequest, textStatus, errorThrown) {},
   });
 };
+
 let getAllVisitsWithDetails = async function () {
   return await $.ajax({
     type: "GET",
@@ -1819,7 +1843,7 @@ function esDispositivoMovil() {
 $(document).ready(function () {
   $("#btnNuevaVisita").click(function () {
     $("#Frmusuarios").trigger("reset");
-    $(".modal-header").css("background-color", "#07B5E8");
+    // $(".modal-header").css("color", "#060606");
     $(".modal-title").text("Nueva Visita");
     $("#myModal").modal("show");
   });
@@ -1851,7 +1875,7 @@ $(document).ready(function () {
 
       // se ejecuta al termino de la petición y está fue correcta
       success: function (data) {
-        console.log(data);
+        // console.log(data);
 
         if (data.length === 0) {
           $("#cbmmaquina").append(
@@ -1884,15 +1908,14 @@ $(document).ready(function () {
   $("#cbmCliente").on("change", function () {
     var valorSeleccionado = this.value;
     document.getElementById("txtPkempresa_v1").value = valorSeleccionado;
-    console.log("Cliente seleccionado:", valorSeleccionado);
+    // console.log("Cliente seleccionado:", valorSeleccionado);
     obtenerMaq(valorSeleccionado);
   });
 
   function manejarSeleccion(valor) {
-    console.log("Has seleccionado: ", valor);
+    // console.log("Has seleccionado: ", valor);
     // Aquí puedes añadir más lógica usando la variable 'valor'
   }
-
   // console.log("valor de pk", pk);
   // obtenerMaq(pk);
 });
@@ -1906,7 +1929,7 @@ $(document).ready(function () {
     let maquinaVisita = $("#cbmmaquina").val();
     let fecha = $("#txtFechaVisita").val();
 
-    console.log(clienteVisita, maquinaVisita, fecha);
+    // console.log(clienteVisita, maquinaVisita, fecha);
 
     if (clienteVisita == 0) {
       Swal.fire({
@@ -1964,19 +1987,46 @@ function ajaxParametos(url, options) {
     .catch((errorB) => console.log("error", errorB));
 }
 
-function dataResponse(datajson) {
+async function dataResponse(datajson) {
   console.log(datajson);
   fechaActualEvento = [];
   if (datajson.status == 200) {
     Swal.fire({
       position: "center",
       icon: "success",
-      title: "usuario registrado con exito",
+      title: "Visita tecnica registrada con exito",
       showConfirmButton: false,
-      timer: 1500,
+      timer: 1000,
     });
-    // document.getElementById("myform").reset();
-    window.location.reload(true);
+    document.getElementById("FrmVisitas").reset();
+    // window.location.reload(true);
+    $("#myModal").modal("hide");
+    // Desvincular el evento para evitar múltiples llamadas
+    $("#myModal").off("hidden.bs.modal");
+
+    const id = datajson.response;
+    const respuesta = await getVisitDetailsId(id);
+	console.log(respuesta,id);
+    const responseParsed2 = JSON.parse(respuesta);
+
+	console.log(responseParsed2);
+    const fielData2 = responseParsed2[0].fieldData;
+    const html2 = html4Details_v2(fielData2);
+
+    // console.log(respuesta);
+
+    //   $("#visitaDetailModalBody").html("");
+    //   $("#visitaDetailModalBody").html(html.body);
+    //   $("#visitaDetailModalTitle").html(html.title);
+
+    // Esperar un segundo antes de abrir el Modal 2
+    setTimeout(function () {
+      $("#visitaDetailModalBody").html("");
+      $("#visitaDetailModalBody").html(html2.body);
+      $("#visitaDetailModalTitle").html(html2.title);
+      $("#visitaDetailModal").modal("toggle");
+      $(".updateVisit").data("record", responseParsed2[0].recordId);
+    }, 1000); // 1000 milisegundos = 1 segundo
   }
 }
 
@@ -1989,3 +2039,50 @@ function formatoFecha() {
   var fechaFormateada = mes + "/" + dia + "/" + año;
   document.getElementById("fechaFormateada").textContent = fechaFormateada;
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const fechaInput = document.getElementById("txtFechaVisita");
+  const hoy = new Date();
+  const unDia = 24 * 60 * 60 * 1000; // Milisegundos en un día
+
+  // Formatear fecha como YYYY-MM-DD
+  function formatearFecha(date) {
+    let mes = "" + (date.getMonth() + 1),
+      dia = "" + date.getDate(),
+      año = date.getFullYear();
+
+    if (mes.length < 2) mes = "0" + mes;
+    if (dia.length < 2) dia = "0" + dia;
+
+    return [año, mes, dia].join("-");
+  }
+
+  // Establecer la fecha máxima (hoy) y mínima (3 días antes)
+  fechaInput.max = formatearFecha(hoy);
+  fechaInput.min = formatearFecha(new Date(hoy - 3 * unDia));
+  fechaInput.value = fechaInput.max; // Establece la fecha por defecto a hoy
+});
+
+function formatoFecha() {
+  // Función para manejar cualquier lógica adicional cuando cambia la fecha
+  const fechaSeleccionada = document.getElementById("txtFechaVisita").value;
+  console.log("Fecha seleccionada:", fechaSeleccionada);
+  // Aquí puedes agregar más lógica según necesites
+}
+
+let getVisitDetailsId = async function (id) {
+  console.log(id);
+  return await $.ajax({
+    type: "GET",
+    url: `controladores/visitas.controlador.php?action=getVisitaTecnicaCompletaId&id=${id}`,
+    success: function (response) {
+      result = JSON.parse(response);
+      if (response?.ok) {
+        return result;
+      } else {
+        return false;
+      }
+    },
+    error: function (XMLHttpRequest, textStatus, errorThrown) {},
+  });
+};
