@@ -15,6 +15,7 @@ class ControladorUsuarios
 
 		if (isset($_POST["txtPass"])) {
 
+			
 		
             $encriptar = crypt($_POST["txtPass"], '$2a$07$asxx54ahjppf45sd87a5a4dDDGsystemdev$');
 
@@ -23,7 +24,12 @@ class ControladorUsuarios
 			$item = "usuario";
 			$valor = $_POST["txtMail"];
 
+			// var_dump($valor);
+
 			$respuesta = ModeloUsuarios::MdlMostrarUsuariosmod($tabla, $item, $valor);
+
+
+			// var_dump($respuesta);
 
 			if ($respuesta == 0) {
 				echo '<br>
@@ -87,6 +93,10 @@ class ControladorUsuarios
 						$_SESSION["ccap"] = $tokenccap;
 						
 
+
+						
+						// var_dump($respuesta["tipouser"]);
+
 						if ($respuesta["tipouser"]==='SuperUsuario'){
 							echo '<script>
 								window.location ="inicio";
@@ -95,6 +105,10 @@ class ControladorUsuarios
 							echo '<script>
 							window.location ="dashclientes";
 							</script>';
+						} elseif($respuesta["tipouser"]==='Ingenieros'){
+							echo '<script>
+								window.location ="inicio";
+                            </script>';
 						}
 
                      

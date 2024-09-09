@@ -32,7 +32,7 @@
 
                 <div class="d-flex justify-content-end">
                     <div class="btn-group  my-3 mx-2" role="group" aria-label="Basic example">
-                        <button id="btnNuevaVisita"  class="btn btn-outline-info btn-sm mx-3" > <i class="fas fa-plus-circle"></i></button>
+                        <button id="btnNuevaVisita"  class="btn btn-outline-info btn-sm mx-3" > <i class="fas fa-plus-circle"></i> Nueva Visita</button>
                     </div>
                 </div>
                     <!-- <button type="button" class="btn btn-primary mx-2" id="btnNuevaVisita">

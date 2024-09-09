@@ -18,6 +18,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             }
             $data = $visitasTecnicas->getVisitaTecnicaCompleta($key);
             // header('Content-Type: application/json');
+
+            // var_dump('getVisitaDetails');
             echo json_encode($data);
             break;
         case 'getVisitaTecnicaCompletaId':
@@ -29,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
                 $key = '';
             }
             $data = $visitasTecnicas->getVisitaTecnicaCompletaId($key);
+            // header('Content-Type: application/json');
             echo json_encode($data);
             break;
     }
@@ -64,10 +67,10 @@ class ControladorVisitasTecnicas
     }
     public function getVisitaTecnicaSencilla()
     {
-        $query = '_offset=1&_limit=200&_sort=[{%20%22fieldName%22%3A%20%22fecha%22%2C%20%22sortOrder%22%3A%20%22descend%22%20}]';
+        $query = '_offset=1&_limit=50&_sort=[{%20%22fieldName%22%3A%20%22fecha%22%2C%20%22sortOrder%22%3A%20%22descend%22%20}]';
         $host = 'https://fms.lersan.com/fmi/data/v1/databases/CCAP/layouts/visita_tecnica_web_sencilla/records?' . $query;
         $body = '';
-        // var_dump($host);
+        // var_dump('gellVisitasTecnicaSencilla');
         $response = $this->curl($host, $body, 'GET');
         if ($response) {
             $visitasTecnicas = $response->response->data;
@@ -100,16 +103,25 @@ class ControladorVisitasTecnicas
             return false;
         }
     }
+
+
     public function getVisitaTecnicaCompleta($pk = '')
     {
+
+
         $host = 'https://fms.lersan.com/fmi/data/v1/databases/CCAP/layouts/visita_tecnica_web/_find?';
         if (!empty($pk)) {
+
+
+
+
             $body = '{
                 "query": [
                     {
                         "pk": "' . $pk . '"
                     }
                 ]
+               
                 }';
         } else {
             $body = '{
@@ -118,10 +130,13 @@ class ControladorVisitasTecnicas
                         "fkCliente": "' . $this->fkCliente . '"
                     }
                 ]
+                
                 }';
         }
 
         $response = $this->curl($host, $body, 'POST');
+
+        // var_dump('response',$response);
         if ($response) {
             $visitasTecnicas = (isset($response->response->data)) ? $response->response->data : $response;
             return $visitasTecnicas;

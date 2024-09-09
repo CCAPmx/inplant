@@ -1,15 +1,16 @@
 $(document).ready(function () {
-	$('#tablaVisitas').bootstrapTable({
-        sortable: true,
-        sortOrder: 'asc',
-        sortName: 'zzHcreo' // El campo por el cual quieres ordenar inicialmente
-    });
+  $("#tablaVisitas").bootstrapTable({
+	pageSize: 10, // Cantidad de filas iniciales por página
+    sortable: true,
+    sortOrder: "asc",
+    sortName: "zzHcreo", // El campo por el cual quieres ordenar inicialmente
+  });
   $("#tablaVisitas").css("visibility", "visible");
 
-//   setInterval(function () {
-//     $("#tablaVisitas").bootstrapTable("refresh"); // Recargar la tabla
-// 	console.log("Cargando datos de la tabla");
-//   }, 10000); // 300000 ms = 5 minutos
+  //   setInterval(function () {
+  //     $("#tablaVisitas").bootstrapTable("refresh"); // Recargar la tabla
+  // 	console.log("Cargando datos de la tabla");
+  //   }, 10000); // 300000 ms = 5 minutos
 
   // Refrescar la tabla cuando se cierra el modal de detalles de la visita
   $("#visitaDetailModal").on("hidden.bs.modal", function () {
@@ -2006,10 +2007,10 @@ async function dataResponse(datajson) {
 
     const id = datajson.response;
     const respuesta = await getVisitDetailsId(id);
-	console.log(respuesta,id);
+    console.log(respuesta, id);
     const responseParsed2 = JSON.parse(respuesta);
 
-	console.log(responseParsed2);
+    console.log(responseParsed2);
     const fielData2 = responseParsed2[0].fieldData;
     const html2 = html4Details_v2(fielData2);
 
