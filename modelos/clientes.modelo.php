@@ -7,7 +7,7 @@ class ModeloClientes
 
     static public function MdltablaClientes()
     {
-        $Sql = "SELECT Razon_social,  direccion_fiscal, RFC, pk, id FROM tbclientes where estado=1";
+        $Sql = "SELECT Razon_social,  nombre_corto, RFC, pk, id FROM tbclientes where estado=1";
         $stmt = Conexion::conectar()->prepare($Sql);
         $stmt->execute();
         return $stmt->fetchAll();
@@ -27,6 +27,7 @@ class ModeloClientes
     {
         $Sql = "SELECT pk as id, Razon_social as text FROM tbclientes where estado=1 and  Razon_social<>'' ORDER BY Razon_social";
 
+        // var_dump($Sql);
         $stmt = Conexion::conectar()->prepare($Sql);
         $stmt->execute();
         return $stmt->fetchAll();

@@ -89,7 +89,7 @@
                             <thead>
                                 <tr>
                                     <th>Razon Social</th>
-                                    <th>Direccion Fiscal</th>
+                                    <th>nombre corto</th>
                                     <th>RFC</th>
                                     <!--<th>PK</th>-->
                                     <th>Operaciones</th>

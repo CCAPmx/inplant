@@ -24,7 +24,7 @@ class TablaClientes
 
             $datosJson .= '[ 
             "' . preg_replace("[\n|\r|\n\r]", "", $Usuario[$i]["Razon_social"]) . '",
-            "' . preg_replace("[\n|\r|\n\r]", "", $Usuario[$i]["direccion_fiscal"]) . '",
+            "' . preg_replace("[\n|\r|\n\r]", "", $Usuario[$i]["nombre_corto"]) . '",
             "' . $Usuario[$i]["RFC"] . '",
             "' . $Usuario[$i]["pk"] . '",
             "' . $Usuario[$i]["id"] . '"

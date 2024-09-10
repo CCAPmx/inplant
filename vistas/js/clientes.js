@@ -175,9 +175,9 @@ $(document).ready(function () {
   
   columnDefs: [
     { "width": "10%", "targets": 0 },
-    { "width": "10%", "targets": 1},
-    { "width": "10%", "targets": 2 },
-    { "width": "10%", "targets": 3 },
+    // { "width": "10%", "targets": 1},
+    // { "width": "10%", "targets": 2 },
+    // { "width": "10%", "targets": 3 },
 
    {
        targets: -1,

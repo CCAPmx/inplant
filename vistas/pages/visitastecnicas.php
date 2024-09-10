@@ -8,9 +8,9 @@
 
     <div class="d-flex bd-highlight p-0 text-white" style="background-color: #07B5E8;">
         <div class="my-2 mx-2 flex-grow-1 bd-highlight">Visitas Técnicas</div>
-        <!-- <?php 
-        echo $_SESSION["ccap"];
-        ?> -->
+        <!-- <?php
+                echo $_SESSION["ccap"];
+                ?> -->
         <ol class="my-2 mx-2 breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="dashclientes">Inicio</a></li>
             <li class="breadcrumb-item active">Visitas Técnicas</li>
@@ -30,11 +30,11 @@
 
                 <div class="card-body">
 
-                <div class="d-flex justify-content-end">
-                    <div class="btn-group  my-3 mx-2" role="group" aria-label="Basic example">
-                        <button id="btnNuevaVisita"  class="btn btn-outline-info btn-sm mx-3" > <i class="fas fa-plus-circle"></i> Nueva Visita</button>
+                    <div class="d-flex justify-content-end">
+                        <div class="btn-group  my-3 mx-2" role="group" aria-label="Basic example">
+                            <button id="btnNuevaVisita" class="btn btn-outline-info btn-sm mx-3"> <i class="fas fa-plus-circle"></i> Nueva Visita</button>
+                        </div>
                     </div>
-                </div>
                     <!-- <button type="button" class="btn btn-primary mx-2" id="btnNuevaVisita">
                         Nueva Visita
                     </button> -->
@@ -70,12 +70,12 @@
             <!-- Modal body -->
             <form id="FrmVisitas" class="row g-2" role="form" method="post" autocomplete="off">
                 <div class="modal-body">
-                <div class="col-md-4">
-                            
-                            <input type="" hidden  class="form-control" id="txtPkempresa_v1" name="txtPkempresa_v1" required value="" readonly> 
-                            
-                        </div>
-                        <div class="row">                    
+                    <div class="col-md-4">
+
+                        <input type="" hidden class="form-control" id="txtPkempresa_v1" name="txtPkempresa_v1" required value="" readonly>
+
+                    </div>
+                    <div class="row">
 
 
 
@@ -84,7 +84,15 @@
                             <select class="form-control select2 select2-purple" data-dropdown-css-class="select2-purple" style="width: 100%;" id="cbmCliente" name="cbmCliente"></select>
                         </div>
 
+
+
+
                         <div class="col-md-4">
+                            <!-- <div id="loader_m" style="display:none;">Cargando...</div> -->
+
+                            <div id="loader_m" class="spinner-border text-primary" role="status" style="display:none;">
+                                <span class="sr-only">Cargando...</span>
+                            </div>
                             <label for="cbmmaquina" class="form-label">Maquina</label>
                             <select class="form-control select2 select2-purple" data-dropdown-css-class="select2-purple" style="width: 100%;" id="cbmmaquina" name="cbmmaquina">
                             </select>
@@ -99,14 +107,14 @@
                     </div>
 
                 </div>
-                </form>
+            </form>
 
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" id="btnGuardarVisita" class="btn btn-primary">CONTINUAR</button>
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">CANCELAR</button>
-                </div>
-            
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" id="btnGuardarVisita" class="btn btn-primary">CONTINUAR</button>
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">CANCELAR</button>
+            </div>
+
 
         </div>
     </div>

@@ -1854,6 +1854,8 @@ $(document).ready(function () {
   }
 
   function obtenerMaq(pk) {
+
+	
     $("#cbmmaquina").val(null).trigger("change");
     //   $("#cbmmaquina").select2()
     $("#cbmmaquina").empty();
@@ -1865,13 +1867,14 @@ $(document).ready(function () {
       dataType: "json",
 
       beforeSend: function (response) {
-        mostrarLoader();
-        // spanElement.innerText = "Buscando Información";
+         // Mostrar el loader antes de enviar la solicitud
+		 $("#loader_m").show();
       },
 
       //  Se ejecuta cuando termino la petición
       complete: function (response) {
-        // $('#exito').html('Exito...');
+         // Ocultar el loader después de completar la solicitud
+		 $("#loader_m").hide();
       },
 
       // se ejecuta al termino de la petición y está fue correcta
@@ -1893,14 +1896,17 @@ $(document).ready(function () {
           }
         }
 
-        ocultarLoader();
+        
 
         // $("#cbmmaquina").append(
         //   `<option value="Ninguno"  selected="selected">Seleccione</option>`
         // );
       },
       error: function (response) {
-        // window.location ="salir";
+          // Ocultar loader también si ocurre un error
+		  $("#loader_m").hide();
+		  // Manejar el error (podrías mostrar un mensaje al usuario)
+		  alert("Error al obtener los datos.");
       },
     });
   }
@@ -2060,7 +2066,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Establecer la fecha máxima (hoy) y mínima (3 días antes)
   fechaInput.max = formatearFecha(hoy);
-  fechaInput.min = formatearFecha(new Date(hoy - 3 * unDia));
+  fechaInput.min = formatearFecha(new Date(hoy - 6 * unDia));
   fechaInput.value = fechaInput.max; // Establece la fecha por defecto a hoy
 });
 
