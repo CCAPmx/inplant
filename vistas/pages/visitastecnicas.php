@@ -46,6 +46,7 @@
                                     <th class="text-center" data-field="fecha" data-filter-control="input">Fecha</th>
                                     <th class="text-center" data-field="nombre_usuario" data-filter-control="input">Usuario</th>
                                     <th class="text-center" data-field="nombre_cliente" data-filter-control="input">Nombre Cliente</th>
+                                    <!-- <th class="text-center" data-field="fkCliente" data-filter-control="input">Clave Cliente</th> -->
                                     <th class="text-center" data-field="nombre_maquina" data-filter-control="input">Nombre Maquina</th>
                                 </tr>
                             </thead>

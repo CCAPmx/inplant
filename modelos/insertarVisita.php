@@ -6,7 +6,13 @@ date_default_timezone_set('America/Denver');
 $input = json_decode(file_get_contents('php://input'), true);
 $token = $_SESSION["ccap"];
 
-// var_dump($input);
+// var_dump($input['fkMaquina']);
+
+$fkMaquinaData = json_decode($input['fkMaquina'], true);
+
+// var_dump($fkMaquinaData);
+
+
 
 
 // $host = "https://fms.lersan.com/fmi/data/v1/databases/CCAP/layouts/supervisores_web/records";
@@ -15,6 +21,7 @@ $token = $_SESSION["ccap"];
 //       "fk_maquina": "' . $input['fk_maquina'] . '",
 //       "nombre": "' . $input['nombre'] . '",
 //       "apellidos": "' . $input['apellidos'] . '",
+//       "nombre_maquina": "' . $fkMaquinaData['descripcion'] . '",
 //       "fk_cliente_lersoft": "' . $input['fk_cliente_lersoft'] . '"
 //     }
 //   }';
@@ -23,9 +30,10 @@ $timestamp = strtotime($input['fecha']);
 $host = "https://fms.lersan.com/fmi/data/v1/databases/CCAP/layouts/visita_tecnica_web_sencilla/records";
 $body = '{
     "fieldData": {
-      "fkMaquina": "' . $input['fkMaquina'] . '",
+      "fkMaquina": "' . $fkMaquinaData['pk'] . '",
       "fkCliente": "' . $input['fkCliente'] . '",      
-      "nombre_usuario": "' .  $_SESSION["nombre"] . '",      
+      "nombre_usuario": "' .  $_SESSION["nombre"] . '",  
+      "nombre_maquina": "' . $fkMaquinaData['descripcion'] . '",       
       "fecha": "'.date("m/d/Y",$timestamp).'"    
     }
   }';

@@ -1890,9 +1890,18 @@ $(document).ready(function () {
             `<option value="Ninguno" selected="selected">Seleccione</option>`
           );
           for (var i = 0; i < data.length; i++) {
-            $("#cbmmaquina").append(
-              `<option value="${data[i].pk}">${data[i].descripcion}</option>`
-            );
+			var obj = {
+				pk: data[i].pk,
+				descripcion: data[i].descripcion
+			};
+
+			$("#cbmmaquina").append(
+				`<option value='${JSON.stringify(obj)}'>${data[i].descripcion}</option>`
+			);
+
+            // $("#cbmmaquina").append(
+            //   `<option value="${data[i].pk}">${data[i].descripcion}</option>`
+            // );
           }
         }
 

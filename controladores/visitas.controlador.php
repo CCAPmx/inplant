@@ -213,6 +213,7 @@ class ControladorVisitasTecnicas
         foreach ($data as $key => $value) {
             // Cambiar formato de fecha
             $fechaObj = DateTime::createFromFormat('m/d/Y', $value->fieldData->fecha);
+            // var_dump($fechaObj);
             // Formatear la fecha al formato deseado
             $fechaFormateada = $fechaObj->format('d/m/Y');
 
@@ -221,6 +222,7 @@ class ControladorVisitasTecnicas
             $dataConverted[$key]['nombre_usuario'] = $value->fieldData->nombre_usuario;
             $dataConverted[$key]['nombre_maquina'] = $value->fieldData->nombre_maquina;
             $dataConverted[$key]['nombre_cliente'] = $value->fieldData->nombre_cliente;
+            $dataConverted[$key]['fkCliente'] = $value->fieldData->fkCliente;
             $dataConverted[$key]['zzHcreo'] = $value->fieldData->zzHcreo;
         }
 
