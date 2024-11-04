@@ -91,9 +91,23 @@
                         <div class="col-md-4">
                             <!-- <div id="loader_m" style="display:none;">Cargando...</div> -->
 
-                            <div id="loader_m" class="spinner-border text-primary" role="status" style="display:none;">
-                                <span class="sr-only">Cargando...</span>
+                            <!-- <div id="loader_m" class="spinner-border text-primary" role="status" style="display:none;">
+                                <span class="" style="display:block;">Cargando...</span>
+                            </div> -->
+
+                            <style>
+                                #loader_m {
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                }
+                            </style>
+
+                            <div id="loader_m" style="display:none; text-align: center;">
+                                <div class="spinner-border text-primary" role="status"></div>
+                                <span style="display: inline-block; margin-left: 10px;">Cargando...</span>
                             </div>
+
                             <label for="cbmmaquina" class="form-label">Maquina</label>
                             <select class="form-control select2 select2-purple" data-dropdown-css-class="select2-purple" style="width: 100%;" id="cbmmaquina" name="cbmmaquina">
                             </select>
