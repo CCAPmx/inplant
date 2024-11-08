@@ -207,7 +207,7 @@ session_start();
   <!-- select -->
   <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
 
-
+  <script src="vistas/js/validaSession.js"></script>
   <script src="vistas/js/plantilla.js"></script>
   <script src="vistas/js/usuarios.js"></script>
   <script src="vistas/js/clientes.js"></script>
@@ -226,6 +226,7 @@ session_start();
   <!-- <script src="vistas/js/reporteTurno.js"></script> -->
   <!-- <script src="vistas/js/partesMaquinas.js"></script> -->
   <script src="vistas/js/menu.js"></script>
+  
 </body>
 
 </html>
