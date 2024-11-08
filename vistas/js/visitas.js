@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $("#tablaVisitas").bootstrapTable({
-	pageSize: 10, // Cantidad de filas iniciales por página
+    pageSize: 10, // Cantidad de filas iniciales por página
     sortable: true,
     sortOrder: "asc",
     sortName: "zzHcreo", // El campo por el cual quieres ordenar inicialmente
@@ -30,6 +30,13 @@ $("#tablaVisitas").on("click", ".more-info", async function () {
       const responseParsed = JSON.parse(response);
       const fielData = responseParsed[0].fieldData;
       const html = html4Details_v2(fielData);
+
+      // Crear el temporizador solo cuando el modal se active
+      const temporizadorDiv = document.createElement("div");
+      temporizadorDiv.id = "temporizador";
+      temporizadorDiv.textContent = "10:00"; // Tiempo inicial del temporizador
+      document.getElementById("visitaDetailModalBody").prepend(temporizadorDiv);
+      alert;
       $("#visitaDetailModalBody").html("");
       $("#visitaDetailModalBody").html(html.body);
       $("#visitaDetailModalTitle").html(html.title);
@@ -702,6 +709,7 @@ let html4Details_v2 = function (fielData) {
 					<button type="button" id="closeModal" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>`;
 
   const secc1_bloque1 = `<div class="accordion" id="accordionPanelsStayOpenExample">
+  
 	
 	<div class="accordion-item">
 	  <h2 class="accordion-header">
@@ -1854,8 +1862,6 @@ $(document).ready(function () {
   }
 
   function obtenerMaq(pk) {
-
-	
     $("#cbmmaquina").val(null).trigger("change");
     //   $("#cbmmaquina").select2()
     $("#cbmmaquina").empty();
@@ -1867,14 +1873,14 @@ $(document).ready(function () {
       dataType: "json",
 
       beforeSend: function (response) {
-         // Mostrar el loader antes de enviar la solicitud
-		 $("#loader_m").show();
+        // Mostrar el loader antes de enviar la solicitud
+        $("#loader_m").show();
       },
 
       //  Se ejecuta cuando termino la petición
       complete: function (response) {
-         // Ocultar el loader después de completar la solicitud
-		 $("#loader_m").hide();
+        // Ocultar el loader después de completar la solicitud
+        $("#loader_m").hide();
       },
 
       // se ejecuta al termino de la petición y está fue correcta
@@ -1890,14 +1896,16 @@ $(document).ready(function () {
             `<option value="Ninguno" selected="selected">Seleccione</option>`
           );
           for (var i = 0; i < data.length; i++) {
-			var obj = {
-				pk: data[i].pk,
-				descripcion: data[i].descripcion
-			};
+            var obj = {
+              pk: data[i].pk,
+              descripcion: data[i].descripcion,
+            };
 
-			$("#cbmmaquina").append(
-				`<option value='${JSON.stringify(obj)}'>${data[i].descripcion}</option>`
-			);
+            $("#cbmmaquina").append(
+              `<option value='${JSON.stringify(obj)}'>${
+                data[i].descripcion
+              }</option>`
+            );
 
             // $("#cbmmaquina").append(
             //   `<option value="${data[i].pk}">${data[i].descripcion}</option>`
@@ -1905,17 +1913,15 @@ $(document).ready(function () {
           }
         }
 
-        
-
         // $("#cbmmaquina").append(
         //   `<option value="Ninguno"  selected="selected">Seleccione</option>`
         // );
       },
       error: function (response) {
-          // Ocultar loader también si ocurre un error
-		  $("#loader_m").hide();
-		  // Manejar el error (podrías mostrar un mensaje al usuario)
-		  alert("Error al obtener los datos.");
+        // Ocultar loader también si ocurre un error
+        $("#loader_m").hide();
+        // Manejar el error (podrías mostrar un mensaje al usuario)
+        alert("Error al obtener los datos.");
       },
     });
   }
@@ -2006,42 +2012,64 @@ function ajaxParametos(url, options) {
 async function dataResponse(datajson) {
   console.log(datajson);
   fechaActualEvento = [];
+
   if (datajson.status == 200) {
     Swal.fire({
       position: "center",
       icon: "success",
-      title: "Visita tecnica registrada con exito",
+      title: "Visita técnica registrada con éxito",
       showConfirmButton: false,
       timer: 1000,
     });
+
     document.getElementById("FrmVisitas").reset();
-    // window.location.reload(true);
     $("#myModal").modal("hide");
-    // Desvincular el evento para evitar múltiples llamadas
-    $("#myModal").off("hidden.bs.modal");
+    $("#myModal").off("hidden.bs.modal"); // Desvincular el evento para evitar múltiples llamadas
 
     const id = datajson.response;
     const respuesta = await getVisitDetailsId(id);
-    console.log(respuesta, id);
+    // console.log(respuesta, id);
     const responseParsed2 = JSON.parse(respuesta);
-
-    console.log(responseParsed2);
     const fielData2 = responseParsed2[0].fieldData;
     const html2 = html4Details_v2(fielData2);
 
-    // console.log(respuesta);
+    // Crear el contenedor del temporizador dinámicamente cada vez que se abre el modal
+    const temporizadorContainer = document.createElement("div");
+    temporizadorContainer.id = "temporizador-container";
+    temporizadorContainer.style.display = "block";
+    temporizadorContainer.style.textAlign = "center";
+    temporizadorContainer.style.marginTop = "10px";
+    temporizadorContainer.style.color = "#0dcaf0";
 
-    //   $("#visitaDetailModalBody").html("");
-    //   $("#visitaDetailModalBody").html(html.body);
-    //   $("#visitaDetailModalTitle").html(html.title);
+
+    // Título "Tiempo Límite"
+    const titulo = document.createElement("h5");
+    titulo.textContent = "Tiempo límite";
+    // titulo.style.color = "#d9534f";
+    temporizadorContainer.appendChild(titulo);
+
+    // Div del temporizador
+    const temporizadorDiv = document.createElement("div");
+    temporizadorDiv.id = "temporizador";
+    temporizadorDiv.textContent = "10:00"; // Tiempo inicial
+    temporizadorDiv.style.fontSize = "1.5em";
+    temporizadorDiv.style.fontWeight = "bold";
+    temporizadorDiv.style.color = "#0dcaf0";
+    temporizadorContainer.appendChild(temporizadorDiv);
+
+   
 
     // Esperar un segundo antes de abrir el Modal 2
     setTimeout(function () {
       $("#visitaDetailModalBody").html("");
       $("#visitaDetailModalBody").html(html2.body);
+      document.getElementById("visitaDetailModalBody").prepend(temporizadorDiv);
       $("#visitaDetailModalTitle").html(html2.title);
       $("#visitaDetailModal").modal("toggle");
       $(".updateVisit").data("record", responseParsed2[0].recordId);
+
+      // Iniciar temporizador cuando el modal se muestra
+      iniciarTemporizador(temporizadorDiv);
     }, 1000); // 1000 milisegundos = 1 segundo
   }
 }
@@ -2102,3 +2130,53 @@ let getVisitDetailsId = async function (id) {
     error: function (XMLHttpRequest, textStatus, errorThrown) {},
   });
 };
+
+// Función para actualizar el temporizador
+function iniciarTemporizador(temporizadorDiv) {
+  let tiempoRestante = 600; // 10 minutos en segundos
+
+  function actualizarTemporizador() {
+    const minutos = Math.floor(tiempoRestante / 60);
+    const segundos = tiempoRestante % 60;
+    temporizadorDiv.textContent = `Tiempo límite: ${minutos}:${
+      segundos < 10 ? "0" : ""
+    }${segundos}`;
+    tiempoRestante--;
+
+    if (tiempoRestante < 0) {
+      clearInterval(intervalId);
+      temporizadorDiv.textContent = "¡Tiempo terminado!";
+
+      // Mostrar alerta y ejecutar cierre de sesión
+      Swal.fire({
+        icon: "warning",
+        title: "Sesión CADUCADA",
+        text: "Su sesión ha sido caducado por límite de tiempo",
+        confirmButtonText: "Aceptar",
+        allowOutsideClick: true,
+        allowEscapeKey: true,
+      }).then(() => {
+        // Llamada al servidor para cerrar la sesión
+        fetch("modelos/cerrar_sesion.php", {
+          method: "POST",
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "session_closed") {
+              window.location.href = "ingreso";
+            }
+          })
+          .catch((error) => console.error("Error al cerrar sesión:", error));
+      });
+    }
+  }
+
+  // Ejecuta la función cada segundo
+  const intervalId = setInterval(actualizarTemporizador, 1000);
+
+  // Detener el temporizador y remover el div si el modal se cierra
+  $("#visitaDetailModal").on("hidden.bs.modal", function () {
+    clearInterval(intervalId);
+    temporizadorDiv.remove(); // Remueve el div del temporizador
+  });
+}

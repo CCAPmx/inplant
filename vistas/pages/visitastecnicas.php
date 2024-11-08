@@ -9,10 +9,10 @@
     <div class="d-flex bd-highlight p-0 text-white" style="background-color: #07B5E8;">
         <div class="my-2 mx-2 flex-grow-1 bd-highlight">Visitas Técnicas</div>
         <!-- <?php
-        echo $_SESSION["ccap"];
-        // echo $_SESSION["lersant"];
+                echo $_SESSION["ccap"];
+                // echo $_SESSION["lersant"];
 
-        ?> -->
+                ?> -->
         <ol class="my-2 mx-2 breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="dashclientes">Inicio</a></li>
             <li class="breadcrumb-item active">Visitas Técnicas</li>
@@ -35,6 +35,7 @@
 
                     <!-- <button id="btnValidarSecion" class="btn btn-outline-info btn-sm mx-3" onclick="validarSesion()"> validar sesion</button> -->
 
+                    
                     <div class="d-flex justify-content-end">
                         <div class="btn-group  my-3 mx-2" role="group" aria-label="Basic example">
                             <button id="btnNuevaVisita" class="btn btn-outline-info btn-sm mx-3"> <i class="fas fa-plus-circle"></i> Nueva Visita</button>
@@ -145,6 +146,7 @@
             <div class="modal-header" id="visitaDetailModalTitle">
             </div>
             <div class="modal-body" id="visitaDetailModalBody">
+            <!-- <div id="temporizador">10:00</div> -->
 
             </div>
             <div class="modal-footer">
@@ -167,3 +169,6 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="vistas/recursos/compressor/compressor.min.js"></script>
 
+<script>
+    
+</script>
