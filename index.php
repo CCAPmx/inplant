@@ -19,6 +19,7 @@ include "modelos/granalla.modelo.php";
 include "modelos/movimientos.modelo.php";
 include "modelos/maquinas.modelo.php";
 include "modelos/mantenimiento.modelo.php";
+// include "modelos/MGranulometria.php";
 
 
 $plantilla = new ControloadorPlantilla();

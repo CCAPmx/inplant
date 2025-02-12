@@ -6,6 +6,8 @@
     <title>Documento</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
     <style>
         .header-container {
@@ -153,14 +155,15 @@
 </head>
 
 <body>
-    
-<?php include 'formatos/maquinaGranalladoPdf.php';?>
+
+
+    <?php include 'formatos/maquinaGranalladoPdf.php'; ?>
 
 
 
 
- <?php include 'formatos/procesoGranalladoPdf.php';?> 
- <?php include 'formatos/condicionGranalladoPdf.php';?> 
+    <?php include 'formatos/procesoGranalladoPdf.php'; ?>
+    <?php include 'formatos/condicionGranalladoPdf.php'; ?>
 
 </body>
 
@@ -168,7 +171,38 @@
 
 
 
+<script>
+        // Obtener el parámetro "id" de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get("id"); // Aquí se obtiene el valor del ID
+
+        let getVisitDetails = async function(pk) {
+            return await $.ajax({
+                type: "GET",
+                url: `../../controladores/visitas.controlador.php?action=getVisitaDetails&pk=${pk}`,
+                success: function(response) {
+                    const result = JSON.parse(response);
+                    if (response?.ok) {
+                        return result;
+                    } else {
+                        return false;
+                    }
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.error("Error al obtener los detalles de la visita:", errorThrown);
+                },
+            });
+        };
+
+        // Usar el parámetro "id" capturado desde la URL
+        (async () => {
+            if (id) {
+                const visitDetails = await getVisitDetails(id);
+                console.log("Detalles de la visita:", visitDetails);
+            } else {
+                console.error("No se encontró el parámetro 'id' en la URL.");
+            }
+        })();
+    </script>
+
 </html>
-
-
-

@@ -1,353 +1,369 @@
-$(document).ready(function () {
+let clientesData = []; // 🔹 Variable para almacenar la data
 
-
-    let tbgrano = $("#tbgrano").DataTable({
-        responsive: true,
-        paging      : true,
-        retrieve: true,
-        pageLength  : 10,
-        lengthChange: false,
-        dom: "Bfrtip",
-        ordering    : true,
-        serverSide	: false,
-        fixedHeader : true,
-        orderCellsTop: true,
-        info		: true,
-        select      : false,
-        stateSave	: false, 
-        order       : [ [ 0, 'asc' ] ],	
-        buttons: [
-
-            {
-                extend: 'excel',
-                text: '<i class="fas fa-file-excel"></i>',
-                title: 'REPORTE DE REFERENCIAS ',
-                filename: 'REFERENCIAS',
-                titleAttr: 'Excel'
-            },
-            {
-                extend: 'pdf',
-                text: '<i class="fas fa-file-pdf"></i>',
-                orientation: 'portrait',
-                pageSize: 'letter',
-                title: 'REPORTE DE REFERENCIAS ',
-                filename: 'REFERENCIAS',
-                titleAttr: 'PDF'
-            },
-            {
-                extend: 'print',
-                text: '<i class="fas fa-print"></i>',
-                titleAttr: 'Imprimir'
-              },
-              'pageLength'
-              
-        ],
-        language : {
-            processing:     "Procesando...",
-            zeroRecords:    "No se encontraron resultados",
-            emptyTable:     "Ningún dato disponible en esta tabla",
-            info:           "Mostrando _START_ al _END_ de _TOTAL_ registros",
-            infoEmpty:      "No hay registros disponibles",
-            infoFiltered:   "(filtrado de un total de _MAX_ registros)",
-            infoPostFix:    "",
-            search:         "Buscar:",
-            url:            "",
-            infoThousands:  ",",
-            loadingRecords: "Cargando...",
-            oPaginate: {
-                   sFirst : "Primero",
-                   sLast  : "Último",
-                   sNext  : "<span class='fa fa-chevron-right fa-w-10'></span>",
-                   sPrevious : "<span class='fa fa-chevron-left fa-w-10'></span>"
-               },
-            select: {
-                rows: "" 
-            },
-            searchBuilder: {
-                add: 'Agregar Filtro',
-                condition: 'Operador',
-                clearAll: 'Limpiar',
-                delete: 'Borrar',
-                deleteTitle: 'Borrar Titulo',
-                data: 'Columna',
-                left: 'Izquierda',
-                leftTitle: 'Titulo Izquierdo',
-                logicAnd: 'And',
-                logicOr: 'or',
-                right: 'Derecho',
-                rightTitle: 'Titulo Derecho',
-                title: {
-                    0: '',
-                    _: 'Filtros (%d)'
-                },
-                value: 'Opción',
-                valueJoiner: 'et',
-                conditions :{
-                    string: {
-                        contains: 'Contiene',
-                        empty: 'Vacío',
-                        endsWith: 'Termina con',
-                        equals: 'Igual a',
-                        not: 'Diferente de',
-                        notContains: 'No Contiene',
-                        notEmpty: 'No Vacío',
-                        notEndsWith: 'No Termina con',
-                        notStartsWith: 'No Inicia con',
-                        startsWith: 'Inicia con'
-                    },
-                    number: {
-                        equals: 'Igual a',
-                        not: 'Diferente de',
-                        gt: 'Mayor a',
-                        gte: 'Mayor o igual a',
-                        lt: 'Menor a',
-                        lte: 'Menor o igual a',
-                        between: 'Entre',
-                        notBetween: 'No entre',
-                        empty: 'Vacío',
-                        notEmpty: 'No vacío'
-                    },
-                    date: {
-                        before: 'Antes',
-                        after: 'Después',
-                        equals: 'Igual a',
-                        not: 'Diferente de',
-                        between: 'Entre',
-                        notBetween: 'No entre',
-                        empty: 'Vacío',
-                        notEmpty: 'No vacío'
-                    },
-                    moment: {
-                        before: 'Antes',
-                        after: 'Después',
-                        equals: 'Igual a',
-                        not: 'Diferente de',
-                        between: 'Entre',
-                        notBetween: 'No entre',
-                        empty: 'Vacío',
-                        notEmpty: 'No vacío'
-                    }
-                }
-            }
-        },
-       "ajax": {
-           "method": "POST",
-           "url": "ajax/tablegranulometria.ajax.php"
-       
-       },
-       
-       columnDefs: [
-        {
-            targets: -1,
-            data: null,
-            defaultContent: '<div class="btn-group" style="margin: auto; display: flex;flex-direction: row;justify-content: center;" ><button class="btn btn-outline-warning btn-sm BtnMod" Id style="margin-right:10px;"><i class="fas fa-pen"></i></button><button class="btn btn-outline-danger btn-sm  BtnEli" Id><i class="fas fa-times" aria-hidden="true"></i></button></div>'
-        }
-    
- 
-    ]
+// 🔹 Función para obtener datos y almacenarlos en `clientesData`
+function getFetch(url) {
+  return fetch(url, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      clientesData = data; // Guardar los datos en la variable global
+      // console.log("✅ Datos almacenados en clientesData:", clientesData);
+      return data;
+    })
+    .catch((error) => {
+      console.error("❌ Error en la solicitud:", error);
+      return []; // Devolver un array vacío en caso de error
     });
+}
 
-    $("#btnActualizargranulo").click(function () {
-        mostrarLoader();
-        $.ajax({
-          type: "POST",
-          url: "modelos/enviogranu.php",
-          success: function (data) {
-             Conta = parseInt(data);
-             if (Conta>0 ) {
-               Swal.fire({
-                 icon: "success",
-                 title: "Registros Actualizado Correctamente " + Conta,
-                 showConfirmButton: false,
-                 timer: 1000,
-               });
-               tbgrano.ajax.reload(null, false);
-               ocultarLoader();
-             } else {
-               Swal.fire({
-                 icon: "success",
-                 title: "Registros Actualizado Correctamente " + Conta,
-                 showConfirmButton: false,
-                 timer: 1000,
-               });
-               tbgrano.ajax.reload(null, false);
-               ocultarLoader();
-             }
-          },
-        });
-      });
-    
+function parametresGetFetch(url, options, mensaje) {
+  fetch(url, options)
+    .then((response) => response.json())
+    .then((data) => dataResponse(data, mensaje))
+    .catch((errorB) => console.log("error", errorB));
+}
+
+async function dataResponse(datajson, mensaje) {
+  // console.log(datajson);
+  fechaActualEvento = [];
+
+  if (datajson.status == 200) {
+    Swal.fire({
+      position: "center",
+      icon: "success",
+      title: datajson.message,
+      showConfirmButton: false,
+      timer: 2000,
+    }).then(() => {
+      // table.ajax.reload(null, false);
+      // $('#infoModal').modal('hide');
+      // Resetear el formulario y cerrar el modal después del mensaje de éxito
+      window.location.reload();
+    });
+  } else {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Ocurrió un error al guardar la visita",
+      text: datajson.message || "Intente nuevamente más tarde",
+      showConfirmButton: true,
+    });
+  }
+}
+
+function crearSelector(data) {
+  const select = document.getElementById("cbmClienteGranulometria");
+
+  // Limpiar opciones previas
+  select.innerHTML = '<option value="">Seleccione una opción</option>';
+
+  // Usar `Set` para almacenar clientes únicos
+  const clientesUnicos = new Set();
+
+  data.forEach((cliente) => {
+    if (!clientesUnicos.has(cliente.cliente)) {
+      // Verifica si ya está agregado
+      clientesUnicos.add(cliente.cliente); // Agregar al Set para evitar duplicados
+
+      let option = document.createElement("option");
+      option.value = cliente.procesador_maq; // Suponiendo que cada cliente tiene un 'id'
+      option.textContent = cliente.cliente; // Suponiendo que cada cliente tiene un 'nombre'
+      select.appendChild(option);
+    }
+  });
+}
+
+// 🔹 Función para poblar el <select> de clientes
+function crearSelectorClientes(data) {
+  const selectClientes = document.getElementById("cbmClienteGranulometria");
+  selectClientes.innerHTML = '<option value="">Seleccione un Cliente</option>';
+
+  const clientesUnicos = new Set();
+
+  data.forEach((cliente) => {
+    if (!clientesUnicos.has(cliente.cliente)) {
+      clientesUnicos.add(cliente.cliente);
+      let option = document.createElement("option");
+      option.value = cliente.cliente; // Se usa `procesador_maq` como value
+      option.textContent = cliente.cliente;
+      selectClientes.appendChild(option);
+    }
+  });
+
+  // 🔹 Evento cuando se selecciona un cliente
+  selectClientes.addEventListener("change", function () {
+    const procesadorMaqSeleccionado = this.value;
+    // console.log("🔍 Procesador seleccionado:", procesadorMaqSeleccionado);
+    actualizarSelectorMaquinas(procesadorMaqSeleccionado);
+  });
+}
+
+// 🔹 Función para filtrar y poblar el select de máquinas con clientes repetidos
+function actualizarSelectorMaquinas(cliente) {
+  const selectMaquinas = document.getElementById("cbmmaquinaGranulometria");
+  selectMaquinas.innerHTML = '<option value="">Seleccione una Máquina</option>';
+  // console.log("🔍 Cliente seleccionado:", cliente);
+
+  // Filtrar clientes repetidos con el mismo nombre
+  const maquinasFiltradas = clientesData.filter(
+    (item) => item.cliente === cliente
+  );
+
+  // console.log("🔍 Máquinas filtradas:", maquinasFiltradas);
+
+  // Agregar opciones al select de máquinas
+  maquinasFiltradas.forEach((item) => {
+    let option = document.createElement("option");
+    option.value = item.procesador_maq; // Suponiendo que cada máquina tiene un ID
+    option.textContent = item.nombre; // Suponiendo que cada máquina tiene un nombre
+    selectMaquinas.appendChild(option);
+  });
+}
+
+function formatoFecha() {
+  var input = document.getElementById("txtFechaGranulometria").value;
+  var fecha = new Date(input);
+  var dia = ("0" + fecha.getDate()).slice(-2);
+  var mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+  var año = fecha.getFullYear();
+  var fechaFormateada = mes + "/" + dia + "/" + año;
+  document.getElementById("fechaFormateada").textContent = fechaFormateada;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const fechaInput = document.getElementById("txtFechaGranulometria");
+  const hoy = new Date();
+  const unDia = 24 * 60 * 60 * 1000; // Milisegundos en un día
+
+  // Formatear fecha como YYYY-MM-DD
+  function formatearFecha(date) {
+    let mes = "" + (date.getMonth() + 1),
+      dia = "" + date.getDate(),
+      año = date.getFullYear();
+
+    if (mes.length < 2) mes = "0" + mes;
+    if (dia.length < 2) dia = "0" + dia;
+
+    return [año, mes, dia].join("-");
+  }
+
+  // // Establecer la fecha máxima (hoy) y mínima (3 días antes)
+  // fechaInput.max = formatearFecha(hoy);
+  // fechaInput.min = formatearFecha(new Date(hoy - 6 * unDia));
+  fechaInput.value = fechaInput.max; // Establece la fecha por defecto a hoy
 });
 
-$("#btnNuevousuario").click(function () {
-      $("#Frmusuarios").trigger("reset");
-      $(".modal-header").css("background-color", "#07B5E8");
-      $(".modal-title").text("Alta De Usuario");
-      $("#myModal").modal("show");
-  });
+// 🔹 Evento para el botón "Siguiente"
+let btnSiguienteGranulometria = document.getElementById(
+  "btnSiguienteGranulometria"
+);
 
-  $("#formConctato").submit(function (e) {
-    e.preventDefault();
-    idtipouser = parseInt($("#cbmTipouser").val());
-    idcliente = parseInt($("#cbmCliente").val());
-    idnotificacion = parseInt($("#cbmNotificacion").val());
-    nombre = $.trim($("#txtNombre").val());
-    usuario = $.trim($("#txtPuesto").val());
-    contrasena = $.trim($("#txtContrasena").val());
-    movil = $.trim($("#txtMovil").val());
+btnSiguienteGranulometria.addEventListener("click", function () {
+  let cliente = document.getElementById("cbmClienteGranulometria").value;
+  let maquina = document.getElementById("cbmmaquinaGranulometria").value;
+  let fecha = document.getElementById("txtFechaGranulometria").value;
+  let nombreCliente = $("#cbmClienteGranulometria option:selected").text();
+  let maquinaCliente = $("#cbmmaquinaGranulometria option:selected").text();
 
-    if (document.getElementById('CheckProd').checked){
-        areaprod=1
-     }else{
-        areaprod=0
-     }
-
-     if (document.getElementById('CheckManto').checked){
-        areamanto=1
-     }else{
-        areamanto=0
-     }
-
-     if (document.getElementById('CheckDir').checked){
-        areadir=1
-     }else{
-        areadir=0
-     }
-
-
-    
-
-
-    if ($('#CheckDir').is(":checked")) {
-        areadir=1;
-    }
-    else {
-        areadir=0;
-    }
-
-    if ($('#CheckBodega').is(":checked")) {
-        areabodega=1;
-    }
-    else {
-        areabodega=0;
-    }
-
-    if ($('#CheckProy').is(":checked")) {
-        areaproyecto=1;
-    }
-    else {
-        areaproyecto=0;
-    }
-
-    if ($('#CheckGranalla').is(":checked")) {
-        permisogranalla=1;
-    }
-    else {
-        permisogranalla=0;
-    }
-
-    if ($('#CheckPiezas').is(":checked")) {
-        permisopieza=1;
-    }
-    else {
-        permisopieza=0;
-    }
-
-    if ($('#CheckPartes').is(":checked")) {
-        permisoaltapartes=1;
-    }
-    else {
-        permisoaltapartes=0;
-    }
-
-    if ($('#CheckExtender').is(":checked")) {
-        permisovidautil=1;
-    }
-    else {
-        permisovidautil=0;
-    }
-
-    if ($('#CheckEntradas').is(":checked")) {
-        permisoentrada=1;
-    }
-    else {
-        permisoentrada=0;
-    }
-
-    if ($('#CheckSalidas').is(":checked")) {
-        permisosalida=1;
-    }
-    else {
-        permisosalida=0;
-    }
-
-    $.ajax({
-      url: "modelos/crudcontactos.php",
-      type: "POST",
-      datatype: "json",
-      data: {
-        idcontacto:idcontacto,
-        idusuario: idusuario,
-        nombre: nombre,
-        puesto: puesto,
-        domoficina: domoficina,
-        teloficina: teloficina,
-        fax: fax,
-        domparticular: domparticular,
-        telparticular: telparticular,
-        celular: celular,
-        email: email,
-        fecha: fecha,
-        opcion: opcion,
-      },
-      success: function (data) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Registro Actualizado Correctamente',
-          showConfirmButton: false,
-          timer: 1000
-        })
-        $("#ModalContactos").modal("hide");
-        tbcontactos.ajax.reload(null, false);
-      },
+  if (cliente == 0) {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "se requiere seleccionar un cliente",
+      showConfirmButton: false,
+      timer: 1500,
     });
-   
-   
-  });
-
-  function obtenerTipousario() {
-    $.ajax({
-      url: "ajax/usuarios.ajax.php",
-      type: "POST",
-      data: {
-        Combo: 1
-      },
-      datatype: "json",
-      success: function (data) {
-       
-        $("#cbmTipouser").append(
-          '<option value=0 selected="selected">Seleccione Tipo De Usuario</option>'
-        );
-        var obj = JSON.parse(data);
-        obj.forEach(function (data, index) {
-          $("#cbmTipouser").append(
-            "<option value=" + data.id + ">" + data.text + "</option>"
-          );
-        });
-      },
-      error: function (data) {
-        // alert("Error Centro");
-      },
+  } else if (maquina.length == 0 || maquina === "Ninguno") {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "se requiere seleccionar una maquina",
+      showConfirmButton: false,
+      timer: 1500,
     });
+  } else if (fecha.length == 0) {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "se requiere seleccionar una fecha",
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  } else {
+    $(".btnSiguienteGranulometria").hide();
+    $(".contenedor_form_granulometria_nueva").hide();
+    $(".btnSiguienteGranulometria").hide();
+    $(".btnRegresarGranulometria").show();
+    $(".contenedor_form_granulometria").show();
+    $(".btnGuardarGranulometria").show();
+    $(".modal-title").text("informacion de granulometria");
+
+    $("#fecha_nueva_granulometria").text(fecha);
+    $("#cliente_nueva_granulometria").text(nombreCliente);
+    $("#maquina_nueva_granulometria").text(maquinaCliente);
   }
 
-  
-function mostrarLoader() {
-    document.getElementById("loader").style.display = "block";
+  //   let idGranulometria = document.getElementById("txtIdGranulometria").value;
+});
+
+// 🔹 Opción de regresar o cambiar los valores de nuevo (puedes añadir un botón si es necesario)
+$("#btnRegresarGranulometria").on("click", function () {
+  $(".contenedor_form_granulometria").hide();
+  $(".btnSiguienteGranulometria").show();
+  $(".btnRegresarGranulometria").hide();
+  $(".btnGuardarGranulometria").hide();
+  $(".contenedor_form_granulometria_nueva").show();
+});
+
+// 🔹 Evento para el botón "Guardar"
+
+let btnGuardarGranulometria = document.getElementById(
+  "btnGuardarGranulometria"
+);
+
+btnGuardarGranulometria.addEventListener("click", function () {
+  // FrmVisitas
+
+  // Obtener el formulario de edición
+  let form = document.getElementById("FrmVisitas");
+
+  // Verificar si el formulario es válido (esto mostrará mensajes de error nativos en el navegador)
+  if (!form.checkValidity()) {
+    // Si el formulario no es válido, evita continuar y dispara la validación
+    form.reportValidity();
+    return;
   }
-  
-  // Función para ocultar el loader
-  function ocultarLoader() {
-    document.getElementById("loader").style.display = "none";
+
+  let arrayDatos = {
+    clienteNombre: $("#cbmClienteGranulometria").val(),
+    maquinaNombre: $("#maquina_nueva_granulometria").val(),
+    procesador_maq: $("#cbmmaquinaGranulometria").val(),
+    fecha: $("#txtFechaGranulometria").val(),
+    c_05: $("#c_05").val(),
+    c_09: $("#c_09").val(),
+    c_150: $("#c_150").val(),
+    c_212: $("#c_212").val(),
+    c_300: $("#c_300").val(),
+    c_425: $("#c_425").val(),
+    c_600: $("#c_600").val(),
+    c_850: $("#c_850").val(),
+    c_1180: $("#c_1180").val(),
+    c_1400: $("#c_1400").val(),
+    c_1700: $("#c_1700").val(),
+    c_2200: $("#c_2200").val(),
+    polvo: $("#polvo").val(),
+    usuario: datosSesion,
+  };
+
+  // console.log(arrayDatos);
+  let clienteFK = clientesData.find(
+    (cliente) =>
+      cliente.procesador_maq === parseInt(arrayDatos.procesador_maq, 10)
+  );
+
+  arrayDatos.fkCliente = clienteFK.id_cliente;
+  arrayDatos.fkMaquina = clienteFK.fkMaquina;
+  arrayDatos.maquinaNombre = clienteFK.nombre;
+  // console.log(arrayDatos);
+  // console.log(clientesData);
+  // console.log(clienteFK);
+
+  let url = "controladores/granulometria.controlador.php?action=insertar";
+  let options = {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ arrayDatos: arrayDatos }),
+  };
+  var urlGranulometria =
+    "controladores/granulometria.controlador.php?action=insertar";
+
+  mensaje = "Granulometria guardada con exito";
+
+  parametresGetFetch(url, options, mensaje);
+});
+
+let btnEditarGranulometria = document.getElementById("btnGranulometriaEdicion");
+
+btnEditarGranulometria.addEventListener("click", function () {
+  let $form = $("#FrmGranulometriaEdicion");
+
+  let form = document.getElementById("FrmGranulometriaEdicion");
+
+  // Verificar si el formulario es válido (esto mostrará mensajes de error nativos en el navegador)
+  if (!form.checkValidity()) {
+    // Si el formulario no es válido, evita continuar y dispara la validación
+    form.reportValidity();
+    return;
   }
-  
+
+  let arrayDatos = {
+    c_05: $form.find("#c_05").val(),
+    c_09: $form.find("#c_09").val(),
+    c_150: $form.find("#c_150").val(),
+    c_212: $form.find("#c_212").val(),
+    c_300: $form.find("#c_300").val(),
+    c_425: $form.find("#c_425").val(),
+    c_600: $form.find("#c_600").val(),
+    c_850: $form.find("#c_850").val(),
+    c_1180: $form.find("#c_1180").val(),
+    c_1400: $form.find("#c_1400").val(),
+    c_1700: $form.find("#c_1700").val(),
+    c_2200: $form.find("#c_2200").val(),
+    polvo: $form.find("#polvo").val(),
+    procesador_maq: $form.find("#procesador").val(),
+    idGranulometria: $form.find("#idGranulometria").val(),
+  };
+
+  // Busca en clientesData el registro que coincida según procesador_maq
+  let clienteFK = clientesData.find(
+    (cliente) =>
+      cliente.procesador_maq === parseInt(arrayDatos.procesador_maq, 10)
+  );
+
+  arrayDatos.fkCliente = clienteFK.id_cliente;
+  arrayDatos.fkMaquina = clienteFK.fkMaquina;
+  arrayDatos.maquinaNombre = clienteFK.nombre;
+
+  arrayDatos.fkCliente = clienteFK.id_cliente;
+  arrayDatos.fkMaquina = clienteFK.fkMaquina;
+  arrayDatos.maquinaNombre = clienteFK.nombre;
+  // console.log(arrayDatos);
+  // console.log(clientesData);
+  // console.log(clienteFK);
+
+  let url = "controladores/granulometria.controlador.php?action=editar";
+  let options = {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ arrayDatos: arrayDatos }),
+  };
+
+  mensaje = "Granulometria guardada con exito";
+
+  parametresGetFetch(url, options, mensaje);
+});
+
+// 🔹 Función para obtener los datos y almacenarlos en clientesData
+async function cargarClientes() {
+  const urlGranulometria =
+    "controladores/granulometria.controlador.php?action=1";
+  clientesData = await getFetch(urlGranulometria);
+  // console.log("✅ Datos cargados:", clientesData);
+  crearSelectorClientes(clientesData);
+}
+
+// 🔹 Iniciar la carga de datos
+cargarClientes();

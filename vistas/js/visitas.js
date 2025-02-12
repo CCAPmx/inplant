@@ -137,7 +137,8 @@ $(document).on("click", "#exportpdf", async function () {
       document.querySelector("#exportpdf").style.display = "none";
       document.querySelector("#closeBottomModal").style.display = "none";
       document.querySelector(".updateVisit").style.display = "none";
-      await printToPDF();
+      let id = $(this).data("index");
+      await printToPDF(id);
       document.querySelector("#closeModal").style.display = "inline-block";
       document.querySelector("#exportpdf").style.display = "inline-block";
       document.querySelector("#closeBottomModal").style.display =
@@ -151,6 +152,7 @@ $(document).on("click", "#exportpdf", async function () {
     },
   });
 });
+
 $(document).on("click", ".updateVisit", async function () {
   Swal.fire({
     title: "¿Esta seguro que quiere actualizar?",
@@ -325,7 +327,7 @@ function previsualizarImagen(input, imagenPrevisualizacion) {
   }
 }
 
-let printToPDF = function () {
+let printToPDF = function (param) {
   const iframe = document.createElement("iframe");
   document.body.appendChild(iframe);
   iframe.style.width = "100%";
@@ -333,6 +335,7 @@ let printToPDF = function () {
   iframe.style.position = "absolute";
   iframe.style.left = "-10000px"; // Ocultar el iframe visualmente
 
+  // alert(param);
   iframe.onload = function () {
     // Ajustar el tamaño del canvas cuando se cargue el contenido del iframe
     const adjustCanvasSize = () => {
@@ -413,8 +416,18 @@ let printToPDF = function () {
     processElement(0);
   };
 
+  // const response = await getVisitDetails(pk);
+  //     const responseParsed = JSON.parse(response);
+  //     const fielData = responseParsed[0].fieldData;
+
   // Cargar el documento HTML externo en el iframe
-  iframe.src = "vistas/pagesPdfs/documento.php";
+
+  // Usar parámetros para generar la URL
+  const queryParams = new URLSearchParams(param).toString();
+  const url = "vistas/pagesPdfs/documento.php?id=" + param;
+  console.log(url);
+  iframe.src = url;
+  // iframe.src = "vistas/pagesPdfs/documento.php?id=" + param;
 };
 
 let printToPDF_v1 = function () {
@@ -1944,14 +1957,22 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   // Maneja el evento de clic en el botón
-  $("#btnGuardarVisita").on("click", function () {
+  $("#btnSiguienteVisita").on("click", function () {
     // alert("hola");
     // Obtener los datos del formulario
     let clienteVisita = $("#cbmCliente").val();
     let maquinaVisita = $("#cbmmaquina").val();
     let fecha = $("#txtFechaVisita").val();
+    let nombreCliente = $("#cbmCliente option:selected").text();
+    let nombreMaquina = $("#cbmmaquina option:selected").text();
 
-    // console.log(clienteVisita, maquinaVisita, fecha);
+    console.log(
+      clienteVisita,
+      maquinaVisita,
+      fecha,
+      nombreCliente,
+      nombreMaquina
+    );
 
     if (clienteVisita == 0) {
       Swal.fire({
@@ -1983,23 +2004,78 @@ $(document).ready(function () {
       });
     }
 
-    let url = "modelos/insertarVisita.php";
+    // Ocultar el formulario de visitas y mostrar el de granometría
+    $(".contenedor_form_visitas_nueva").hide();
+    $(".btnSiguienteVisita").hide();
+    $(".btnRegresarvisita").show();
+    $(".contenedor_form_visita_granumetria").show();
+    $(".btnGuardarVisita").show();
+    $(".modal-title").text("informacion de granulometria");
 
-    let options = {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fkMaquina: maquinaVisita,
-        fkCliente: clienteVisita,
-        fecha: fecha,
-      }),
-    };
-
-    ajaxParametos(url, options);
+    $("#fecha_nueva_visita").text(fecha);
+    $("#cliente_nueva_visita").text(nombreCliente);
+    $("#maquina_nueva_visita").text(nombreMaquina);
   });
+});
+
+// Opción de regresar o cambiar los valores de nuevo (puedes añadir un botón si es necesario)
+$("#btnRegresarVisita").on("click", function () {
+  $(".contenedor_form_visita_granumetria").hide();
+  $(".btnSiguienteVisita").show();
+  $(".btnRegresarvisita").hide();
+  $(".btnGuardarVisita").hide();
+  $(".contenedor_form_visitas_nueva").show();
+});
+
+// Opción de regresar o cambiar los valores de nuevo (puedes añadir un botón si es necesario)
+$("#btnGuardarVisita").on("click", function () {
+  // alert("hola");
+  let clienteVisita = $("#cbmCliente").val();
+  let maquinaVisita = $("#cbmmaquina").val();
+  let fecha = $("#txtFechaVisita").val();
+  let c_05 = $("#c_05").val();
+  let c_09 = $("#c_09").val();
+  let c_150 = $("#c_150").val();
+  let c_212 = $("#c_212").val();
+  let c_300 = $("#c_300").val();
+  let c_425 = $("#c_425").val();
+  let c_600 = $("#c_600").val();
+  let c_850 = $("#c_850").val();
+  let c_1180 = $("#c_1180").val();
+  let c_1400 = $("#c_1400").val();
+  let c_1700 = $("#c_1700").val();
+  let c_2200 = $("#c_2200").val();
+
+  console.log(clienteVisita, maquinaVisita, fecha);
+
+  let url = "modelos/insertarVisita.php";
+
+  let options = {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      fkMaquina: maquinaVisita,
+      fkCliente: clienteVisita,
+      fecha: fecha,
+      c_05: c_05,
+      c_09: c_09,
+      c_150: c_150,
+      c_212: c_212,
+      c_300: c_300,
+      c_425: c_425,
+      c_600: c_600,
+      c_850: c_850,
+      c_1180: c_1180,
+      c_1400: c_1400,
+      c_1700: c_1700,
+      c_2200: c_2200,
+    }),
+  };
+
+  ajaxParametos(url, options);
 });
 
 function ajaxParametos(url, options) {
@@ -2018,60 +2094,86 @@ async function dataResponse(datajson) {
       position: "center",
       icon: "success",
       title: "Visita técnica registrada con éxito",
+      text: "Ahora puedes agregar fotos y comentarios en la edición de la visita para completar la información.",
       showConfirmButton: false,
-      timer: 1000,
+      timer: 2000,
+    }).then(() => {
+      // Resetear el formulario y cerrar el modal después del mensaje de éxito
+      window.location.reload();
     });
-
-    document.getElementById("FrmVisitas").reset();
-    $("#myModal").modal("hide");
-    $("#myModal").off("hidden.bs.modal"); // Desvincular el evento para evitar múltiples llamadas
-
-    const id = datajson.response;
-    const respuesta = await getVisitDetailsId(id);
-    // console.log(respuesta, id);
-    const responseParsed2 = JSON.parse(respuesta);
-    const fielData2 = responseParsed2[0].fieldData;
-    const html2 = html4Details_v2(fielData2);
-
-    // Crear el contenedor del temporizador dinámicamente cada vez que se abre el modal
-    const temporizadorContainer = document.createElement("div");
-    temporizadorContainer.id = "temporizador-container";
-    temporizadorContainer.style.display = "block";
-    temporizadorContainer.style.textAlign = "center";
-    temporizadorContainer.style.marginTop = "10px";
-    temporizadorContainer.style.color = "#0dcaf0";
-
-
-    // Título "Tiempo Límite"
-    const titulo = document.createElement("h5");
-    titulo.textContent = "Tiempo límite";
-    // titulo.style.color = "#d9534f";
-    temporizadorContainer.appendChild(titulo);
-
-    // Div del temporizador
-    const temporizadorDiv = document.createElement("div");
-    temporizadorDiv.id = "temporizador";
-    temporizadorDiv.textContent = "10:00"; // Tiempo inicial
-    temporizadorDiv.style.fontSize = "1.5em";
-    temporizadorDiv.style.fontWeight = "bold";
-    temporizadorDiv.style.color = "#0dcaf0";
-    temporizadorContainer.appendChild(temporizadorDiv);
-
-   
-
-    // Esperar un segundo antes de abrir el Modal 2
-    setTimeout(function () {
-      $("#visitaDetailModalBody").html("");
-      $("#visitaDetailModalBody").html(html2.body);
-      document.getElementById("visitaDetailModalBody").prepend(temporizadorDiv);
-      $("#visitaDetailModalTitle").html(html2.title);
-      $("#visitaDetailModal").modal("toggle");
-      $(".updateVisit").data("record", responseParsed2[0].recordId);
-
-      // Iniciar temporizador cuando el modal se muestra
-      iniciarTemporizador(temporizadorDiv);
-    }, 1000); // 1000 milisegundos = 1 segundo
+  } else {
+    Swal.fire({
+      position: "center",
+      icon: "error",
+      title: "Ocurrió un error al guardar la visita",
+      text: datajson.message || "Intente nuevamente más tarde",
+      showConfirmButton: true,
+    });
   }
+
+  // document.getElementById("FrmVisitas").reset();
+  // $("#myModal").modal("hide");
+  // $("#myModal").off("hidden.bs.modal"); // Desvincular el evento para evitar múltiples llamadas
+
+  // const id = datajson.response;
+  // const respuesta = await getVisitDetailsId(id);
+  // // console.log(respuesta, id);
+  // const responseParsed2 = JSON.parse(respuesta);
+  // const fielData2 = responseParsed2[0].fieldData;
+  // const html2 = html4Details_v2(fielData2);
+
+  // // Crear el contenedor del temporizador dinámicamente cada vez que se abre el modal
+  // const temporizadorContainer = document.createElement("div");
+  // temporizadorContainer.id = "temporizador-container";
+  // temporizadorContainer.style.display = "block";
+  // temporizadorContainer.style.textAlign = "center";
+  // temporizadorContainer.style.marginTop = "10px";
+  // temporizadorContainer.style.color = "#0dcaf0";
+
+  // // Título "Tiempo Límite"
+  // const titulo = document.createElement("h5");
+  // titulo.textContent = "Tiempo límite";
+  // // titulo.style.color = "#d9534f";
+  // temporizadorContainer.appendChild(titulo);
+
+  // // Div del temporizador
+  // const temporizadorDiv = document.createElement("div");
+  // temporizadorDiv.id = "temporizador";
+  // temporizadorDiv.textContent = "10:00"; // Tiempo inicial
+  // temporizadorDiv.style.fontSize = "1.5em";
+  // temporizadorDiv.style.fontWeight = "bold";
+  // temporizadorDiv.style.color = "#0dcaf0";
+  // temporizadorContainer.appendChild(temporizadorDiv);
+
+  // // Esperar un segundo antes de abrir el Modal 2
+  // setTimeout(function () {
+  //   $("#visitaDetailModalBody").html("");
+  //   $("#visitaDetailModalBody").html(html2.body);
+  //   document.getElementById("visitaDetailModalBody").prepend(temporizadorDiv);
+  //   $("#visitaDetailModalTitle").html(html2.title);
+  //   $("#visitaDetailModal").modal("toggle");
+  //   $(".updateVisit").data("record", responseParsed2[0].recordId);
+
+  //   // Iniciar temporizador cuando el modal se muestra
+  //   iniciarTemporizador(temporizadorDiv);
+  // }, 1000); // 1000 milisegundos = 1 segundo
+}
+
+// Función para limpiar el formulario y cerrar el modal
+function resetFormAndModal() {
+  // Limpiar todos los inputs
+  $("input").val("");
+  $("#cbmCliente").val("0");
+  $("#cbmmaquina").val("0");
+  $("#txtFechaVisita").val("");
+
+  // Regresar al primer formulario
+  $(".contenedor_form_visitas_nueva").show();
+  $(".btnSiguienteVisita").show();
+  $(".btnRegresarvisita").hide();
+  $(".contenedor_form_visita_granumetria").hide();
+  $(".btnGuardarVisita").hide();
+  $(".modal-title").text("Visita técnica");
 }
 
 function formatoFecha() {

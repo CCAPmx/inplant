@@ -67,7 +67,7 @@ class ControladorVisitasTecnicas
     }
     public function getVisitaTecnicaSencilla()
     {
-        $query = '_offset=1&_limit=50&_sort=[{%20%22fieldName%22%3A%20%22fecha%22%2C%20%22sortOrder%22%3A%20%22descend%22%20}]';
+        $query = '_offset=1&_limit=10&_sort=[{%20%22fieldName%22%3A%20%22fecha%22%2C%20%22sortOrder%22%3A%20%22descend%22%20}]';
         $host = 'https://fms.lersan.com/fmi/data/v1/databases/CCAP/layouts/visita_tecnica_web_sencilla/records?' . $query;
         $body = '';
         // var_dump('gellVisitasTecnicaSencilla');

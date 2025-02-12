@@ -35,7 +35,7 @@
 
                     <!-- <button id="btnValidarSecion" class="btn btn-outline-info btn-sm mx-3" onclick="validarSesion()"> validar sesion</button> -->
 
-                    
+
                     <div class="d-flex justify-content-end">
                         <div class="btn-group  my-3 mx-2" role="group" aria-label="Basic example">
                             <button id="btnNuevaVisita" class="btn btn-outline-info btn-sm mx-3"> <i class="fas fa-plus-circle"></i> Nueva Visita</button>
@@ -81,7 +81,7 @@
                         <input type="" hidden class="form-control" id="txtPkempresa_v1" name="txtPkempresa_v1" required value="" readonly>
 
                     </div>
-                    <div class="row">
+                    <div class="row contenedor_form_visitas_nueva">
 
 
 
@@ -126,12 +126,98 @@
 
                     </div>
 
+                    <div class="row contenedor_form_visita_granumetria" style="display: none;">
+
+                    <div  class="col-md-3">
+                        <strong>Fecha: </strong> <span id="fecha_nueva_visita"></span>
+                    </div>
+
+                    <div  class="col-md-3">
+                        <strong>Maquina: </strong> <span id="maquina_nueva_visita"></span>
+                    </div>
+
+                    <div  class="col-md-3">
+                        <strong>Cliente: </strong><span id="cliente_nueva_visita"></span>
+                    </div>
+
+                    <div  class="col-md-3">
+                        <strong>Nombre Usuario: </strong> <span id="usuario_nueva_visita"><?php echo $_SESSION['nombre']; ?></span>
+                    </div>
+
+                    <div class="col-12"><hr>
+                </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_05</label>
+                            <input type="number" name="c_05" id="c_05" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_09</label>
+                            <input type="number" name="c_09" id="c_09" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_150</label>
+                            <input type="number" name="c_150" id="c_150" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_212</label>
+                            <input type="number" name="c_212" id="c_212" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_300</label>
+                            <input type="number" name="c_300" id="c_300" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_425</label>
+                            <input type="number" name="c_425" id="c_425" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_600</label>
+                            <input type="number" name="c_600" id="c_600" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_850</label>
+                            <input type="number" name="c_850" id="c_850" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_1180</label>
+                            <input type="number" name="c_1180" id="c_1180" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_1400</label>
+                            <input type="number" name="c_1400" id="c_1400" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_1700</label>
+                            <input type="number" name="c_1700" id="c_1700" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="inputPassword5" class="form-label">c_2200</label>
+                            <input type="number" name="c_2200" id="c_2200" class="form-control">
+                        </div>                    
+
+                       
+                    </div>
+
                 </div>
             </form>
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" id="btnGuardarVisita" class="btn btn-primary">CONTINUAR</button>
+                <button type="button" id="btnSiguienteVisita" class="btn btn-primary btnSiguienteVisita">CONTINUAR</button>
+                <button type="button" id="btnRegresarVisita" class="btn btn-primary btnRegresarvisita" style="display: none;">REGRESAR</button>
+                <button type="button" id="btnGuardarVisita" class="btn btn-success btnGuardarVisita" style="display: none;">Guardar</button>
                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">CANCELAR</button>
             </div>
 
@@ -146,7 +232,7 @@
             <div class="modal-header" id="visitaDetailModalTitle">
             </div>
             <div class="modal-body" id="visitaDetailModalBody">
-            <!-- <div id="temporizador">10:00</div> -->
+                <!-- <div id="temporizador">10:00</div> -->
 
             </div>
             <div class="modal-footer">
@@ -170,5 +256,5 @@
 <script src="vistas/recursos/compressor/compressor.min.js"></script>
 
 <script>
-    
+
 </script>
