@@ -15,6 +15,12 @@
     input[type=number] {
         -moz-appearance: textfield;
     }
+
+    .input-invalido {
+        background-color: rgba(255, 165, 0, 0.3) !important;
+        /* Naranja pálido */
+        border: 1px solid #ffa500;
+    }
 </style>
 
 <div class="container-fluid">
@@ -165,7 +171,10 @@
                         </div>
 
                         <div class="row">
+                            <div id="mensaje_granulometria" class=" text-center col-12" style="display: none; color: red; font-size: 16px;font-weight: bold;"></div>
+
                             <div class="col-12 row p-2">
+
                                 <div class="col-md-2 d-flex align-items-center">
                                     <label for="polvo" class="mr-2 p-1"> <strong>Polvo</strong> </label>
                                     <input type="number" name="polvo" id="polvo" class="form-control" required>
@@ -295,8 +304,15 @@
                         <input type="hidden" name="idGranulometria" id="idGranulometria" class="form-control">
                         <input type="hidden" name="procesado" id="procesador" class="form-control">
 
+
+                        <div id="mensaje_granulometria" class=" text-center col-12" style="display: none; color: red; font-size: 16px;font-weight: bold;"></div>
+
+                       
                         <div class="row">
+                            <div id="mensaje_granulometria_editar" class=" text-center col-12" style="display: none; color: red; font-size: 16px;font-weight: bold;"></div>
+
                             <div class="col-12 row p-2">
+
                                 <div class="col-md-2 d-flex align-items-center">
                                     <label for="polvo" class="mr-2 p-1"> <strong>Polvo</strong> </label>
                                     <input type="number" name="polvo" id="polvo" class="form-control" required>

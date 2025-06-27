@@ -65,4 +65,11 @@ class cGranulometria
         $respueta = $obj->editar($request);
         return $respueta;
     }
+
+    //  static public function dataGranulometriaSelector($procesador)
+    // {
+    //     $obj = new mainGranulometria();
+    //     $respueta= $obj->dataGranulometriaSelector($procesador);
+    //     return $respueta;
+    // }
 }

@@ -95,7 +95,7 @@ class mainGranulometria
             $stmt = $objConexion->conectarDooble()->prepare($sql);
             $stmt->bindParam(':fecha', $request['fecha'], PDO::PARAM_STR);
             $stmt->bindParam(':nombre_maquina', $request['maquinaNombre'], PDO::PARAM_STR);
-            $stmt->bindParam(':c_05', $request['c_05'] , PDO::PARAM_STR);
+            $stmt->bindParam(':c_05', $request['c_05'], PDO::PARAM_STR);
             $stmt->bindParam(':c_09', $request['c_09'], PDO::PARAM_STR);
             $stmt->bindParam(':c_150', $request['c_150'], PDO::PARAM_STR);
             $stmt->bindParam(':c_212', $request['c_212'], PDO::PARAM_STR);
@@ -236,5 +236,39 @@ class mainGranulometria
         ];
 
         return $array;
+    }
+
+
+    public function dataGranulometriaSelector($request)
+    {
+
+        //  var_dump($request);
+        $Sql = "SELECT c_05, c_09, c_150, c_212, c_300, c_425, c_600, c_850, c_1180, c_1400, c_1700, c_2200,fkCliente, fkMaquina,nombre_maquina,fecha, id  FROM granulometria
+        WHERE fecha >= NOW() - INTERVAL 5 DAY and fkMaquina = :fkMaquina
+        ORDER BY fecha DESC
+        LIMIT 5;
+        ";
+
+
+        $objConexion = new conexion();
+
+        $stmt = $objConexion->conectarDooble()->prepare($Sql);
+        $stmt->bindParam(':fkMaquina', $request, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll();
+
+        
+
+        // var_dump($request);
+        // var_dump($stmt->fetchAll());
+        if ($stmt->rowCount() == 0) {
+            $array = [
+                'success' => false,
+                'message' => 'No hay registros',
+                'status' => 400
+            ];
+            return $array;
+        }
+        // $stmt = null;
     }
 }

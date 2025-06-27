@@ -34,21 +34,8 @@ $body = '{
       "fkCliente": "' . $input['fkCliente'] . '",      
       "nombre_usuario": "' .  $_SESSION["nombre"] . '",  
       "nombre_maquina": "' . $fkMaquinaData['descripcion'] . '",       
-      "fecha": "'.date("m/d/Y",$timestamp).'",
-      "c_05": "' . $input['c_05'] . '",
-      "c_09": "' . $input['c_09'] . '",
-      "c_150": "' . $input['c_150'] . '",
-      "c_212": "' . $input['c_212'] . '",
-      "c_300": "' . $input['c_300'] . '",
-      "c_425": "' . $input['c_425'] . '",      
-      "c_600": "' . $input['c_600'] . '",
-      "c_850": "' . $input['c_850'] . '",
-      "c_1180": "' . $input['c_1180'] . '",
-      "c_1400": "' . $input['c_1400'] . '",
-      "c_1700": "' . $input['c_1700'] . '",
-      "c_2200": "' . $input['c_2200'] . '"     
-      
-    }
+      "fecha": "'.date("m/d/Y",$timestamp).'"
+       }
   }';
 
   

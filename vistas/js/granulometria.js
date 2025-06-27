@@ -233,13 +233,38 @@ btnGuardarGranulometria.addEventListener("click", function () {
 
   // Obtener el formulario de edición
   let form = document.getElementById("FrmVisitas");
+  let inputs = form.querySelectorAll("input[type='number']");
+  let valido = true;
 
-  // Verificar si el formulario es válido (esto mostrará mensajes de error nativos en el navegador)
-  if (!form.checkValidity()) {
-    // Si el formulario no es válido, evita continuar y dispara la validación
-    form.reportValidity();
+  // Recorrer cada input y validar
+  inputs.forEach((input) => {
+    if (!input.value.trim()) {
+      // Si está vacío
+      input.classList.add("input-invalido"); // Agregar la clase de error
+      valido = false; // Indicar que hay campos vacíos
+    } else {
+      input.classList.remove("input-invalido"); // Quitar la clase si ya tiene valor
+    }
+  });
+
+  if (!valido) {
+    var mensaje = document.getElementById("mensaje_granulometria");
+    mensaje.style.display = "block";
+    document.getElementById("mensaje_granulometria").innerHTML =
+      "Por favor, complete todos los campos obligatorios.";
+    // alert("Por favor, complete todos los campos obligatorios.");
     return;
+  } else {
+    var mensaje = document.getElementById("mensaje_granulometria");
+    mensaje.style.display = "none";
   }
+
+  // // Verificar si el formulario es válido (esto mostrará mensajes de error nativos en el navegador)
+  // if (!form.checkValidity()) {
+  //   // Si el formulario no es válido, evita continuar y dispara la validación
+  //   form.reportValidity();
+  //   return;
+  // }
 
   let arrayDatos = {
     clienteNombre: $("#cbmClienteGranulometria").val(),
@@ -297,14 +322,36 @@ let btnEditarGranulometria = document.getElementById("btnGranulometriaEdicion");
 btnEditarGranulometria.addEventListener("click", function () {
   let $form = $("#FrmGranulometriaEdicion");
 
-  let form = document.getElementById("FrmGranulometriaEdicion");
+  
 
-  // Verificar si el formulario es válido (esto mostrará mensajes de error nativos en el navegador)
-  if (!form.checkValidity()) {
-    // Si el formulario no es válido, evita continuar y dispara la validación
-    form.reportValidity();
-    return;
-  }
+
+   // Obtener el formulario de edición
+   let form = document.getElementById("FrmGranulometriaEdicion");
+   let inputs = form.querySelectorAll("input[type='number']");
+   let valido = true;
+ 
+   // Recorrer cada input y validar
+   inputs.forEach((input) => {
+     if (!input.value.trim()) {
+       // Si está vacío
+       input.classList.add("input-invalido"); // Agregar la clase de error
+       valido = false; // Indicar que hay campos vacíos
+     } else {
+       input.classList.remove("input-invalido"); // Quitar la clase si ya tiene valor
+     }
+   });
+ 
+   if (!valido) {
+     var mensaje = document.getElementById("mensaje_granulometria_editar");
+     mensaje.style.display = "block";
+     document.getElementById("mensaje_granulometria_editar").innerHTML =
+       "Por favor, complete todos los campos obligatorios.";
+     // alert("Por favor, complete todos los campos obligatorios.");
+     return;
+   } else {
+     var mensaje = document.getElementById("mensaje_granulometria");
+     mensaje.style.display = "none";
+   }
 
   let arrayDatos = {
     c_05: $form.find("#c_05").val(),

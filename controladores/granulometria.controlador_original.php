@@ -7,4 +7,11 @@ class ControladorGranulo
         $respueta= ModeloGranulo::MdltablaGranulo();
         return $respueta;
     }
+
+
+    static public function dataGranulometria($procesador)
+    {
+        $respueta= ModeloGranulo::dataGranulometria($procesador);
+        return $respueta;
+    }
 }

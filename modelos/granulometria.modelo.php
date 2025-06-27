@@ -15,4 +15,21 @@ class ModeloGranulo
     }
 
 
+
+    static public function dataGranulometria($procesador)
+    {
+        $Sql = "SELECT * FROM granulometrias
+        WHERE fecha >= NOW() - INTERVAL 5 DAY
+        ORDER BY fecha DESC
+        LIMIT 5;
+        ";
+
+        
+        $stmt = Conexion::conectar()->prepare($Sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
+        $stmt = null;
+    }
+
+     
 }

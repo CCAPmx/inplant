@@ -120,7 +120,7 @@ $("#tablaVisitas").on("click", ".more-info", async function () {
 
       // Refrescar la tabla cuando se cierra el modal de detalles de la visita
       $("#visitaDetailModal").on("hidden.bs.modal", function () {
-        table.ajax.reload(); // Recargar la tabla
+        // table.ajax.reload(); // Recargar la tabla
       });
     },
   });
@@ -164,43 +164,75 @@ $(document).on("click", ".updateVisit", async function () {
     confirmButtonText: "Si, guardar",
     cancelButtonText: "Cancelar",
   }).then((result) => {
-    console.log(result);
+    // console.log(result);
     if (result.isConfirmed) {
-      console.log("si");
+      // console.log("si");
       const recordId = $(this).data("record");
-      console.log($(this).data());
+      // console.log("informacion form", $(this).data());
       Swal.fire({
         title: "Preparando actualización...",
         allowOutsideClick: false,
         showConfirmButton: false,
         willOpen: async () => {
           Swal.showLoading();
-          try {
-            const datos = await prepareDataToUpdate();
-            console.log("datos", datos);
-            const response = await updateVisit(datos, recordId);
-            // Cierra el cargador después de un breve período de tiempo
-            setTimeout(() => {
-              Swal.close();
-            }, 500);
 
-            if (response.ok) {
-              $("#tablaVisitas").bootstrapTable();
-              $("#visitaDetailModal").modal("toggle");
+          try {
+            const selected = document.getElementById("id_granulometria").value;
+            if (!selected) {
               Swal.fire({
-                position: "top-end",
+                icon: "warning",
+                title: "Sin granulometria seleccionada",
+                html: `
+      <p>No se encontró  granulometria reciente asociada a esta maquina.</p>
+      <p><strong>No puedes continuar hasta que se registre una granulometria </strong></p>
+      <p>¿Deseas cancelar completamente esta acción?</p>
+    `,
+                showCancelButton: true,
+                confirmButtonText: "Sí, cancelar visita",
+                cancelButtonText: "Volver",
+                reverseButtons: true,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // Aquí puedes cerrar el modal o redirigir
+                  $("#visitaDetailModal").modal("hide"); // o window.location.reload();
+                }
+              });
+              return;
+            }
+
+            const datos = await prepareDataToUpdate();
+            const response = await updateVisit(datos, recordId);
+
+            // console.log("response", response);
+
+            if (response.success == true) {
+              $("#tablaVisitas").bootstrapTable("refresh");
+              $("#visitaDetailModal").modal("hide");
+
+              Swal.fire({
+                position: "center",
                 icon: "success",
-                title: "Your work has been saved",
+                title: response.message,
                 showConfirmButton: false,
                 timer: 1500,
               });
+            } else {
+              Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: response.message,
+              });
             }
           } catch (error) {
-            console.error(error.message);
+            console.error(
+              "❌ Error en prepareDataToUpdate o updateVisit:",
+              error
+            );
+
             Swal.fire({
               icon: "error",
               title: "Error",
-              text: "Hubo un error durante la actualización.",
+              text: "Hubo un error inesperado durante la actualización.",
             });
           }
         },
@@ -212,7 +244,7 @@ $(document).on("click", ".updateVisit", async function () {
 async function prepareDataToUpdate() {
   const inputs = document
     .querySelector("#visitaDetailModalBody")
-    .querySelectorAll("input, textarea");
+    .querySelectorAll("input, textarea,select");
   const datos = {};
 
   const compressImage = (file) => {
@@ -425,7 +457,7 @@ let printToPDF = function (param) {
   // Usar parámetros para generar la URL
   const queryParams = new URLSearchParams(param).toString();
   const url = "vistas/pagesPdfs/documento.php?id=" + param;
-  console.log(url);
+  // console.log(url);
   iframe.src = url;
   // iframe.src = "vistas/pagesPdfs/documento.php?id=" + param;
 };
@@ -711,6 +743,71 @@ let html4Details_v2 = function (fielData) {
   } else {
     fielData.fecha = "";
   }
+
+  //selector granometria
+
+  // console.log("🚀 fielData", fielData.fkMaquina);
+  let url =
+    "controladores/visitas.controlador.php?action=dataGranulometriaSelector&fkMaquina=" +
+    fielData.fkMaquina +
+    "";
+  //  console.log("🛰️ Fetching from:", url);
+  fetch(url)
+    .then((response) => response.text()) // ⚠️ primero lo tratamos como texto
+    .then((text) => {
+      // console.log("📦 Respuesta cruda del servidor:", text);
+
+      try {
+        const data = JSON.parse(text);
+        const selector = document.getElementById("id_granulometria");
+        const mensaje = document.getElementById("msgNoGranulometria");
+
+        if (Array.isArray(data) && data.length > 0) {
+          // Mostrar select, ocultar mensaje
+          selector.style.display = "block";
+          mensaje.style.display = "none";
+
+          selector.innerHTML =
+            '<option value="">Selecciona una opción</option>';
+
+          const valorActual = fielData.id_granulometria;
+
+          data.forEach((item, index) => {
+            const fechaOriginal = item.fecha || item.date || null;
+            let fechaFormateada = "Sin fecha";
+
+            if (fechaOriginal) {
+              const fecha = new Date(fechaOriginal);
+              const dia = ("0" + fecha.getDate()).slice(-2);
+              const mes = ("0" + (fecha.getMonth() + 1)).slice(-2);
+              const año = fecha.getFullYear();
+              fechaFormateada = `${dia}-${mes}-${año}`;
+            }
+
+            const option = document.createElement("option");
+            const id = item.id || `registro_${index}`;
+            option.value = id;
+            option.textContent = fechaFormateada;
+
+            if (valorActual && id == valorActual) {
+              option.selected = true;
+            }
+
+            selector.appendChild(option);
+          });
+        } else {
+          // Ocultar select y mostrar mensaje
+          selector.style.display = "none";
+          mensaje.style.display = "block";
+        }
+      } catch (error) {
+        console.error("❌ Error al parsear JSON:", error);
+      }
+    })
+    .catch((error) => {
+      console.error("❌ Error de red o conexión:", error);
+    });
+
   const title = `	<img src="vistas/recursos/img/avatars/lersan.png" width="100">
 					<div>REPORTE VISITA TÉCNICA</div>
 					<img src="vistas/recursos/img/avatars/in-plant.jpeg" width="100">
@@ -829,103 +926,23 @@ let html4Details_v2 = function (fielData) {
 	<div class="accordion-item">
 	  <h2 class="accordion-header">
 		<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-		  Información Granulometría
+		  Vincular Granulometria
 		</button>
 	  </h2>
 	  	<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
 			<div class="accordion-body">
 				<div class="row g-3">
+      
+        <select id="id_granulometria" name="id_granulometria" class="form-select form-select-sm mb-2">
+  <option value="">Selecciona una opción</option>
+</select> 
 
-					<div class="col-md-3">
-						<label for="polvo" class="form-label">Polvo</label>
-						<input type="number" class="form-control" name="polvo" id="polvo" value="${
-              fielData.polvo
-            }">
-					</div>
-
-					<div class="col-md-3">
-						<label for="c_05" class="form-label">c_05</label>
-						<input type="number" class="form-control" name="c_05" id="c_05" value="${
-              fielData.c_05
-            }">
-					</div>
-
-					<div class="col-md-3">
-						<label for="c_09" class="form-label">c_09</label>
-						<input type="number" class="form-control" name="c_09" id="c_09" value="${
-              fielData.c_09
-            }">
-					</div>
-
-					<div class="col-md-3">
-						<label for="c_150" class="form-label">c_150</label>
-						<td><input type="number" class="form-control" name="c_150" id="c_150" value="${
-              fielData.c_150
-            }"></td>
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_212" class="form-label">c_212</label>
-						<input type="number" class="form-control" name="c_212" id="c_212" value="${
-              fielData.c_212
-            }">
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_300" class="form-label">c_300</label>
-						<input type="number" class="form-control" name="c_300" id="c_300" value="${
-              fielData.c_300
-            }">
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_425" class="form-label">c_425</label>
-						<input type="number" class="form-control" name="c_425" id="c_425" value="${
-              fielData.c_425
-            }">
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_600" class="form-label">c_600</label>
-						<input type="number" class="form-control" name="c_600" id="c_600" value="${
-              fielData.c_600
-            }">
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_850" class="form-label">c_850</label>
-						<input type="number" class="form-control" name="c_850" id="c_850" value="${
-              fielData.c_850
-            }">
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_1180" class="form-label">c_1180</label>
-						<input type="number" class="form-control" name="c_1180" id="c_1180" value="${
-              fielData.c_1180
-            }">
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_1400" class="form-label">c_1400</label>
-						<input type="number" class="form-control" name="c_1400"  id="c_1400" value="${
-              fielData.c_1400
-            }">
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_1700" class="form-label">c_1700</label>
-						<input type="number" class="form-control" name="c_1700" id="c_1700" value="${
-              fielData.c_1700
-            }"></td>
-					</div>
-
-					<div class="col-md-4">
-						<label for="c_2200" class="form-label">c_2200</label>
-						<input type="number" class="form-control" name="c_2200" id="c_2200" value="${
-              fielData.c_2200
-            }">
-					</div>
+<!-- Mensaje si no hay granulometrías -->
+<p id="msgNoGranulometria" class="text-danger" style="display: none;">
+  No hay granulometrías disponibles en los últimos 5 días.
+</p>
+          
+					
 				</div>
 			</div>
 	  	</div>
@@ -1813,6 +1830,7 @@ let getVisitDetails = async function (pk) {
     url: `controladores/visitas.controlador.php?action=getVisitaDetails&pk=${pk}`,
     success: function (response) {
       result = JSON.parse(response);
+
       if (response?.ok) {
         return result;
       } else {
@@ -1838,24 +1856,91 @@ let getAllVisitsWithDetails = async function () {
     error: function (XMLHttpRequest, textStatus, errorThrown) {},
   });
 };
+// let updateVisit = async function (data, recordId) {
+//   const data2Send = JSON.stringify(data);
+
+//   console.log("data2Send", data2Send);
+//   return await $.ajax({
+//     type: "POST",
+//     url: `controladores/visitas.controlador.php`,
+//     data: { action: "updateVisit", data: data2Send, recordid: recordId },
+//     dataType: "json",
+//     success: function (response) {
+//       result = response;
+//       if (response?.ok) {
+//         return result;
+//       } else {
+//         return false;
+//       }
+//     },
+//     error: function (XMLHttpRequest, textStatus, errorThrown) {},
+//   });
+// };
+
+// let updateVisit = async function (data, recordId) {
+//   const data2Send = JSON.stringify(data);
+//   console.log("📤 Datos a enviar:", data2Send);
+
+//   try {
+//     const response = await $.ajax({
+//       type: "POST",
+//       url: "controladores/visitas.controlador.php",
+//       data: {
+//         action: "updateVisit",
+//         data: data2Send,
+//         recordid: recordId,
+//       },
+//       dataType: "json",
+//     });
+
+//     console.log("✅ Respuesta del servidor:", response);
+//     return response;
+//   } catch (xhr) {
+//     console.error("❌ Error en AJAX:", xhr.status, xhr.responseText);
+
+//     // Intenta parsear el mensaje de error si viene en formato JSON
+//     let errorMessage = "Error en la solicitud AJAX";
+
+//     try {
+//       const json = JSON.parse(xhr.responseText);
+//       if (json.message) {
+//         errorMessage = json.message;
+//       }
+//     } catch (e) {
+//       // No es JSON, dejar mensaje genérico
+//     }
+
+//     return {
+//       success: false,
+//       message: errorMessage,
+//     };
+//   }
+// };
+
 let updateVisit = async function (data, recordId) {
-  const data2Send = JSON.stringify(data);
-  return await $.ajax({
-    type: "POST",
-    url: `controladores/visitas.controlador.php`,
-    data: { action: "updateVisit", data: data2Send, recordid: recordId },
-    dataType: "json",
-    success: function (response) {
-      result = response;
-      if (response?.ok) {
-        return result;
-      } else {
-        return false;
-      }
-    },
-    error: function (XMLHttpRequest, textStatus, errorThrown) {},
-  });
+  const data2Send = new FormData();
+  data2Send.append("action", "updateVisit");
+  data2Send.append("data", JSON.stringify(data));
+  data2Send.append("recordid", recordId);
+
+  try {
+    const response = await fetch("controladores/visitas.controlador.php", {
+      method: "POST",
+      body: data2Send,
+    });
+
+    const result = await response.json();
+    // console.log("✅ Respuesta del servidor:", result);
+    return result;
+  } catch (error) {
+    console.error("❌ Error en fetch:", error);
+    return {
+      success: false,
+      message: "Error en la solicitud al servidor",
+    };
+  }
 };
+
 function esDispositivoMovil() {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent
@@ -1966,13 +2051,13 @@ $(document).ready(function () {
     let nombreCliente = $("#cbmCliente option:selected").text();
     let nombreMaquina = $("#cbmmaquina option:selected").text();
 
-    console.log(
-      clienteVisita,
-      maquinaVisita,
-      fecha,
-      nombreCliente,
-      nombreMaquina
-    );
+    // console.log(
+    //   clienteVisita,
+    //   maquinaVisita,
+    //   fecha,
+    //   nombreCliente,
+    //   nombreMaquina
+    // );
 
     if (clienteVisita == 0) {
       Swal.fire({
@@ -2033,20 +2118,20 @@ $("#btnGuardarVisita").on("click", function () {
   let clienteVisita = $("#cbmCliente").val();
   let maquinaVisita = $("#cbmmaquina").val();
   let fecha = $("#txtFechaVisita").val();
-  let c_05 = $("#c_05").val();
-  let c_09 = $("#c_09").val();
-  let c_150 = $("#c_150").val();
-  let c_212 = $("#c_212").val();
-  let c_300 = $("#c_300").val();
-  let c_425 = $("#c_425").val();
-  let c_600 = $("#c_600").val();
-  let c_850 = $("#c_850").val();
-  let c_1180 = $("#c_1180").val();
-  let c_1400 = $("#c_1400").val();
-  let c_1700 = $("#c_1700").val();
-  let c_2200 = $("#c_2200").val();
+  // let c_05 = $("#c_05").val();
+  // let c_09 = $("#c_09").val();
+  // let c_150 = $("#c_150").val();
+  // let c_212 = $("#c_212").val();
+  // let c_300 = $("#c_300").val();
+  // let c_425 = $("#c_425").val();
+  // let c_600 = $("#c_600").val();
+  // let c_850 = $("#c_850").val();
+  // let c_1180 = $("#c_1180").val();
+  // let c_1400 = $("#c_1400").val();
+  // let c_1700 = $("#c_1700").val();
+  // let c_2200 = $("#c_2200").val();
 
-  console.log(clienteVisita, maquinaVisita, fecha);
+  // console.log(clienteVisita, maquinaVisita, fecha);
 
   let url = "modelos/insertarVisita.php";
 
@@ -2060,18 +2145,18 @@ $("#btnGuardarVisita").on("click", function () {
       fkMaquina: maquinaVisita,
       fkCliente: clienteVisita,
       fecha: fecha,
-      c_05: c_05,
-      c_09: c_09,
-      c_150: c_150,
-      c_212: c_212,
-      c_300: c_300,
-      c_425: c_425,
-      c_600: c_600,
-      c_850: c_850,
-      c_1180: c_1180,
-      c_1400: c_1400,
-      c_1700: c_1700,
-      c_2200: c_2200,
+      // c_05: c_05,
+      // c_09: c_09,
+      // c_150: c_150,
+      // c_212: c_212,
+      // c_300: c_300,
+      // c_425: c_425,
+      // c_600: c_600,
+      // c_850: c_850,
+      // c_1180: c_1180,
+      // c_1400: c_1400,
+      // c_1700: c_1700,
+      // c_2200: c_2200,
     }),
   };
 
@@ -2086,7 +2171,7 @@ function ajaxParametos(url, options) {
 }
 
 async function dataResponse(datajson) {
-  console.log(datajson);
+  // console.log(datajson);
   fechaActualEvento = [];
 
   if (datajson.status == 200) {

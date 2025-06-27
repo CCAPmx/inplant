@@ -215,9 +215,9 @@
 
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" id="btnSiguienteVisita" class="btn btn-primary btnSiguienteVisita">CONTINUAR</button>
+                <button type="button" id="btnSiguienteVisita" class="btn btn-primary btnSiguienteVisita" style="display: none;">CONTINUAR</button>
                 <button type="button" id="btnRegresarVisita" class="btn btn-primary btnRegresarvisita" style="display: none;">REGRESAR</button>
-                <button type="button" id="btnGuardarVisita" class="btn btn-success btnGuardarVisita" style="display: none;">Guardar</button>
+                <button type="button" id="btnGuardarVisita" class="btn btn-success btnGuardarVisita" >Guardar</button>
                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">CANCELAR</button>
             </div>
 
@@ -253,6 +253,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.4.1/purify.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="vistas/recursos/compressor/compressor.min.js"></script>
 
 <script>

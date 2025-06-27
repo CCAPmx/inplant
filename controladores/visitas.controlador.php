@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Mexico_City');
 $visitasTecnicas = new ControladorVisitasTecnicas();
-
+require __DIR__ . "/../modelos/MGranulometria.php";
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
 
     switch ($_GET['action']) {
@@ -19,6 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             $data = $visitasTecnicas->getVisitaTecnicaCompleta($key);
             // header('Content-Type: application/json');
 
+            // $dataGranumelitria  =  $visitasTecnicas->dataGranulometriaSelector($key);
+
+            // var_dump($dataGranumelitria);
+
             // var_dump('getVisitaDetails');
             echo json_encode($data);
             break;
@@ -30,8 +34,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action'])) {
             } else {
                 $key = '';
             }
+
+
             $data = $visitasTecnicas->getVisitaTecnicaCompletaId($key);
             // header('Content-Type: application/json');
+            echo json_encode($data);
+
+            break;
+
+        case 'dataGranulometriaSelector':
+            $key = isset($_GET['fkMaquina']) ? $_GET['fkMaquina'] : '';
+            // var_dump($key);
+            // $key = 00000000000;
+            $data = $visitasTecnicas->dataGranulometriaSelector($key);
+            header('Content-Type: application/json'); // Muy importante
             echo json_encode($data);
             break;
     }
@@ -180,6 +196,8 @@ class ControladorVisitasTecnicas
     }
     public function updateVisitaTecnica($recordid, $data)
     {
+
+        // var_dump($recordid, $data);
         $host = 'https://fms.lersan.com/fmi/data/v1/databases/CCAP/layouts/visita_tecnica_web/records/' . $recordid;
         $body = '{
             "fieldData":
@@ -200,12 +218,39 @@ class ControladorVisitasTecnicas
             ]
           }');*/
 
+        // var_dump($response);
+
+        // echo json_encode($response);
+
+        // if (isset($response->messages[0]->message) && $response->messages[0]->message == 'OK') {
+        //     return true;
+        // } else {
+        //     return false;
+        // }
+
         if (isset($response->messages[0]->message) && $response->messages[0]->message == 'OK') {
-            return true;
+            echo json_encode([
+                'success' => true,
+                'message' => 'Actualización realizada correctamente',
+                'modId' => $response
+            ]);
         } else {
-            return false;
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al actualizar',
+                'detalle' => $response->messages[0]->message ?? 'Respuesta inesperada'
+            ]);
         }
+        exit;
     }
+
+    public function dataGranulometriaSelector($procesador)
+    {
+        $obj = new mainGranulometria();
+        $respueta = $obj->dataGranulometriaSelector($procesador);
+        return $respueta;
+    }
+
     private function convertArrayForView($data)
     {
         // var_dump($data);
@@ -228,6 +273,8 @@ class ControladorVisitasTecnicas
 
         return $dataConverted;
     }
+
+
     /**
      * Ejecion de peticion
      * @param $host  pk de la solicitud
