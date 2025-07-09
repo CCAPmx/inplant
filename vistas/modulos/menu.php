@@ -142,6 +142,23 @@
 	.a_nav {
 		text-decoration: none !important;
 	}
+
+
+	.list_button.active,
+	.list_button--click.active {
+		background-color: #1c2532;
+	}
+
+	.list_button.active a,
+	.list_button--click.active a {
+		color: #fff;
+		font-weight: bold;
+	}
+
+	.list_show.open {
+		height: auto !important;
+		overflow: visible;
+	}
 </style>
 
 <?php
@@ -178,20 +195,20 @@ $menu = [];
 
 // Procesar los resultados de la consulta
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    if ($row['parent_id'] === NULL) {
-        // Elemento de nivel superior
-        $menu[$row['id']] = $row;
-        $menu[$row['id']]['children'] = [];
-    } else {
-        // Si hay un parent_id, añadir este item a los children del padre
-        if (isset($menu[$row['parent_id']])) {
-            $menu[$row['parent_id']]['children'][] = $row;
-        } else {
-            // Inicializa una nueva entrada en caso de que el padre no se haya encontrado todavía
-            $menu[$row['parent_id']] = ['children' => []];
-            $menu[$row['parent_id']]['children'][] = $row;
-        }
-    }
+	if ($row['parent_id'] === NULL) {
+		// Elemento de nivel superior
+		$menu[$row['id']] = $row;
+		$menu[$row['id']]['children'] = [];
+	} else {
+		// Si hay un parent_id, añadir este item a los children del padre
+		if (isset($menu[$row['parent_id']])) {
+			$menu[$row['parent_id']]['children'][] = $row;
+		} else {
+			// Inicializa una nueva entrada en caso de que el padre no se haya encontrado todavía
+			$menu[$row['parent_id']] = ['children' => []];
+			$menu[$row['parent_id']]['children'][] = $row;
+		}
+	}
 }
 
 // var_dump($menu);
@@ -199,34 +216,89 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 
 <?php
+// function renderMenu($menu)
+// {
+// 	foreach ($menu as $item) {
+// 		// Si el elemento del menú tiene subelementos
+// 		if (!empty($item['children'])) {
+// 			echo '<li class="list_item">
+//                     <div class="list_button list_button--click">
+//                         <i class="align-middle ' . htmlspecialchars($item['icon_class']) . '" style="color: #eaebef;"></i>
+//                         <a href="' . htmlspecialchars($item['url']) . '" class="list_img a_nav">' . htmlspecialchars($item['name']) . '</a>
+//                         <i class="fa-solid fa-chevron-up list_arrow i_list_arrow" style="color: #eaebef;"></i>
+//                     </div>
+//                     <ul class="list_show">';
+
+// 			// Llamada recursiva para renderizar submenús
+// 			renderMenu($item['children']);
+
+// 			echo '</ul></li>';
+// 		} else {
+// 			// Si el elemento del menú no tiene subelementos
+// 			echo '<li class="list_item">
+//                     <div class="list_button">
+//                         <i class="align-middle ' . htmlspecialchars($item['icon_class']) . '" style="color: #eaebef;"></i>
+//                         <a href="' . htmlspecialchars($item['url']) . '" class="nav_link list_img a_nav">' . htmlspecialchars($item['name']) . '</a>
+//                     </div>
+//                 </li>';
+// 		}
+// 	}
+// }
+
+
+function markActiveItems(&$menu, $currentUrl)
+{
+    foreach ($menu as &$item) {
+        $item['is_active'] = strpos($currentUrl, $item['url']) !== false;
+        $item['is_open'] = false;
+
+        if (!empty($item['children'])) {
+            markActiveItems($item['children'], $currentUrl);
+
+            // Si algún hijo está activo, el padre se debe marcar como abierto
+            foreach ($item['children'] as $child) {
+                if ($child['is_active'] || $child['is_open']) {
+                    $item['is_open'] = true;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+$currentUrl = $_SERVER['REQUEST_URI'];
+markActiveItems($menu, $currentUrl);
+
+
 function renderMenu($menu)
 {
-	foreach ($menu as $item) {
-		// Si el elemento del menú tiene subelementos
-		if (!empty($item['children'])) {
-			echo '<li class="list_item">
-                    <div class="list_button list_button--click">
-                        <i class="align-middle '.htmlspecialchars($item['icon_class']).'" style="color: #eaebef;"></i>
+    foreach ($menu as $item) {
+        $isActive = !empty($item['is_active']) ? ' active' : '';
+        $isOpen = !empty($item['is_open']) ? ' open' : '';
+
+        if (!empty($item['children'])) {
+            echo '<li class="list_item">
+                    <div class="list_button list_button--click' . $isActive . '">
+                        <i class="align-middle ' . htmlspecialchars($item['icon_class']) . '" style="color: #eaebef;"></i>
                         <a href="' . htmlspecialchars($item['url']) . '" class="list_img a_nav">' . htmlspecialchars($item['name']) . '</a>
                         <i class="fa-solid fa-chevron-up list_arrow i_list_arrow" style="color: #eaebef;"></i>
                     </div>
-                    <ul class="list_show">';
+                    <ul class="list_show' . $isOpen . '" style="height:' . ($isOpen ? 'auto' : '0') . ';">';
 
-			// Llamada recursiva para renderizar submenús
-			renderMenu($item['children']);
+            renderMenu($item['children']);
 
-			echo '</ul></li>';
-		} else {
-			// Si el elemento del menú no tiene subelementos
-			echo '<li class="list_item">
-                    <div class="list_button">
-                        <i class="align-middle '.htmlspecialchars($item['icon_class']).'" style="color: #eaebef;"></i>
+            echo '</ul></li>';
+        } else {
+            echo '<li class="list_item">
+                    <div class="list_button' . $isActive . '">
+                        <i class="align-middle ' . htmlspecialchars($item['icon_class']) . '" style="color: #eaebef;"></i>
                         <a href="' . htmlspecialchars($item['url']) . '" class="nav_link list_img a_nav">' . htmlspecialchars($item['name']) . '</a>
                     </div>
                 </li>';
-		}
-	}
+        }
+    }
 }
+
 
 // Renderiza el menú principal
 echo '<ul class="list">';

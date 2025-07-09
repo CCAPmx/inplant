@@ -118,6 +118,8 @@ session_start();
         $_GET["pages"] == "visitastecnicas" ||
         $_GET["pages"] == "programacionvisitas" ||
         $_GET["pages"] == "inplanttv" ||
+        $_GET["pages"] == "reportegreenbrier" ||
+        $_GET["pages"] == "granumelometriagreenbrier" ||
         $_GET["pages"] == "salir"
       ) {
         include "pages/" . $_GET["pages"] . ".php";
@@ -213,6 +215,8 @@ session_start();
   <script src="vistas/js/clientes.js"></script>
   <script src="vistas/js/notificacion.js"></script>
   <script src="vistas/js/granulometria.js"></script>
+  <script src="vistas/js/greenbrier.js"></script>
+  <script src="vistas/js/greenbrierRer.js"></script>
   <script src="vistas/js/contactos.js"></script>
   <script src="vistas/js/granalla.js"></script>
   <script src="vistas/js/movimientos.js"></script>

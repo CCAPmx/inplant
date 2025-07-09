@@ -38,7 +38,8 @@ class ModeloUsuarios
             usuarios.produccion,
             usuarios.mantenimiento,
             usuarios.bodega,
-            usuarios.maquinas
+            usuarios.maquinas,
+            usuarios.auth_reporte
         FROM
             usuarios
             INNER JOIN

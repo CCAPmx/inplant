@@ -203,11 +203,23 @@ btnSiguienteGranulometria.addEventListener("click", function () {
     $(".btnRegresarGranulometria").show();
     $(".contenedor_form_granulometria").show();
     $(".btnGuardarGranulometria").show();
+
+    // $(".rugosidad_greenbrier").hide();
     $(".modal-title").text("informacion de granulometria");
 
     $("#fecha_nueva_granulometria").text(fecha);
     $("#cliente_nueva_granulometria").text(nombreCliente);
     $("#maquina_nueva_granulometria").text(maquinaCliente);
+
+    
+
+
+    
+
+
+
+
+
   }
 
   //   let idGranulometria = document.getElementById("txtIdGranulometria").value;
@@ -322,36 +334,33 @@ let btnEditarGranulometria = document.getElementById("btnGranulometriaEdicion");
 btnEditarGranulometria.addEventListener("click", function () {
   let $form = $("#FrmGranulometriaEdicion");
 
-  
+  // Obtener el formulario de edición
+  let form = document.getElementById("FrmGranulometriaEdicion");
+  let inputs = form.querySelectorAll("input[type='number']");
+  let valido = true;
 
+  // Recorrer cada input y validar
+  inputs.forEach((input) => {
+    if (!input.value.trim()) {
+      // Si está vacío
+      input.classList.add("input-invalido"); // Agregar la clase de error
+      valido = false; // Indicar que hay campos vacíos
+    } else {
+      input.classList.remove("input-invalido"); // Quitar la clase si ya tiene valor
+    }
+  });
 
-   // Obtener el formulario de edición
-   let form = document.getElementById("FrmGranulometriaEdicion");
-   let inputs = form.querySelectorAll("input[type='number']");
-   let valido = true;
- 
-   // Recorrer cada input y validar
-   inputs.forEach((input) => {
-     if (!input.value.trim()) {
-       // Si está vacío
-       input.classList.add("input-invalido"); // Agregar la clase de error
-       valido = false; // Indicar que hay campos vacíos
-     } else {
-       input.classList.remove("input-invalido"); // Quitar la clase si ya tiene valor
-     }
-   });
- 
-   if (!valido) {
-     var mensaje = document.getElementById("mensaje_granulometria_editar");
-     mensaje.style.display = "block";
-     document.getElementById("mensaje_granulometria_editar").innerHTML =
-       "Por favor, complete todos los campos obligatorios.";
-     // alert("Por favor, complete todos los campos obligatorios.");
-     return;
-   } else {
-     var mensaje = document.getElementById("mensaje_granulometria");
-     mensaje.style.display = "none";
-   }
+  if (!valido) {
+    var mensaje = document.getElementById("mensaje_granulometria_editar");
+    mensaje.style.display = "block";
+    document.getElementById("mensaje_granulometria_editar").innerHTML =
+      "Por favor, complete todos los campos obligatorios.";
+    // alert("Por favor, complete todos los campos obligatorios.");
+    return;
+  } else {
+    var mensaje = document.getElementById("mensaje_granulometria");
+    mensaje.style.display = "none";
+  }
 
   let arrayDatos = {
     c_05: $form.find("#c_05").val(),
@@ -376,6 +385,8 @@ btnEditarGranulometria.addEventListener("click", function () {
     (cliente) =>
       cliente.procesador_maq === parseInt(arrayDatos.procesador_maq, 10)
   );
+
+   console.log(clienteFK);
 
   arrayDatos.fkCliente = clienteFK.id_cliente;
   arrayDatos.fkMaquina = clienteFK.fkMaquina;

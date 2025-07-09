@@ -66,6 +66,8 @@ class ControladorUsuarios
 						$_SESSION["mantenimiento"] = $respuesta["mantenimiento"];
 						$_SESSION["bodega"] = $respuesta["bodega"];
 						$_SESSION["maquinas"] = $respuesta["maquinas"];
+						$_SESSION["auth_reporte"] = $respuesta["auth_reporte"];
+
 						
 						
 						if ($_SESSION["tipousuarionivel"]<>4){
