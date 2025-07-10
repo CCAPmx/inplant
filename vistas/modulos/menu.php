@@ -278,26 +278,70 @@ function renderMenu($menu)
 
         if (!empty($item['children'])) {
             echo '<li class="list_item">
-                    <div class="list_button list_button--click' . $isActive . '">
-                        <i class="align-middle ' . htmlspecialchars($item['icon_class']) . '" style="color: #eaebef;"></i>
-                        <a href="' . htmlspecialchars($item['url']) . '" class="list_img a_nav">' . htmlspecialchars($item['name']) . '</a>
-                        <i class="fa-solid fa-chevron-up list_arrow i_list_arrow" style="color: #eaebef;"></i>
-                    </div>
-                    <ul class="list_show' . $isOpen . '" style="height:' . ($isOpen ? 'auto' : '0') . ';">';
+                    <div class="list_button list_button--click' . $isActive . '">';
+
+            // ICONO: SVG personalizado o <i> estándar
+            if ($item['icon_class'] === 'svg-piramide') {
+                echo '<svg class="align-middle" style="width: 1.2em; height: 1.2em; fill: #eaebef; margin-right: 6px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="10" r="5" />
+                        <circle cx="40" cy="25" r="5" />
+                        <circle cx="60" cy="25" r="5" />
+                        <circle cx="30" cy="40" r="5" />
+                        <circle cx="50" cy="40" r="5" />
+                        <circle cx="70" cy="40" r="5" />
+                        <circle cx="20" cy="55" r="5" />
+                        <circle cx="40" cy="55" r="5" />
+                        <circle cx="60" cy="55" r="5" />
+                        <circle cx="80" cy="55" r="5" />
+                      </svg>';
+            } elseif ($item['icon_class'] === 'svg-greebrier') {
+                echo '<img src="vistas/recursos/img/icons/letter-g_inversa.png" alt="Piramide" class="align-middle" style="width: 1.4em; height: 1.4em; margin-right: 6px;">';
+            } else {
+                echo '<i class="align-middle ' . htmlspecialchars($item['icon_class']) . '" style="color: #eaebef;"></i>';
+            }
+
+            echo '<a href="' . htmlspecialchars($item['url']) . '" class="list_img a_nav">' . htmlspecialchars($item['name']) . '</a>
+                  <i class="fa-solid fa-chevron-up list_arrow i_list_arrow" style="color: #eaebef;"></i>
+                </div>
+                <ul class="list_show' . $isOpen . '" style="height:' . ($isOpen ? 'auto' : '0') . ';">';
 
             renderMenu($item['children']);
 
             echo '</ul></li>';
         } else {
             echo '<li class="list_item">
-                    <div class="list_button' . $isActive . '">
-                        <i class="align-middle ' . htmlspecialchars($item['icon_class']) . '" style="color: #eaebef;"></i>
-                        <a href="' . htmlspecialchars($item['url']) . '" class="nav_link list_img a_nav">' . htmlspecialchars($item['name']) . '</a>
-                    </div>
+                    <div class="list_button' . $isActive . '">';
+
+            if ($item['icon_class'] === 'svg-piramide') {
+                echo '<svg class="align-middle" style="width: 1em; height: 1em; fill: #eaebef; margin-right: 6px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="10" r="5" />
+                        <circle cx="40" cy="25" r="5" />
+                        <circle cx="60" cy="25" r="5" />
+                        <circle cx="30" cy="40" r="5" />
+                        <circle cx="50" cy="40" r="5" />
+                        <circle cx="70" cy="40" r="5" />
+                        <circle cx="20" cy="55" r="5" />
+                        <circle cx="40" cy="55" r="5" />
+                        <circle cx="60" cy="55" r="5" />
+                        <circle cx="80" cy="55" r="5" />
+                      </svg>';
+            } elseif ($item['icon_class'] === 'svg-greebrier') {
+                echo '<svg class="align-middle" style="width: 1em; height: 1em; stroke: #eaebef; fill: none; stroke-width: 6px; margin-right: 6px;" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="10" y="10" width="80" height="80" rx="20" ry="20" />
+                        <path d="M65 40H55c0-10-6-15-15-15s-15 9-15 20v20c0 11 6 20 15 20s15-3 15-5v-15h-15v-15h30v25c0 3-10 15-30 15s-30-15-30-35V45c0-20 15-35 35-35s35 12 35 35" />
+                      </svg>';
+            } else {
+                echo '<i class="align-middle ' . htmlspecialchars($item['icon_class']) . '" style="color: #eaebef;"></i>';
+            }
+
+            echo '<a href="' . htmlspecialchars($item['url']) . '" class="nav_link list_img a_nav">' . htmlspecialchars($item['name']) . '</a>
+                  </div>
                 </li>';
         }
     }
 }
+
+
 
 
 // Renderiza el menú principal

@@ -38,7 +38,7 @@ async function dataResponse(datajson, mensaje) {
     Swal.fire({
       position: "center",
       icon: "success",
-      title: datajson.message,
+      title: mensaje,
       showConfirmButton: false,
       timer: 2000,
     }).then(() => {
@@ -176,7 +176,7 @@ function actualizarSelectorMaquinas(cliente) {
     (item) => item.cliente === cliente
   );
 
-  // console.log("🔍 Máquinas filtradas:", maquinasFiltradas);
+  console.log("🔍 Máquinas filtradas:", maquinasFiltradas);
 
   // Agregar opciones al select de máquinas
   maquinasFiltradas.forEach((item) => {
@@ -321,6 +321,29 @@ $("#btnRegresarGranulometria").on("click", function () {
 
 // 🔹 Evento para el botón "Guardar"
 
+function obtenerDatosRecargas() {
+  const datos = []; // Array donde se guardarán los resultados finales
+
+  // Recorremos todos los inputs con clase 'input-carga'
+  document.querySelectorAll(".input-carga").forEach((input) => {
+    const id = input.dataset.id; // Obtenemos el ID desde el atributo data-id
+    const valor = input.value.trim(); // Obtenemos el valor actual del input (sin espacios)
+    const name = input.name; // Obtenemos el atributo name del input
+
+    // Validamos que el campo no esté vacío antes de guardar
+    if (valor !== "") {
+      datos.push({
+        id: parseInt(id), // Convertimos el ID a número entero
+        carga_granallado: parseFloat(valor), // Convertimos el valor a número decimal
+        name: name, // Guardamos el name tal como está
+      });
+    }
+  });
+
+  console.log("📦 Datos de recargas:", datos); // Mostramos el array por consola para depuración
+  return datos; // Devolvemos el array con los datos capturados
+}
+
 let btnGuardarGranulometria = document.getElementById(
   "btnGuardarGranulometria"
 );
@@ -332,6 +355,9 @@ btnGuardarGranulometria.addEventListener("click", function () {
   let form = document.getElementById("FrmVisitas");
   let inputs = form.querySelectorAll("input[type='number']");
   let valido = true;
+
+  let arrayRecargas = obtenerDatosRecargas();
+  // console.log("📦 Datos de recargas:", arrayRecargas);
 
   // let maquina_nombre =  document.getElementById("maquina_nueva_granulometria").value;
 
@@ -409,6 +435,7 @@ btnGuardarGranulometria.addEventListener("click", function () {
     arrayDatos.basura_F_s = $('input[name="sur_afuera"]:checked').val();
     arrayDatos.vacio_silo_01 = $("#vacio_silo_1").val();
     arrayDatos.vacio_silo_02 = $("#vacio_silo_2").val();
+    arrayDatos.recargas_granallados = JSON.stringify(arrayRecargas);
 
     arrayDatos.basura_img01 = img1 ? img1 : ""; // Guardar el nombre del archivo
     arrayDatos.basura_img02 = img2 ? img2 : ""; // Guardar
@@ -421,7 +448,7 @@ btnGuardarGranulometria.addEventListener("click", function () {
     arrayDatos.fkCliente = clienteFK.id_cliente;
     arrayDatos.fkMaquina = clienteFK.fkMaquina;
     arrayDatos.maquinaNombre = clienteFK.nombre;
-    // console.log(arrayDatos);
+    console.log("arrayDatos", arrayDatos);
     // console.log(clientesData);
     // console.log('clienteFK',clienteFK);
 
@@ -514,7 +541,14 @@ btnGuardarCambiosGranulometria.addEventListener("click", function () {
   let cliente = $("#cbmClienteGranulometria").val();
 
   // console.log("cliente", cliente);
-  // console.log("maquina_nombre desde js", maquina_nombre);
+  console.log("maquina_nombre desde js", maquina_nombre);
+
+  let arrayRecargasEditar = obtenerDatosRecargas();
+
+  console.log("📦 Datos de recargas para editar:", arrayRecargasEditar);
+  // const dataEdicion = data; // Guardar los datos para la edición
+
+  // console.log("dataEcicion", dataEdicion);
 
   let dataFk = JSON.parse(maquina_nombre);
 
@@ -598,6 +632,8 @@ btnGuardarCambiosGranulometria.addEventListener("click", function () {
     arrayDatos.fkMaquina = dataFk.fkMaquina;
     arrayDatos.id = dataFk.id;
 
+    arrayDatos.recargas_granallados = JSON.stringify(arrayRecargasEditar);
+
     url =
       "controladores/granulometria.controlador.php?action=editar_reporte_greenbrier";
   }
@@ -672,9 +708,9 @@ btnGuardarCambiosGranulometria.addEventListener("click", function () {
     body: formData,
   };
   var urlGranulometria =
-    "controladores/granulometria.controlador.php?action=insertar_reporte_greenbrier";
+    "controladores/granulometria.controlador.php?action=editar_reporte_greenbrier";
 
-  mensaje = "Granulometria guardada con exito";
+  mensaje = "Granulometria editada con exito";
 
   parametresGetFetch(url, options, mensaje);
 });
@@ -697,8 +733,6 @@ let btnNuevaGranulometria = document.getElementById("btnNuevaGranulometria");
 btnNuevaGranulometria.addEventListener("click", function () {
   // console.log("🔄 Botón Nueva Granulometría clickeado");
 
- 
-
   formulario.reset();
 
   // contenedor_form_granulometria_nueva
@@ -710,7 +744,7 @@ btnNuevaGranulometria.addEventListener("click", function () {
   $(".btnSiguienteGranulometria").show();
   $(".btnGuardarGranulometria").hide();
 
-   // Limpiar inputs file
+  // Limpiar inputs file
   document.getElementById("basura_img01").value = "";
   document.getElementById("basura_img02").value = "";
 
@@ -733,3 +767,160 @@ async function cargarClientesGreenbrier() {
 
 // 🔹 Iniciar la carga de datos
 cargarClientesGreenbrier();
+
+let btnSiguienteGranulometriaTabla = document.getElementById(
+  "btnSiguienteGranulometria"
+);
+
+btnSiguienteGranulometriaTabla.addEventListener("click", function () {
+  const maquina = document.querySelector("#cbmmaquinaGranulometria").value;
+  console.log("🔄 Botón Siguiente Granulometría clickeado", maquina);
+  datatableRecargasGranalla(maquina, "nuevo");
+});
+
+function datatableRecargasGranalla(maquina,tipo) {
+
+  console.log("🔄 Cargando datos de recargas para la máquina:", maquina);
+  console.log("🔄 Tipo de carga:", tipo);
+  // console.log("🔄 Cargando datos de recargas para la máquina:", maquina);
+  // Destruir si ya están inicializadas
+  if ($.fn.DataTable.isDataTable("#tablaHoy")) {
+    $("#tablaHoy").DataTable().clear().destroy();
+  }
+  if ($.fn.DataTable.isDataTable("#tablaAnteriores")) {
+    $("#tablaAnteriores").DataTable().clear().destroy();
+  }
+
+  $.ajax({
+    url: "controladores/granulometria.controlador.php?action=dataGranulometriaGreenbrierRecargasGranalla",
+    type: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({ arrayDatos: { maquina } }),
+    success: function (responseRaw) {
+      let response;
+      try {
+        response =
+          typeof responseRaw === "string"
+            ? JSON.parse(responseRaw)
+            : responseRaw;
+      } catch (e) {
+        console.error("❌ Error al parsear JSON:", e);
+        return;
+      }
+
+      if (!response || !Array.isArray(response.data)) {
+        console.warn("⚠️ No hay datos válidos:", response);
+        return;
+      }
+
+      const hoy = new Date().toLocaleDateString("en-CA", {
+        timeZone: "America/Mexico_City",
+      });
+
+      const registrosHoy = [];
+      const registrosAnteriores = [];
+      const tablaNuevoReporte = {
+        id: 0,
+        fecha: hoy,
+        carga_granalla: 0,        
+        cliente: "GREENBRIER",
+        unidad: "KG",
+      };
+
+      console.log("🔄 Registros hoy:", hoy);
+      console.log("🔄 Registros hoy:", tablaNuevoReporte);
+
+      response.data.forEach((item) => {
+        if (item.fecha === hoy) {
+          registrosHoy.push(item);
+        } else {
+          registrosAnteriores.push(item);
+        }
+      });
+
+      console.log("🔄 Registros de hoy:", registrosHoy);
+      console.log("🔄 Registros anteriores:", registrosAnteriores);
+
+      // Init tabla de hoy
+      $("#tablaHoy").DataTable({
+        data: tipo === "nuevo" ? [tablaNuevoReporte] : registrosHoy,
+        columns: getColumnDefs(),
+        paging: false,
+        searching: false,
+        info: false,
+        ordering: false,
+        language: {
+          sEmptyTable: "Sin registros para hoy.",
+        },
+      });
+
+      // Init tabla de anteriores
+      $("#tablaAnteriores").DataTable({
+        data: registrosAnteriores,
+        columns: getColumnDefs(),
+        paging: false,
+        searching: false,
+        info: false,
+        ordering: false,
+        language: {
+          sEmptyTable: "Sin registros anteriores.",
+        },
+      });
+    },
+    error: function (xhr, status, error) {
+      console.error("❌ Error AJAX:", status, error);
+    },
+  });
+}
+
+// Destruir si ya están inicializada
+
+// Función común de columnas
+function getColumnDefs() {
+  return [
+    { data: "id", className: "text-center" },
+    {
+      data: "fecha",
+      className: "text-center",
+      render: function (data) {
+        if (!data) return "";
+
+        const [y, m, d] = data.split("-");
+        const fechaFormateada = `${d}/${m}/${y}`;
+
+        const hoy = new Date();
+        const fechaHoy = hoy.toISOString().split("T")[0]; // yyyy-mm-dd
+
+        if (data === fechaHoy) {
+          return `<strong class="text-success">Hoy</strong>`;
+        }
+        return `<strong>${fechaFormateada}</strong>`;
+      },
+    },
+    {
+      data: "carga_granalla",
+      className: "text-center",
+      render: function (data, type, row) {
+        return `
+          <input 
+            type="number" 
+            class="form-control text-center input-carga" 
+            data-id="${row.id}" 
+            name="recarga_granallado_${row.id}"
+            id="recarga_granallado_${row.id}"
+            value="${data ?? ""}" 
+            style="max-width: 120px; margin: 0 auto; width: 120px;"
+            inputmode="decimal" 
+            pattern="^\\d+(\\.\\d{1,2})?$" 
+            title="Solo números con hasta 2 decimales"
+          />
+        `;
+      },
+    },
+    {
+      data: "unidad",
+      className: "text-center",
+      defaultContent: "KG", // 👉 fallback si falta
+    },
+  ];
+}

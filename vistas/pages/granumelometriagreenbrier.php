@@ -26,7 +26,7 @@
 <div class="container-fluid">
 
     <div class="d-flex bd-highlight p-0 text-white" style="background-color: #07B5E8;">
-        <div class="my-2 mx-2 flex-grow-1 bd-highlight">Reporte Greenbrier</div>
+        <div class="my-2 mx-2 flex-grow-1 bd-highlight">Granulometría Greenbrier</div>
         <!-- <?php
                 echo $_SESSION["ccap"];
                 // echo $_SESSION["lersant"];
@@ -34,7 +34,7 @@
                 ?> -->
         <ol class="my-2 mx-2 breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="dashclientes">Inicio</a></li>
-            <li class="breadcrumb-item active">Reporte Greenbrier</li>
+            <li class="breadcrumb-item active">Granulometría Greenbrier</li>
         </ol>
     </div>
 
@@ -121,457 +121,537 @@
             <!-- Modal body -->
             <form id="FrmVisitas" class="row g-2" role="form" method="post" autocomplete="off">
                 <div class="modal-body">
-                    <div class="col-md-4">
-                        <input type="" hidden class="form-control" id="txtPkempresa_v1" name="txtPkempresa_v1" required value="" readonly>
+
+                    <div class="row">
+                        <div class="container">
+                            <div class="col-md-4">
+                                <input type="" hidden class="form-control" id="txtPkempresa_v1" name="txtPkempresa_v1" required value="" readonly>
+
+                            </div>
+                            <div class="row contenedor_form_granulometria_nueva">
+
+
+
+                                <!-- <div class="form-group col-md-4"> -->
+                                <!-- <label for="cbmCliente" class="form-label">Clientes</label> -->
+                                <select class="form-control select2 select2-purple" data-dropdown-css-class="select2-purple" style="width: 100%;" id="cbmClienteGranulometria" name="cbmClienteGranulometria" hidden></select>
+                                <!-- </div> -->
+
+
+
+
+                                <div class="col-md-6">
+
+                                    <style>
+                                        #loader_m {
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                        }
+                                    </style>
+
+                                    <div id="loader_m" style="display:none; text-align: center;">
+                                        <div class="spinner-border text-primary" role="status"></div>
+                                        <span style="display: inline-block; margin-left: 10px;">Cargando...</span>
+                                    </div>
+
+                                    <label for="cbmmaquina" class="form-label">Maquina</label>
+                                    <select class="form-control select2 select2-purple" data-dropdown-css-class="select2-purple" style="width: 100%;" id="cbmmaquinaGranulometria" name="cbmmaquinaGranulometria">
+                                    </select>
+                                </div>
+
+
+                                <div class="col-md-6">
+                                    <label for="cbmmaquina" class="form-label">Fecha</label>
+                                    <input type="date" class="form-control" id="txtFechaGranulometria" name="txtFechaGranulometria" onchange="" value="<?php echo date('Y-m-d'); ?>">
+                                </div>
+
+                            </div>
+
+                            <div class="row contenedor_form_granulometria" style="display: none;">
+
+
+
+                                <div class="row">
+                                    <div id="mensaje_granulometria" class=" text-center col-12" style="display: none; color: red; font-size: 16px;font-weight: bold;"></div>
+                                    <h4 class="mb-3">Granulometría</h4>
+                                    <div class="col-12 row p-2">
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="polvo" class="mr-2 p-1"> <strong>Polvo</strong> </label>
+                                            <input type="number" name="polvo" id="polvo" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_05" class="mr-2 p-1"><strong>c_05</strong></label>
+                                            <input type="number" name="c_05" id="c_05" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_09" class="mr-2 p-1"><strong>c_09</strong> </label>
+                                            <input type="number" name="c_09" id="c_09" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_150" class="mr-2 p-1"><strong> c_150</strong></label>
+                                            <input type="number" name="c_150" id="c_150" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_212" class="mr-2 p-1"><strong>c_212</strong></label>
+                                            <input type="number" name="c_212" id="c_212" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_300" class="mr-2 p-1"><strong>c_300</strong></label>
+                                            <input type="number" name="c_300" id="c_300" class="form-control" required>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-12 row p-2">
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_425" class="mr-2 p-1"><strong>c_425</strong></label>
+                                            <input type="number" name="c_425" id="c_425" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_600" class="mr-2 p-1"><strong>c_600</strong></label>
+                                            <input type="number" name="c_600" id="c_600" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_850" class="mr-2 p-1"><strong>c_850</strong></label>
+                                            <input type="number" name="c_850" id="c_850" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_1180" class="mr-2 p-1"><strong>c_1180</strong></label>
+                                            <input type="number" name="c_1180" id="c_1180" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_1400" class="mr-2 p-1"><strong>c_1400</strong></label>
+                                            <input type="number" name="c_1400" id="c_1400" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_1700" class="mr-2 p-1"><strong>c_1700</strong></label>
+                                            <input type="number" name="c_1700" id="c_1700" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 row p-2">
+                                        <div class="col-md-2 d-flex align-items-center">
+                                            <label for="c_2200" class="mr-2 p-1"><strong>c_2200</strong></label>
+                                            <input type="number" name="c_2200" id="c_2200" class="form-control" required>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="row conteneror_rugosidad" style="display: none;">
+                                    <div class="col-12 ">
+                                        <hr> <!-- Rugosidad -->
+                                    </div>
+                                    <div class="col-12 row center">
+                                        <!-- Rugosidad -->
+                                        <h4 class="mb-3">Rugosidad</h4>
+                                    </div>
+
+
+                                    <div class="col-12 row g-2 justify-content-center  " style="    position: relative;
+    left: -87px;">
+
+
+
+                                        <div class="col-3 d-flex justify-content-end">
+                                            <!-- Rugosidad -->
+                                            <style>
+                                                .tam_input_rugosidad {
+                                                    max-width: 80px;
+                                                    margin: 0 auto;
+                                                    text-align: center;
+                                                }
+                                            </style>
+
+                                            <div class="row flex-column g-2 justify-content-center">
+                                                <div class="col-md-12 d-flex  align-items-center">
+                                                    <label for="rig_01" class="me-2"><strong>01</strong></label>
+                                                    <input type="number" name="rig_01" id="rig_01" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_02" class="me-2"><strong>02</strong></label>
+                                                    <input type="number" name="rig_02" id="rig_02" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_03" class="me-2"><strong>03</strong></label>
+                                                    <input type="number" name="rig_03" id="rig_03" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_04" class="me-2"><strong>04</strong></label>
+                                                    <input type="number" name="rig_04" id="rig_04" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex  align-items-center">
+                                                    <label for="rig_05" class="me-2"><strong>05</strong></label>
+                                                    <input type="number" name="rig_05" id="rig_05" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="col-3 d-flex justify-content-end">
+                                            <!-- Rugosidad -->
+                                            <div class="row flex-column g-2 justify-content-center">
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_06" class="me-2"><strong>06</strong></label>
+                                                    <input type="number" name="rig_06" id="rig_06" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_07" class="me-2"><strong>07</strong></label>
+                                                    <input type="number" name="rig_07" id="rig_07" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_08" class="me-2"><strong>08</strong></label>
+                                                    <input type="number" name="rig_08" id="rig_08" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+                                                <div class="col-md-12 d-flex  align-items-center">
+                                                    <label for="rig_09" class="me-2"><strong>09</strong></label>
+                                                    <input type="number" name="rig_09" id="rig_09" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_10" class="me-2"><strong>10</strong></label>
+                                                    <input type="number" name="rig_10" id="rig_10" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-3 d-flex justify-content-end">
+                                            <!-- Rugosidad -->
+                                            <div class="row flex-column g-2 justify-content-center">
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_11" class="me-2"><strong>11</strong></label>
+                                                    <input type="number" name="rig_11" id="rig_11" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_12" class="me-2"><strong>12</strong></label>
+                                                    <input type="number" name="rig_12" id="rig_12" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex  align-items-center">
+                                                    <label for="rig_13" class="me-2"><strong>13</strong></label>
+                                                    <input type="number" name="rig_13" id="rig_13" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_14" class="me-2"><strong>14</strong></label>
+                                                    <input type="number" name="rig_10" id="rig_14" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_15" class="me-2"><strong>15</strong></label>
+                                                    <input type="number" name="rig_15" id="rig_15" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-3 d-flex justify-content-end">
+                                            <!-- Rugosidad -->
+                                            <div class="row flex-column g-2 justify-content-center">
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_16" class="me-2"><strong>16</strong></label>
+                                                    <input type="number" name="rig_16" id="rig_16" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex  align-items-center">
+                                                    <label for="rig_17" class="me-2"><strong>17</strong></label>
+                                                    <input type="number" name="rig_17" id="rig_17" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_18" class="me-2"><strong>18</strong></label>
+                                                    <input type="number" name="rig_18" id="rig_18" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_19" class="me-2"><strong>19</strong></label>
+                                                    <input type="number" name="rig_19" id="rig_19" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="rig_20" class="me-2"><strong>20</strong></label>
+                                                    <input type="number" name="rig_20" id="rig_20" class="form-control rugosidad-input tam_input_rugosidad" required>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <div class="row contenedor_basura" style="display: none;">
+
+                                    <div class="col-12 ">
+                                        <hr> <!-- Rugosidad -->
+                                    </div>
+
+
+                                    <h4 class="mb-3">Basura</h4>
+
+
+                                    <style>
+                                        .label_with_text {
+                                            width: 115px;
+                                        }
+                                    </style>
+
+
+
+
+
+                                    <!-- Columna 1 -->
+                                    <div class="col-4 text-center">
+                                        <div class="row flex-column g-2">
+                                            <div class="col-md-12">
+                                                <label class="form-label"><strong>Norte der:</strong></label>
+                                                <input type="radio" name="norte_der" value="0" checked required> 0
+                                                <input type="radio" name="norte_der" value="1"> 1
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="form-label"><strong>Norte izq:</strong></label>
+                                                <input type="radio" name="norte_izq" value="0" checked required> 0
+                                                <input type="radio" name="norte_izq" value="1"> 1
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="form-label"><strong>Norte afuera:</strong></label>
+                                                <input type="radio" name="norte_afuera" value="0" checked required> 0
+                                                <input type="radio" name="norte_afuera" value="1"> 1
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Columna 2 -->
+                                    <div class="col-4 text-center">
+                                        <div class="row flex-column g-2">
+                                            <div class="col-md-12">
+                                                <label class="form-label"><strong>Centro der:</strong></label>
+                                                <input type="radio" name="centro_der" value="0" checked required> 0
+                                                <input type="radio" name="centro_der" value="1"> 1
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="form-label"><strong>Centro izq:</strong></label>
+                                                <input type="radio" name="centro_izq" value="0" checked required> 0
+                                                <input type="radio" name="centro_izq" value="1"> 1
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Columna 3 -->
+                                    <div class="col-4 text-center">
+                                        <div class="row flex-column g-2">
+                                            <div class="col-md-12">
+                                                <label class="form-label"><strong>Sur der:</strong></label>
+                                                <input type="radio" name="sur_der" value="0" checked required> 0
+                                                <input type="radio" name="sur_der" value="1"> 1
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="form-label"><strong>Sur izq:</strong></label>
+                                                <input type="radio" name="sur_izq" value="0" checked required> 0
+                                                <input type="radio" name="sur_izq" value="1"> 1
+                                            </div>
+
+                                            <div class="col-md-12">
+                                                <label class="form-label"><strong>Sur afuera:</strong></label>
+                                                <input type="radio" name="sur_afuera" value="0" checked required> 0
+                                                <input type="radio" name="sur_afuera" value="1"> 1
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <br>
+
+
+
+                                    <div class="row contenedor_imagenes mt-4">
+
+
+
+                                        <div class="col-6  d-flex align-items-center">
+                                            <div class="row flex-column g-2 justify-content-center text-center">
+
+                                                <div class="mt-2 text-center imgPreview01">
+                                                    <img id="imgPreview01" src="vistas/recursos/img/avatars/image-not-found.jpg" class="rounded mx-auto d-block " src="" alt="Vista previa imagen 1" class="img-fluid rounded border" style="max-height: 200px; width: 200;">
+                                                </div>
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="basura_img01" class="me-2 label_with_text" style="width: 200px;"><strong>Selecciona una imagen 1</strong></label>
+                                                    <input type="file" name="basura_img01" id="basura_img01" class="form-control" required accept="image/jpeg, image/png, image/jpg">
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6  d-flex align-items-center">
+                                            <div class="row flex-column g-2 justify-content-center  text-center">
+
+                                                <div class=" mt-2 text-center imgPreview02">
+                                                    <img id="imgPreview02" src="vistas/recursos/img/avatars/image-not-found.jpg" class="rounded mx-auto d-block " src="" alt="Vista previa imagen 2" class="img-fluid rounded border" style="max-height: 200px; width: 200px;">
+                                                </div>
+                                                <div class="col-md-12 d-flex align-items-center">
+                                                    <label for="basura_img02" class="me-2 label_with_text" style="width: 200px;"><strong>Selecciona una imagen 2</strong></label>
+                                                    <input type="file" src="vistas/recursos/img/avatars/image-not-found.jpg" name="basura_img02" id="basura_img02" class="form-control" accept="image/jpeg, image/png, image/jpg" required>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-12">
+                                            <strong> <small class="" style=" font-size: 12px;">*** puedes subir fotos opcionales, max 500 kB</small>
+                                            </strong>
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                </div>
+
+
+
+                                <div class="row contener_silo" style="display: none;">
+
+                                    <div class="col-12 ">
+                                        <hr> <!-- Rugosidad -->
+                                    </div>
+
+
+                                    <h4 class="mb-3">Silo </h4>
+
+
+                                    <div class="col-6 text-center">
+                                        <div class="row flex-column g-2 justify-content-center">
+                                            <div class="col-md-12 d-flex  align-items-center">
+                                                <label for="vacio_silo_2" class="me-2 label_with_text"><strong>Vacio Silo 2</strong></label>
+                                                <input
+                                                    type="number"
+                                                    name="vacio_silo_2"
+                                                    id="vacio_silo_2"
+                                                    class="form-control"
+                                                    required
+                                                    style="width: 100px;"> <strong class="ms-2">CM</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6 text-center">
+                                        <div class="row flex-column g-2 justify-content-center">
+                                            <div class="col-md-12 d-flex align-items-center">
+                                                <label for="vacio_silo_1" class="me-2 label_with_text"><strong>Vacio Silo 1</strong></label>
+                                                <input
+                                                    type="number"
+                                                    name="vacio_silo_1"
+                                                    id="vacio_silo_1"
+                                                    class="form-control"
+                                                    style="width: 100px;"
+                                                    required>
+                                                <strong class="ms-2">CM</strong>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="row contenedor_recargas_granalla ">
+                                    <div class="col-12">
+                                        <hr> <!-- Rugosidad -->
+                                        <h4 class="mb-3">Recargas de Granalla
+                                        </h4>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <div class="table-responsive d-flex justify-content-center">
+                                                <table id="tablaHoy" class="table table-bordered table-striped text-center mx-auto" style="width: 80%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th colspan="4" class="bg-light text-dark" style="border: 2px solid #dee2e6;">
+
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Fecha</th>
+                                                            <th>Carga</th>
+                                                            <th></th>
+                                                            <!-- <th></th> -->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12 text-center">
+                                            <!-- <h5 class="text-center">Registros Anteriores</h5> -->
+                                            <div class="table-responsive d-flex justify-content-center">
+                                                <table id="tablaAnteriores" class="table table-bordered table-striped text-center mx-auto" style="width: 80%;">
+                                                    <thead>
+
+                                                        <tr>
+                                                            <th colspan="4" class="text-center">Recargas Anteriores</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Fecha</th>
+                                                            <th>Carga</th>
+                                                            <th></th>
+                                                            <!-- <th></th> -->
+                                                        </tr>
+
+
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            </div>
+
+
+
+                        </div>
 
                     </div>
-                    <div class="row contenedor_form_granulometria_nueva">
+                </div>
 
 
-
-                        <!-- <div class="form-group col-md-4"> -->
-                        <!-- <label for="cbmCliente" class="form-label">Clientes</label> -->
-                        <select class="form-control select2 select2-purple" data-dropdown-css-class="select2-purple" style="width: 100%;" id="cbmClienteGranulometria" name="cbmClienteGranulometria" hidden></select>
-                        <!-- </div> -->
-
-
-
-
-                        <div class="col-md-6">
-                            <!-- <div id="loader_m" style="display:none;">Cargando...</div> -->
-
-                            <!-- <div id="loader_m" class="spinner-border text-primary" role="status" style="display:none;">
-                                <span class="" style="display:block;">Cargando...</span>
-                            </div> -->
-
-                            <style>
-                                #loader_m {
-                                    display: flex;
-                                    align-items: center;
-                                    justify-content: center;
-                                }
-                            </style>
-
-                            <div id="loader_m" style="display:none; text-align: center;">
-                                <div class="spinner-border text-primary" role="status"></div>
-                                <span style="display: inline-block; margin-left: 10px;">Cargando...</span>
-                            </div>
-
-                            <label for="cbmmaquina" class="form-label">Maquina</label>
-                            <select class="form-control select2 select2-purple" data-dropdown-css-class="select2-purple" style="width: 100%;" id="cbmmaquinaGranulometria" name="cbmmaquinaGranulometria">
-                            </select>
-                        </div>
-
-
-                        <div class="col-md-6">
-                            <label for="cbmmaquina" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="txtFechaGranulometria" name="txtFechaGranulometria" onchange="formatoFecha()">
-                        </div>
-
-                    </div>
-
-                    <div class="row contenedor_form_granulometria" style="display: none;">
-
-                        <!-- <div class="col-12">
-                            <hr>
-                        </div> -->
-
-                        <div class="row">
-                            <div id="mensaje_granulometria" class=" text-center col-12" style="display: none; color: red; font-size: 16px;font-weight: bold;"></div>
-
-                            <div class="col-12 row p-2">
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="polvo" class="mr-2 p-1"> <strong>Polvo</strong> </label>
-                                    <input type="number" name="polvo" id="polvo" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_05" class="mr-2 p-1"><strong>c_05</strong></label>
-                                    <input type="number" name="c_05" id="c_05" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_09" class="mr-2 p-1"><strong>c_09</strong> </label>
-                                    <input type="number" name="c_09" id="c_09" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_150" class="mr-2 p-1"><strong> c_150</strong></label>
-                                    <input type="number" name="c_150" id="c_150" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_212" class="mr-2 p-1"><strong>c_212</strong></label>
-                                    <input type="number" name="c_212" id="c_212" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_300" class="mr-2 p-1"><strong>c_300</strong></label>
-                                    <input type="number" name="c_300" id="c_300" class="form-control" required>
-                                </div>
-
-                            </div>
-
-                            <div class="col-12 row p-2">
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_425" class="mr-2 p-1"><strong>c_425</strong></label>
-                                    <input type="number" name="c_425" id="c_425" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_600" class="mr-2 p-1"><strong>c_600</strong></label>
-                                    <input type="number" name="c_600" id="c_600" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_850" class="mr-2 p-1"><strong>c_850</strong></label>
-                                    <input type="number" name="c_850" id="c_850" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_1180" class="mr-2 p-1"><strong>c_1180</strong></label>
-                                    <input type="number" name="c_1180" id="c_1180" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_1400" class="mr-2 p-1"><strong>c_1400</strong></label>
-                                    <input type="number" name="c_1400" id="c_1400" class="form-control" required>
-                                </div>
-
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_1700" class="mr-2 p-1"><strong>c_1700</strong></label>
-                                    <input type="number" name="c_1700" id="c_1700" class="form-control" required>
-                                </div>
-                            </div>
-
-                            <div class="col-12 row p-2">
-                                <div class="col-md-2 d-flex align-items-center">
-                                    <label for="c_2200" class="mr-2 p-1"><strong>c_2200</strong></label>
-                                    <input type="number" name="c_2200" id="c_2200" class="form-control" required>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-
-
-
-
-
-                        <div class="row conteneror_rugosidad" style="display: none;">
-
-                            <div class="col-12 ">
-                                <hr> <!-- Rugosidad -->
-
-
-                            </div>
-                            <div class="col-12 row center">
-                                <!-- Rugosidad -->
-                                <h4 class="mb-3">Rugosidad</h4>
-                            </div>
-
-                            <div class="col-3 d-flex justify-content-end">
-                                <!-- Rugosidad -->
-
-                                <div class="row flex-column g-2 justify-content-center">
-                                    <div class="col-md-12 d-flex  align-items-center">
-                                        <label for="rig_01" class="me-2"><strong>01</strong></label>
-                                        <input type="number" name="rig_01" id="rig_01" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_02" class="me-2"><strong>02</strong></label>
-                                        <input type="number" name="rig_02" id="rig_02" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_03" class="me-2"><strong>03</strong></label>
-                                        <input type="number" name="rig_03" id="rig_03" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_04" class="me-2"><strong>04</strong></label>
-                                        <input type="number" name="rig_04" id="rig_04" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex  align-items-center">
-                                        <label for="rig_05" class="me-2"><strong>05</strong></label>
-                                        <input type="number" name="rig_05" id="rig_05" class="form-control rugosidad-input" required>
-                                    </div>
-                                </div>
-
-
-                            </div>
-
-                            <div class="col-3">
-                                <!-- Rugosidad -->
-                                <div class="row flex-column g-2 justify-content-center">
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_06" class="me-2"><strong>06</strong></label>
-                                        <input type="number" name="rig_06" id="rig_06" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_07" class="me-2"><strong>07</strong></label>
-                                        <input type="number" name="rig_07" id="rig_07" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_08" class="me-2"><strong>08</strong></label>
-                                        <input type="number" name="rig_08" id="rig_08" class="form-control rugosidad-input" required>
-                                    </div>
-                                    <div class="col-md-12 d-flex  align-items-center">
-                                        <label for="rig_09" class="me-2"><strong>09</strong></label>
-                                        <input type="number" name="rig_09" id="rig_09" class="form-control rugosidad-input" required>
-                                    </div>
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_10" class="me-2"><strong>10</strong></label>
-                                        <input type="number" name="rig_10" id="rig_10" class="form-control rugosidad-input" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-3">
-                                <!-- Rugosidad -->
-                                <div class="row flex-column g-2 justify-content-center">
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_11" class="me-2"><strong>11</strong></label>
-                                        <input type="number" name="rig_11" id="rig_11" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_12" class="me-2"><strong>12</strong></label>
-                                        <input type="number" name="rig_12" id="rig_12" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex  align-items-center">
-                                        <label for="rig_13" class="me-2"><strong>13</strong></label>
-                                        <input type="number" name="rig_13" id="rig_13" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_14" class="me-2"><strong>14</strong></label>
-                                        <input type="number" name="rig_10" id="rig_14" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_15" class="me-2"><strong>15</strong></label>
-                                        <input type="number" name="rig_15" id="rig_15" class="form-control rugosidad-input" required>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-3">
-                                <!-- Rugosidad -->
-                                <div class="row flex-column g-2 justify-content-center">
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_16" class="me-2"><strong>16</strong></label>
-                                        <input type="number" name="rig_16" id="rig_16" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex  align-items-center">
-                                        <label for="rig_17" class="me-2"><strong>17</strong></label>
-                                        <input type="number" name="rig_17" id="rig_17" class="form-control rugosidad-input" required>
-                                    </div>
-
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_18" class="me-2"><strong>18</strong></label>
-                                        <input type="number" name="rig_18" id="rig_18" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_19" class="me-2"><strong>19</strong></label>
-                                        <input type="number" name="rig_19" id="rig_19" class="form-control rugosidad-input" required>
-                                    </div>
-
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="rig_20" class="me-2"><strong>20</strong></label>
-                                        <input type="number" name="rig_20" id="rig_20" class="form-control rugosidad-input" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="row contenedor_basura" style="display: none;">
-
-                            <div class="col-12 ">
-                                <hr> <!-- Rugosidad -->
-                            </div>
-
-
-                            <h4 class="mb-3">Basura</h4>
-
-
-                            <style>
-                                .label_with_text {
-                                    width: 115px;
-                                }
-                            </style>
-
-
-
-
-
-                            <!-- Columna 1 -->
-                            <div class="col-4 text-center">
-                                <div class="row flex-column g-2">
-                                    <div class="col-md-12">
-                                        <label class="form-label"><strong>Norte der:</strong></label>
-                                        <input type="radio" name="norte_der" value="0" checked required> 0
-                                        <input type="radio" name="norte_der" value="1"> 1
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <label class="form-label"><strong>Norte izq:</strong></label>
-                                        <input type="radio" name="norte_izq" value="0" checked required> 0
-                                        <input type="radio" name="norte_izq" value="1"> 1
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <label class="form-label"><strong>Norte afuera:</strong></label>
-                                        <input type="radio" name="norte_afuera" value="0" checked required> 0
-                                        <input type="radio" name="norte_afuera" value="1"> 1
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Columna 2 -->
-                            <div class="col-4 text-center">
-                                <div class="row flex-column g-2">
-                                    <div class="col-md-12">
-                                        <label class="form-label"><strong>Centro der:</strong></label>
-                                        <input type="radio" name="centro_der" value="0" checked required> 0
-                                        <input type="radio" name="centro_der" value="1"> 1
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <label class="form-label"><strong>Centro izq:</strong></label>
-                                        <input type="radio" name="centro_izq" value="0" checked required> 0
-                                        <input type="radio" name="centro_izq" value="1"> 1
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Columna 3 -->
-                            <div class="col-4 text-center">
-                                <div class="row flex-column g-2">
-                                    <div class="col-md-12">
-                                        <label class="form-label"><strong>Sur der:</strong></label>
-                                        <input type="radio" name="sur_der" value="0" checked required> 0
-                                        <input type="radio" name="sur_der" value="1"> 1
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <label class="form-label"><strong>Sur izq:</strong></label>
-                                        <input type="radio" name="sur_izq" value="0" checked required> 0
-                                        <input type="radio" name="sur_izq" value="1"> 1
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <label class="form-label"><strong>Sur afuera:</strong></label>
-                                        <input type="radio" name="sur_afuera" value="0" checked required> 0
-                                        <input type="radio" name="sur_afuera" value="1"> 1
-                                    </div>
-                                </div>
-                            </div>
-
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-
-
-
-                            <div class="row contenedor_imagenes mt-4">
-
-
-
-                                <div class="col-6  d-flex align-items-center">
-                                    <div class="row flex-column g-2 justify-content-center text-center">
-
-                                        <div class="mt-2 text-center imgPreview01">
-                                            <img id="imgPreview01" src="vistas/recursos/img/avatars/image-not-found.jpg" class="rounded mx-auto d-block " src="" alt="Vista previa imagen 1" class="img-fluid rounded border" style="max-height: 200px; width: 200;">
-                                        </div>
-                                        <div class="col-md-12 d-flex align-items-center">
-                                            <label for="basura_img01" class="me-2 label_with_text" style="width: 200px;"><strong>Selecciona una imagen 1</strong></label>
-                                            <input type="file" name="basura_img01" id="basura_img01" class="form-control" required accept="image/jpeg, image/png, image/jpg">
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                                <div class="col-6  d-flex align-items-center">
-                                    <div class="row flex-column g-2 justify-content-center  text-center">
-
-                                        <div class=" mt-2 text-center imgPreview02">
-                                            <img id="imgPreview02" src="vistas/recursos/img/avatars/image-not-found.jpg" class="rounded mx-auto d-block " src="" alt="Vista previa imagen 2" class="img-fluid rounded border" style="max-height: 200px; width: 200px;">
-                                        </div>
-                                        <div class="col-md-12 d-flex align-items-center">
-                                            <label for="basura_img02" class="me-2 label_with_text" style="width: 200px;"><strong>Selecciona una imagen 2</strong></label>
-                                            <input type="file" src="vistas/recursos/img/avatars/image-not-found.jpg" name="basura_img02" id="basura_img02" class="form-control" accept="image/jpeg, image/png, image/jpg" required>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-
-                                <div class="col-12">
-                                    <strong> <small class="" style=" font-size: 12px;">*** puedes subir fotos opcionales, max 500 kB</small>
-                                    </strong>
-                                </div>
-                            </div>
-
-
-
-
-
-                        </div>
-
-
-
-                        <div class="row contener_silo" style="display: none;">
-
-                            <div class="col-12 ">
-                                <hr> <!-- Rugosidad -->
-                            </div>
-
-
-                            <h4 class="mb-3">Silo </h4>
-
-
-                            <div class="col-6">
-                                <div class="row flex-column g-2 justify-content-center">
-                                    <div class="col-md-12 d-flex  align-items-center">
-                                        <label for="vacio_silo_2" class="me-2 label_with_text"><strong>Vacio Silo 2</strong></label>
-                                        <input type="number" name="vacio_silo_2" id="vacio_silo_2" class="form-control" required>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-6">
-                                <div class="row flex-column g-2 justify-content-center">
-                                    <div class="col-md-12 d-flex align-items-center">
-                                        <label for="vacio_silo_1" class="me-2 label_with_text"><strong>Vacio Silo 1</strong></label>
-                                        <input type="number" name="vacio_silo_1" id="vacio_silo_1" class="form-control" required>
-                                    </div>
-
-
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-
-                    </div>
-                    <br>
-                    <br>
             </form>
 
             <!-- Modal footer -->
@@ -684,7 +764,18 @@
                     }
                 },
                 {
-                    "data": "fecha"
+                    data: "fecha",
+                    width: "100px",
+                    render: function(data, type, row) {
+                        if (!data) return "";
+
+                        const fecha = new Date(data);
+                        const dia = String(fecha.getDate()).padStart(2, '0');
+                        const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+                        const año = fecha.getFullYear();
+
+                        return `${dia}/${mes}/${año}`;
+                    }
                 },
                 {
                     "data": "usuario"
@@ -724,9 +815,14 @@
         var data = JSON.parse(decodeURIComponent(jsonStr));
         console.log(data);
 
+        const dataEdicion = data; // Guardar los datos para la edición
+
         // Mostrar el modal correcto
         const modal = new bootstrap.Modal(document.getElementById('modalGranulometriaGreenbrier'));
         modal.show();
+
+
+
 
         $('.contenedor_form_granulometria_nueva').hide();
         $('.contenedor_form_granulometria').show();
@@ -747,6 +843,8 @@
         $('#maquina_nueva_granulometria').text(data.nombre_maquina);
         $('#cliente_nueva_granulometria').text(data.cliente);
         // document.getElementById('usuario_nueva_granulometria_edicion').textContent = data.usuario;
+
+        $('#cbmmaquinaGranulometria').val(data.procesador_maq);
 
         const $form = $('#FrmVisitas');
 
@@ -801,6 +899,7 @@
         $form.find('[name="vacio_silo_1"]').val(data.vacio_silo_01);
         $form.find('[name="vacio_silo_2"]').val(data.vacio_silo_02);
 
+
         let dataFk = {
             id: data.id,
             fkCliente: data.fkCliente,
@@ -811,30 +910,23 @@
 
         }
 
-        // console.log(dataFk);
+        document.getElementById('btnGuardarCambiosGranulometria').value = JSON.stringify(dataFk);
 
-        $form.find('#btnGuardarCambiosGranulometria').val(JSON.stringify(dataFk));
-        // $form.find('#fecha_nueva_granulometria').val(data.fecha);
-        // $form.find('#cliente_nueva_granulometria').val(data.cliente);
-        // $form.find('#maquina_nueva_granulometria').val(data.nombre_maquina);
+        // $form.find('#btnGuardarCambiosGranulometria').val(JSON.stringify(dataFk));
 
 
-
-        // console.log(document.getElementById('btnGuardarCambiosGranulometria').value);
-
+        let maquina = data.procesador;
+        datatableRecargasGranalla(maquina, 'edicion');
 
         const baseUrl = `${window.location.origin}/modelos/ver_imagen_granulometria.php`;
 
         let img01 = `${baseUrl}?id=${data.id}&campo=basura_img01&nocache=${new Date().getTime()}`;
         let img02 = `${baseUrl}?id=${data.id}&campo=basura_img02&nocache=${new Date().getTime()}`;
 
-
         // console.log(baseUrl, img01, img02);
-
 
         document.getElementById('imgPreview01').src = img01;
         document.getElementById('imgPreview02').src = img02;
-
 
         $('#imgPreview01').on('error', function() {
             console.error('Error cargando imagen 1');
@@ -843,10 +935,6 @@
         $('#imgPreview02').on('error', function() {
             console.error('Error cargando imagen 2');
         });
-
-
-
-
     }
 </script>
 
@@ -882,5 +970,6 @@
 
         previewImage('basura_img01', 'imgPreview01');
         previewImage('basura_img02', 'imgPreview02');
+
     });
 </script>

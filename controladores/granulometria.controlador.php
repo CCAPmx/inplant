@@ -71,11 +71,11 @@ switch ($action) {
         echo json_encode($respueta);
         break;
 
-        case 'autorizarReporteGreenbrier':
-            $formArray = array_merge($_POST, $_FILES);
+    case 'autorizarReporteGreenbrier':
+        $formArray = array_merge($_POST, $_FILES);
         $respueta = cGranulometria::autorizarReporteGreenbrier($formArray ?? "");
         echo json_encode($respueta);
-        break;   
+        break;
 
 
     case 'dataGranulometriaReporteGreenbrier':
@@ -86,6 +86,17 @@ switch ($action) {
 
     case 'dataSelectorAlertasGreenbrier':
         $respueta = cGranulometria::dataSelectorAlertasGreenbrier();
+        echo json_encode($respueta);
+        break;
+
+
+    case 'dataGranulometriaGreenbrierRecargasGranalla':
+
+        // $input2 = json_decode(file_get_contents("php://input"), true);
+        $arrayDatos = $input['arrayDatos'] ?? [];
+        $maquina = $arrayDatos['maquina'] ?? null;
+        // var_dump($arrayDatos, $maquina);
+        $respueta = cGranulometria::dataGranulometriaGreenbrierRecargasGranalla($maquina);
         echo json_encode($respueta);
         break;
 
@@ -100,6 +111,14 @@ class cGranulometria
 {
 
 
+    static public function dataGranulometriaGreenbrierRecargasGranalla($request)
+    {
+
+        // return $request;
+        $obj = new mainGranulometria();
+        $respueta = $obj->dataGranulometriaGreenbrierRecargasGranalla($request);
+        return $respueta;
+    }
 
     static public function dataSelectorAlertasGreenbrier()
     {
@@ -122,7 +141,7 @@ class cGranulometria
         return $respueta;
     }
 
-     static public function dataGranulometriaGreenbrierSelector()
+    static public function dataGranulometriaGreenbrierSelector()
     {
         $obj = new mainGranulometria();
         $respueta = $obj->dataGranulometriaGreenbrierSelector();

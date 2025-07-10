@@ -59,6 +59,72 @@ ORDER BY g.fecha_server DESC;";
     }
 
 
+    public function dataGranulometriaGreenbrierRecargasGranalla($request)
+    {
+
+        // return $request;
+        date_default_timezone_set('America/Denver');
+        $objConexion = new conexion();
+
+        $sql = "SELECT g.fecha, g.carga_granalla, m.cliente,g.id, 'KG' AS unidad
+            FROM granulometria AS g
+            INNER JOIN maquinas AS m ON g.procesador = m.procesador_maq
+            WHERE m.cliente = 'GREENBRIER'
+              AND DATE(g.fecha) >= CURDATE() - INTERVAL 7 DAY and m.procesador_maq = {$request}
+            ORDER BY g.fecha DESC";
+
+        $stmt = $objConexion->conectarDooble()->prepare($sql);
+        $stmt->execute();
+
+        $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // ✅ Agregar fila con fecha de hoy (solo si no existe ya en los datos)
+        $fechaHoy = date('Y-m-d');
+        // var_dump($fechaHoy);
+        $yaExisteHoy = false;
+
+        foreach ($datos as $fila) {
+            if (date('Y-m-d', strtotime($fila['fecha'])) === $fechaHoy) {
+                $yaExisteHoy = true;
+                break;
+            }
+        }
+
+        if (!$yaExisteHoy) {
+            $datos[] = [
+                'fecha' => $fechaHoy,
+                'carga_granalla' => 0,
+                'cliente' => 'GREENBRIER',
+                'id' => 0,
+                'unidad' => 'KG'
+
+            ];
+        }
+
+        // Ordenar por fecha descendente
+        usort($datos, function ($a, $b) {
+            return strtotime($b['fecha']) - strtotime($a['fecha']);
+        });
+
+        // Si aún así no hay datos
+        if (count($datos) == 0) {
+            return [
+                'success' => false,
+                'message' => 'No hay registros',
+                'status' => 400
+            ];
+        }
+
+        return [
+            'success' => true,
+            'message' => 'Granulometría obtenida con éxito',
+            'data' => $datos,
+            'status' => 200
+        ];
+    }
+
+
+
     public function dataSelectorAlertasGreenbrier()
     {
         $objConexion = new conexion();
@@ -450,13 +516,11 @@ ORDER BY g.fecha_server DESC;";
                 session_start();
             }
 
-
-
             // 🔁 UPDATE solamente
             $sql = "UPDATE reporte_especial SET       
-    id_usuario_auth = :id_usuario_auth,
-    fecha_hora_auth = NOW()
-WHERE id = :id";
+                    id_usuario_auth = :id_usuario_auth,
+                    fecha_hora_auth = NOW()
+                    WHERE id = :id";
 
             $stmt = $objConexion->conectarDooble()->prepare($sql);
 
@@ -584,6 +648,8 @@ WHERE id = :id";
 
     public function insertarReporteGreenbrier($request)
     {
+        // return $cargaGranallado;
+
 
         // return $request;
         $cobertura_furmula = mainGranulometria::coberturaFurmula($request);
@@ -632,7 +698,7 @@ WHERE id = :id";
         }
 
 
-
+        $recargas_granallados = json_decode($request['recargas_granallados'], true);
         // var_dump($request['basura_img01']);
         // var_dump($request['basura_img02']);
 
@@ -696,7 +762,8 @@ WHERE id = :id";
             porcentaje_600,
             porcentaje_425,
             procesador,
-            usuario
+            usuario,
+            carga_granalla
             ) VALUES 
             (
             :fecha,
@@ -751,7 +818,8 @@ WHERE id = :id";
             :porcentaje_600,
             :porcentaje_425,
             :procesador,
-            :usuario)";
+            :usuario,
+            :carga_granalla)";
             $stmt = $objConexion->conectarDooble()->prepare($sql);
             $stmt->bindParam(':fecha', $request['fecha'], PDO::PARAM_STR);
             $stmt->bindParam(':nombre_maquina', $request['maquinaNombre'], PDO::PARAM_STR);
@@ -806,14 +874,25 @@ WHERE id = :id";
             $stmt->bindParam(':porcentaje_425', $porcentaje_425_formula, PDO::PARAM_STR);
             $stmt->bindParam(':procesador', $request['procesador_maq'], PDO::PARAM_STR);
             $stmt->bindParam(':usuario', $request['usuario'], PDO::PARAM_STR);
+            $stmt->bindParam(':carga_granalla', $recargas_granallados[0]['carga_granallado'], PDO::PARAM_STR);
             $stmt->execute();
+
+            // $recargas_granallados = json_decode($request['recargas_granallados'], true);
+            $cargaGranallado = $this->actualizarCargaGranallados($recargas_granallados);
+
+            // var_dump($cargaGranallado);
+
+
 
             // Verificamos cuántas filas se han insertado
             if ($stmt->rowCount() > 0) {
 
                 $array = [
                     'success' => true,
-                    'message' => 'Reporte de greenbrier registrada con exito',
+                    'message' => array(
+                        'mensaje_Granalla' => 'Registro de granulometría exitoso',
+                        'mensaje_Granallados_actualizados' => $cargaGranallado['message']
+                    ),
                     'status' => 200,
                 ];
             } else {
@@ -830,8 +909,72 @@ WHERE id = :id";
         }
     }
 
+
+    public function actualizarCargaGranallados($request)
+    {
+        try {
+            $total = count($request);
+            $objConexion = new conexion();
+
+            // SQL sin errores de sintaxis
+            $sql = "UPDATE granulometria 
+                SET carga_granalla = :carga_granalla 
+                WHERE id = :id";
+
+            // $stmt = $objConexion->conectarDooble()->prepare($sql);
+            $stmt = $objConexion->conectarDooble()->prepare($sql);
+            $registrosActualizados = 0;
+
+            for ($i = 0; $i < $total; $i++) {
+                $item = $request[$i];
+                // var_dump($item);
+
+                // Validar ID válido
+                if (!empty($item['id']) && is_numeric($item['id'])) {
+                    // Si tu array se llama carga_granallado, ajustamos:
+                    $carga = $item['carga_granallado'] ?? null;
+                    // var_dump($carga);
+
+                    $stmt->bindParam(':carga_granalla', $carga, PDO::PARAM_STR);
+                    $stmt->bindParam(':id', $item['id'], PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $registrosActualizados += $stmt->rowCount();
+                }
+            }
+
+            // Evaluar resultado
+            if ($registrosActualizados > 0) {
+                return [
+                    'success' => true,
+                    'message' => 'Recarga(s) de granallados actualizada(s) con éxito',
+                    'status' => 200,
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'No se realizaron actualizaciones. Verifica los datos.',
+                    'status' => 400,
+                ];
+            }
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'Error de base de datos: ' . $e->getMessage(),
+                'status' => 500,
+            ];
+        }
+    }
+
+
+
     public function editarReporteGreenbrier($request)
     {
+
+
+        // return $request;
+
+
         $imagen1 = null;
         $imagen2 = null;
 
@@ -965,9 +1108,17 @@ WHERE id = :id";
 
             $stmt->execute();
 
+
+            $recargas_granallados = json_decode($request['recargas_granallados'], true);
+            $cargaGranallado = $this->actualizarCargaGranallados($recargas_granallados);
+
+
             return [
                 'success' => true,
-                'message' => 'Reporte actualizado correctamente',
+                'message' => array(
+                    'mensaje_Granalla' => 'Registro de granulometría exitoso',
+                    'mensaje_Granallados_actualizados' => $cargaGranallado['message']
+                ),
                 'status' => 200
             ];
         } catch (PDOException $e) {
@@ -1239,7 +1390,7 @@ WHERE id = :id";
     public function dataGranulometriaGreenbrier()
     {
         $objConexion = new conexion();
-        $sql = "SELECT g.*, m.cliente
+        $sql = "SELECT g.*, m.cliente, m.*
             FROM granulometria AS g
             INNER JOIN maquinas AS m ON g.procesador = m.procesador_maq
             WHERE m.cliente = 'GREENBRIER'
