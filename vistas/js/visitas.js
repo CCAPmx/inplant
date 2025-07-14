@@ -457,7 +457,7 @@ let printToPDF = function (param) {
   // Usar parámetros para generar la URL
   const queryParams = new URLSearchParams(param).toString();
   const url = "vistas/pagesPdfs/documento.php?id=" + param;
-  // console.log(url);
+  console.log(url);
   iframe.src = url;
   // iframe.src = "vistas/pagesPdfs/documento.php?id=" + param;
 };

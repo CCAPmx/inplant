@@ -62,6 +62,10 @@
                                 <button id="btnNuevoReporteGreenbrier" class="btn btn-outline-info btn-sm mx-3" data-bs-toggle="modal" data-bs-target="#modalReporteGreenbrier"> <i class="fas fa-plus-circle"></i> Nuevo Reporte </button>
                             <?php endif; ?>
 
+                            <button id="btnCrearPdfReporte" class="btn btn-outline-info btn-sm mx-3">
+                                <i class="fas fa-plus-circle"></i> PDF
+                            </button>
+
                             <!-- <button id="btnNuevoReporteGreenbrier" class="btn btn-outline-info btn-sm mx-3" data-bs-toggle="modal" data-bs-target="#modalReporteGreenbrier"> <i class="fas fa-plus-circle"></i> Nuevo Reporte </button> -->
                         </div>
                     </div>
@@ -586,11 +590,6 @@
                         </div> -->
                     </div>
 
-
-
-
-
-
                 </form>
 
             </div>
@@ -612,12 +611,146 @@
 </div>
 
 
+// Modal para mostrar el PDF generado
+<!-- Modal para ver el PDF -->
+<div class="modal fade" id="modalPDF" tabindex="-1" aria-labelledby="modalPDFLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="max-width: 50%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vista previa del PDF</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <iframe id="visorPDF" style="width: 100%; height: 80vh;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button id="descargarPDFBtn" class="btn btn-primary">Descargar PDF</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+>
 
 
 
 
+<script>
+    document.getElementById('btnCrearPdfReporte').addEventListener('click', function() {
+        // Aquí defines el ID o parámetro dinámico que vas a pasar
+        const idReporte = '808'; // ← Puedes obtenerlo dinámicamente desde PHP o JS
 
+        // Llamas la función
+        printToPDFReporteGrafica(idReporte);
+    });
 
+    let printToPDFReporteGrafica = function(param) {
+        const iframe = document.createElement("iframe");
+        document.body.appendChild(iframe);
+        iframe.style.width = "100%";
+        iframe.style.height = "100vh";
+        iframe.style.position = "absolute";
+        iframe.style.left = "-10000px";
+
+        iframe.onload = function() {
+            setTimeout(async () => {
+                const doc = iframe.contentWindow.document;
+                const encabezado = doc.getElementById("encabezado");
+                const graficas = doc.getElementById("contenedorGraficas");
+
+                if (!encabezado || !graficas) {
+                    console.warn("⚠️ No se encontraron encabezado o gráficas.");
+                    document.body.removeChild(iframe);
+                    return;
+                }
+
+                const [encCanvas, grafCanvas] = await Promise.all([
+                    html2canvas(encabezado, {
+                        scale: 3,
+                        useCORS: true,
+                        scrollY: -window.scrollY
+                    }),
+                    html2canvas(graficas, {
+                        scale: 3,
+                        useCORS: true,
+                        scrollY: -window.scrollY
+                    })
+                ]);
+
+                const {
+                    jsPDF
+                } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: "landscape",
+                    unit: "mm",
+                    format: "a4"
+                });
+
+                const margin = 10;
+                const pageWidth = pdf.internal.pageSize.getWidth() - 2 * margin;
+                const pageHeight = pdf.internal.pageSize.getHeight() - margin;
+
+                // Encabezado
+                const encRatio = encCanvas.height / encCanvas.width;
+                const encHeight = pageWidth * encRatio;
+                const encImg = encCanvas.toDataURL("image/png");
+
+                // Gráficas
+                const grafRatio = grafCanvas.height / grafCanvas.width;
+                let grafHeight = pageWidth * grafRatio;
+                const espacioEntre = 10;
+
+                // Ajustar altura para que encaje en la hoja
+                const maxGrafHeight = pageHeight - encHeight - espacioEntre;
+                if (grafHeight > maxGrafHeight) grafHeight = maxGrafHeight;
+
+                const grafImg = grafCanvas.toDataURL("image/png");
+
+                // Insertar encabezado
+                pdf.addImage(encImg, "JPEG", margin, 5, pageWidth, encHeight);
+
+                // Insertar gráficas con espacio entre bloques
+                const ajusteManual = 15;
+                pdf.addImage(grafImg, "JPEG", margin, 5 + encHeight + espacioEntre + ajusteManual, pageWidth, grafHeight);
+
+                // Pie de página
+                const pageInfo = "Página 1 de 1";
+                pdf.setFontSize(10);
+                const textWidth = (pdf.getStringUnitWidth(pageInfo) * pdf.internal.getFontSize()) / pdf.internal.scaleFactor;
+                const textOffset = (pageWidth - textWidth) / 2;
+                pdf.text(pageInfo, textOffset, pdf.internal.pageSize.getHeight() - 5);
+
+                // Mostrar PDF
+                const pdfBlob = pdf.output("blob");
+                const pdfUrl = URL.createObjectURL(pdfBlob);
+                document.getElementById("visorPDF").src = pdfUrl;
+
+                // 👇 Cambia el nombre visible en el visor PDF
+                const visor = document.getElementById("visorPDF");
+
+                // Esto fuerza que el nombre aparezca en el visor de navegador y en la descarga
+                visor.setAttribute("title", "reporte_granulometria.pdf");
+                visor.src = pdfUrl;
+
+                
+
+                new bootstrap.Modal(document.getElementById("modalPDF")).show();
+
+                document.getElementById("descargarPDFBtn").onclick = () => {
+                    const a = document.createElement("a");
+                    a.href = pdfUrl;
+                    a.download = "documento.pdf";
+                    a.click();
+                };
+
+                document.body.removeChild(iframe);
+            }, 1200);
+        };
+
+        const url = "vistas/pagesPdfs/documento_graficas_reporte_granulometria.php?id=" + param;
+        iframe.src = url;
+    };
+</script>
 
 
 <script src="vistas/js/greenbrier.js"></script>
@@ -627,43 +760,6 @@
 <script src="vistas/recursos/compressor/compressor.min.js"></script>
 
 <script>
-    // mostrar las alertas
-
-
-
-
-
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     const siRadio = document.getElementById("alerta_si");
-    //     const noRadio = document.getElementById("alerta_no");
-    //     const contenedorOpciones = document.getElementById("contenedor_alerta_form_1");
-    //     const contenedorOpciones2 = document.getElementById("contenedor_alerta_form_2");
-
-
-    //     function toggleAlerta() {
-
-    //         console.log(siRadio.checked);
-
-    //         if (siRadio.checked) {
-
-    //             $('.contenedor_alerta_form_1').show();
-    //             $('.contenedor_alerta_form_2').show();
-    //             // contenedorOpciones.style.display = "block";
-    //             // contenedorOpciones2.style.display = "block";
-    //         } else {
-    //             $('.contenedor_alerta_form_1').hide();
-    //             $('.contenedor_alerta_form_2').hide();
-    //         }
-    //     }
-
-    //     siRadio.addEventListener("change", toggleAlerta);
-    //     noRadio.addEventListener("change", toggleAlerta);
-
-    //     // Ejecutar al cargar por si ya está seleccionado
-    //     toggleAlerta();
-    // });
-
-
     document.querySelectorAll(".basura-input").forEach(input => {
         input.setAttribute("min", "0");
         input.setAttribute("max", "1");

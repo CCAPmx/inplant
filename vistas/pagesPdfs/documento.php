@@ -155,13 +155,7 @@
 </head>
 
 <body>
-
-
     <?php include 'formatos/maquinaGranalladoPdf.php'; ?>
-
-
-
-
     <?php include 'formatos/procesoGranalladoPdf.php'; ?>
     <?php include 'formatos/condicionGranalladoPdf.php'; ?>
 

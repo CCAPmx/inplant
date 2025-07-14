@@ -878,10 +878,10 @@ function datatableRecargasGranalla(maquina,tipo) {
 // Función común de columnas
 function getColumnDefs() {
   return [
-    { data: "id", className: "text-center" },
+    // { data: "id", className: "text-center" },
     {
       data: "fecha",
-      className: "text-center",
+      className: "text-center p-1",
       render: function (data) {
         if (!data) return "";
 
@@ -899,7 +899,7 @@ function getColumnDefs() {
     },
     {
       data: "carga_granalla",
-      className: "text-center",
+      className: "text-center p-1",
       render: function (data, type, row) {
         return `
           <input 
@@ -919,7 +919,7 @@ function getColumnDefs() {
     },
     {
       data: "unidad",
-      className: "text-center",
+      className: "text-center p-1",
       defaultContent: "KG", // 👉 fallback si falta
     },
   ];

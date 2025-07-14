@@ -54,6 +54,7 @@
                     <div class="d-flex justify-content-end">
                         <div class="btn-group  my-3 mx-2" role="group" aria-label="Basic example">
                             <button id="btnNuevaGranulometria" class="btn btn-outline-info btn-sm mx-3" data-bs-toggle="modal" data-bs-target="#modalGranulometriaGreenbrier"> <i class="fas fa-plus-circle"></i> Nueva Granulometría </button>
+                           
                         </div>
                     </div>
 
@@ -591,18 +592,24 @@
                                         </h4>
                                     </div>
 
+                                    <style>
+                                        #tablaHoy thead {
+                                            display: none;
+                                        }
+                                    </style>
+
                                     <div class="row">
                                         <div class="col-md-12 text-center">
                                             <div class="table-responsive d-flex justify-content-center">
-                                                <table id="tablaHoy" class="table table-bordered table-striped text-center mx-auto" style="width: 80%;">
+                                                <table id="tablaHoy" class="" style="width: 80%;">
                                                     <thead>
                                                         <tr>
-                                                            <th colspan="4" class="bg-light text-dark" style="border: 2px solid #dee2e6;">
+                                                            <th colspan="3" class="bg-light text-dark" style="border: 2px solid #dee2e6;">
 
                                                             </th>
                                                         </tr>
                                                         <tr>
-                                                            <th>ID</th>
+                                                            <!-- <th>ID</th> -->
                                                             <th>Fecha</th>
                                                             <th>Carga</th>
                                                             <th></th>
@@ -621,10 +628,10 @@
                                                     <thead>
 
                                                         <tr>
-                                                            <th colspan="4" class="text-center">Recargas Anteriores</th>
+                                                            <th colspan="3" class="text-center">Recargas Anteriores</th>
                                                         </tr>
                                                         <tr>
-                                                            <th>ID</th>
+                                                            <!-- <th>ID</th> -->
                                                             <th>Fecha</th>
                                                             <th>Carga</th>
                                                             <th></th>
@@ -972,4 +979,5 @@
         previewImage('basura_img02', 'imgPreview02');
 
     });
+    
 </script>
