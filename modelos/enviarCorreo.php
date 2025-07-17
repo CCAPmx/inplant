@@ -123,11 +123,11 @@ try {
 
     // Contenido del correo
     $mail->isHTML(true);
-    $mail->Subject = "[INPLANT] Reporte de Granulometría - Máquina: $nombre_maquina - $fechaFormateada";
+    $mail->Subject = "[INPLANT] Reporte de Visita Técnica - Máquina: $nombre_maquina - $fechaFormateada";
     $mail->Body = "
         <div style='font-family: Arial, sans-serif; font-size: 14px; color: #333;'>
             <p>Estimado usuario,</p>
-            <p>Se adjunta el <strong>reporte de granulometría</strong> correspondiente a la máquina <strong>$nombre_maquina -$fechaFormateada</strong>.</p>
+            <p>Se adjunta el <strong>Reporte de Visita Técnica</strong> correspondiente a la máquina <strong>$nombre_maquina - $fechaFormateada</strong>.</p>
             <br>
             
         </div>
