@@ -100,6 +100,15 @@ switch ($action) {
         echo json_encode($respueta);
         break;
 
+        case 'jsonDataEditarGranulometriaGreenbrierModal':
+
+           $formArray = array_merge($_POST, $_FILES);
+        //    var_dump($formArray);
+        $arrayDatos = $input['arrayDatos'] ?? [];    
+        $respueta = cGranulometria::jsonDataEditarGranulometriaGreenbrierModal($formArray);
+        echo json_encode($respueta);
+        break;  
+
         // default:
         //     echo json_encode(array("error" => "No se puede ejecutar la peticion", "status" => $action));
         //     break;
@@ -110,6 +119,13 @@ switch ($action) {
 class cGranulometria
 {
 
+
+    static public function jsonDataEditarGranulometriaGreenbrierModal($arrayDatos)
+    {
+        $obj = new mainGranulometria();
+        $respueta = $obj->jsonDataEditarGranulometriaGreenbrierModal($arrayDatos);
+        return $respueta;
+    }
 
     static public function dataGranulometriaGreenbrierRecargasGranalla($request)
     {

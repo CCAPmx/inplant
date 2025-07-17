@@ -1,13 +1,13 @@
 <style>
     .logo {
-        height: 50px;
+        height: 100px;
         /* Altura del logo */
         width: auto;
         /* Ancho automático para mantener la proporción */
     }
 </style>
 
-<section class="container">
+<section class="container-fluid">
     <div class="row mt-4">
 
 
@@ -21,9 +21,9 @@
                         <strong>Reporte de la semana Granalla A/Carbon-Aire </strong>
                     </div>
                     <div class="col-12 text-center">
-                        <strong>Planta:</strong> Sahagún Hidalgo
-                        <strong>Cabinas:</strong> CG02
-                        <strong>Granalla:</strong> AirGritt 85-2.0
+                        <strong>Planta:</strong> Ciudad Sahagún, HGO
+                        <strong>Cabina:</strong> <span id="cabina_encabezado"></span>
+                        <strong>Granalla:</strong> <span id="graballa_encabezado"></span> 
                     </div>
                 </div>
             </div>

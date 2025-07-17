@@ -59,6 +59,55 @@ ORDER BY g.fecha_server DESC;";
     }
 
 
+    public function jsonDataEditarGranulometriaGreenbrierModal($request){
+
+         $objConexion = new conexion();
+        $sql = "SELECT g.*, m.cliente, m.*
+            FROM granulometria AS g
+            INNER JOIN maquinas AS m ON g.procesador = m.procesador_maq           
+            WHERE m.cliente = 'GREENBRIER' and g.id = :id
+            ORDER BY g.fecha_server DESC";
+
+        $stmt = $objConexion->conectarDooble()->prepare($sql);
+        $stmt->bindParam(':id', $request['id'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        if ($stmt->rowCount() == 0) {
+            return [
+                'success' => false,
+                'message' => 'No hay registros',
+                'status' => 400
+            ];
+        }
+
+        $datos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // ✅ Agregar URL de imagen dinámica
+        foreach ($datos as &$row) {
+            $id = $row['id']; // Asegúrate de tener 'id' en la tabla
+
+            $row['imagen_url_1'] = $row['basura_img01'] ? "ver_imagen_granulometria.php?id=$id&campo=basura_img01" : null;
+            $row['imagen_url_2'] = $row['basura_img02'] ? "ver_imagen_granulometria.php?id=$id&campo=basura_img02" : null;
+            
+            // $row['imagen_url_1'] ?? = "ver_imagen_granulometria.php?id=$id&campo=basura_img01";
+            // $row['imagen_url_2'] = "ver_imagen_granulometria.php?id=$id&campo=basura_img02";
+
+            unset($row['basura_img01']);
+            unset($row['basura_img02']);
+        }
+
+        // var_dump($datos);
+
+        return [
+            'success' => true,
+            'message' => 'Granulometria obtenida con éxito',
+            'data' => $datos,
+            'status' => 200
+        ];
+
+    }
+
+
     public function dataGranulometriaGreenbrierRecargasGranalla($request)
     {
 

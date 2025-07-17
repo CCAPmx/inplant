@@ -902,6 +902,11 @@
         $form.find('[name="sur_izq"][value="' + data.basura_S_izq + '"]').prop('checked', true);
         $form.find('[name="sur_afuera"][value="' + data.basura_F_s + '"]').prop('checked', true);
 
+       
+
+
+
+
 
         $form.find('[name="vacio_silo_1"]').val(data.vacio_silo_01);
         $form.find('[name="vacio_silo_2"]').val(data.vacio_silo_02);

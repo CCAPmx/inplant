@@ -3,97 +3,125 @@
 
 
 
-   
+
 
     <!-- <div id="grafico-container"> -->
     <!-- <div id="texto-centro">GRAFICO 1</div> -->
     <canvas id="graficoCargaGranallaSemana" width="600" height="400"></canvas>
     <!-- </div> -->
     <script>
-        const graficoCargaGranallaSemana = document.getElementById('graficoCargaGranallaSemana').getContext('2d');
+        function graficoCargaGranallaSemana_G6(data, nombre_maquina) {
+            const ctx = document.getElementById('graficoCargaGranallaSemana').getContext('2d');
 
-        new Chart(graficoCargaGranallaSemana, {
-            type: 'bar',
-            data: {
-                labels: ['Semana 6', 'Semana 5', 'Semana 4', 'Semana 3', 'Semana 2', 'Semana 1'],
-                datasets: [{
-                    label: 'Kg de Granalla',
-                    data: [1000, 1000, 1000, 300, 1000, 1000],
-                    backgroundColor: 'rgba(0, 123, 255, 0.6)', // Azul Bootstrap transparente
-                    borderColor: 'rgba(0, 123, 255, 1)', // Azul sólido
-                    borderWidth: 1,
-                    barThickness: 12, // Delgadez de la barra
-                    borderRadius: 4 // Bordes redondeados (Chart.js 4+)
-                }]
-            },
-            options: {
-                indexAxis: 'y', // Barras horizontales
-                responsive: true,
-                layout: {
-                    padding: {
-                        top: 10,
-                        bottom: 10,
-                        left: 10,
-                        right: 10
-                    }
+            console.log("Datos recibidos para Carga Granalla Semana:", data);
+
+
+
+            if (!Array.isArray(data) || data.length === 0) {
+                console.warn("⚠️ No hay datos para la gráfica de Carga Granalla Semana.");
+
+                // Limpia el canvas (opcional)
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+                // Muestra mensaje en el canvas (opcional)
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#999";
+                ctx.textAlign = "center";
+                ctx.fillText("Sin datos disponibles", ctx.canvas.width / 2, ctx.canvas.height / 2);
+                return;
+            }
+
+            // Prepara las etiquetas en formato dd-mmm (ej: 20-jun)
+            const labels = data.map(item => {
+                const fecha = new Date(item.dia);
+                return fecha.toLocaleDateString('es-MX', {
+                    day: '2-digit',
+                    month: 'short'
+                });
+            });
+
+            // Datos de carga (conversión a número, 0 si es null)
+            const cargas = data.map(item => item.carga !== null ? parseFloat(item.carga) : 0);
+
+            new Chart(ctx, {
+                type: 'bar', // 👈 Barras verticales
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Kg de Granalla',
+                        data: cargas,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)', // Azul pálido
+                        barThickness: 20 // Controla el grosor de las barras
+                    }]
                 },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Carga de Granalla Kg Por Semana',
-                        font: {
-                            size: 20,
-                            weight: 'bold'
-                        },
-                        color: '#333'
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: {
+                            top: 10,
+                            bottom: 10,
+                            left: 10,
+                            right: 10
+                        }
                     },
-                    legend: {
-                        display: false
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'end',
-                        color: '#000',
-                        font: {
-                            size: 12,
-                            weight: 'bold'
-                        },
-                        formatter: value => `${value.toLocaleString()} kg`
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: '#444',
-                            font: {
-                                size: 11
-                            }
-                        },
-                        grid: {
-                            color: '#ddd'
-                        },
+                    plugins: {
                         title: {
-                            display: false,
-                            text: 'Kilogramos',
-                            color: '#000'
+                            display: true,
+                            text: ` ${nombre_maquina} - Carga de Granalla Por Día`,
+                            font: {
+                                size: 20,
+                                weight: 'bold'
+                            },
+                            color: '#333'
+                        },
+                        legend: {
+                            display: false
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            color: '#000',
+                            font: {
+                                size: 12,
+                                weight: 'bold'
+                            },
+                            formatter: value => `${value.toLocaleString()} `
                         }
                     },
-                    y: {
-                        ticks: {
-                            color: '#444',
-                            font: {
-                                size: 12
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#444',
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: '#ddd'
+                            },
+                            title: {
+                                display: false
                             }
                         },
-                        grid: {
-                            display: false
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#444',
+                                callback: (value) => `${value} Kg`,
+                                font: {
+                                    size: 12
+                                }
+                            },
+                            grid: {
+                                display: true
+                            },
                         }
                     }
-                }
-            },
-            plugins: [ChartDataLabels]
-        });
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
     </script>
 
 </section>

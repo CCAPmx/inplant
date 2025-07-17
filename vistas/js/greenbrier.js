@@ -61,7 +61,7 @@ async function dataResponse(datajson, mensaje) {
     Swal.fire({
       position: "center",
       icon: "success",
-      title: datajson.message,
+      title: mensaje,
       showConfirmButton: false,
       timer: 2000,
     }).then(() => {
@@ -322,6 +322,212 @@ async function getFetchOptimizado(url) {
 }
 // granulometriaGreenbrierInfoReporte
 
+function obtenerDatosRecargas() {
+  const datos = []; // Array donde se guardarán los resultados finales
+
+  // Recorremos todos los inputs con clase 'input-carga'
+  document.querySelectorAll(".input-carga").forEach((input) => {
+    const id = input.dataset.id; // Obtenemos el ID desde el atributo data-id
+    const valor = input.value.trim(); // Obtenemos el valor actual del input (sin espacios)
+    const name = input.name; // Obtenemos el atributo name del input
+
+    // Validamos que el campo no esté vacío antes de guardar
+    if (valor !== "") {
+      datos.push({
+        id: parseInt(id), // Convertimos el ID a número entero
+        carga_granallado: parseFloat(valor), // Convertimos el valor a número decimal
+        name: name, // Guardamos el name tal como está
+      });
+    }
+  });
+
+  console.log("📦 Datos de recargas:", datos); // Mostramos el array por consola para depuración
+  return datos; // Devolvemos el array con los datos capturados
+}
+
+let btnGuardarCambiosGranulometriaReporte = document.getElementById(
+  "btnGuardarCambiosGranulometriaReporte"
+);
+
+btnGuardarCambiosGranulometriaReporte.addEventListener("click", function () {
+  // FrmVisitas
+
+  console.log("🔍 Botón Guardar Cambios Granulometría Reporte presionado");
+
+  // Obtener el formulario de edición
+  let form = document.getElementById("FrmReporteGreenbrierGranulometriaEditar");
+  let inputs = form.querySelectorAll("input[type='number']");
+  let valido = true;
+
+  // let maquina_nombre =  document.getElementById("maquina_nueva_granulometria").value;
+
+  let maquina_nombre = $("#btnGuardarCambiosGranulometriaReporte").val();
+  // let cliente = $("#cbmClienteGranulometria").val();
+
+  // console.log("cliente", cliente);
+  console.log("maquina_nombre desde js", maquina_nombre);
+
+
+
+  let arrayRecargasEditar = obtenerDatosRecargas();
+
+  console.log("📦 Datos de recargas para editar:", arrayRecargasEditar);
+
+  let dataFk = JSON.parse(maquina_nombre);
+
+
+  let cliente = dataFk.cliente; // Obtener el cliente desde dataFk
+
+  console.log("🔍 Cliente desde dataFk:", cliente);
+
+  let url = "";
+
+  let arrayDatos = {
+    clienteNombre: cliente,
+    maquinaNombre: dataFk.maquinaNombre,
+    procesador_maq: dataFk.procesador_maq,
+    fecha: dataFk.fecha,
+    c_05: $("#c_05").val(),
+    c_09: $("#c_09").val(),
+    c_150: $("#c_150").val(),
+    c_212: $("#c_212").val(),
+    c_300: $("#c_300").val(),
+    c_425: $("#c_425").val(),
+    c_600: $("#c_600").val(),
+    c_850: $("#c_850").val(),
+    c_1180: $("#c_1180").val(),
+    c_1400: $("#c_1400").val(),
+    c_1700: $("#c_1700").val(),
+    c_2200: $("#c_2200").val(),
+    basura: $("#basura").val(),
+    polvo: $("#polvo").val(),
+    usuario: datosSesion,
+  };
+
+  // Si es GREENBRIER, agregamos los rugXX y basura_*
+  if (cliente === "GREENBRIER") {
+    for (let i = 1; i <= 20; i++) {
+      let key = `rug${i.toString().padStart(2, "0")}`; // rug01, rug02, ...
+      let selector = `#rig_${i.toString().padStart(2, "0")}`;
+      arrayDatos[key] = $(selector).val();
+    }
+
+    const maxSize = 500 * 1024; // 500 KB
+
+    // 🔹 Agregar las imágenes
+    let img1 = document.getElementById("basura_img01").files[0];
+    let img2 = document.getElementById("basura_img02").files[0];
+
+    if (img1 && img1.size > maxSize) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "La imagen 01 no puede superar los 500KB",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    } else if (img2 && img2.size > maxSize) {
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "La imagen 02 no puede superar los 500KB",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      return;
+    }
+
+    // Agregar basura específica
+    arrayDatos.basura_N_der = $('input[name="norte_der"]:checked').val();
+    arrayDatos.basura_N_izq = $('input[name="norte_izq"]:checked').val();
+    arrayDatos.basura_F_n = $('input[name="norte_afuera"]:checked').val();
+    arrayDatos.basura_C_der = $('input[name="centro_der"]:checked').val();
+    arrayDatos.basura_C_izq = $('input[name="centro_izq"]:checked').val();
+    arrayDatos.basura_S_der = $('input[name="sur_der"]:checked').val();
+    arrayDatos.basura_S_izq = $('input[name="sur_izq"]:checked').val();
+    arrayDatos.basura_F_s = $('input[name="sur_afuera"]:checked').val();
+    arrayDatos.vacio_silo_01 = $("#vacio_silo_1").val();
+    arrayDatos.vacio_silo_02 = $("#vacio_silo_2").val();
+
+    arrayDatos.basura_img01 = img1 ? img1 : ""; // Guardar el nombre del archivo
+    arrayDatos.basura_img02 = img2 ? img2 : ""; // Guardar
+    arrayDatos.fkCliente = dataFk.fkCliente;
+    arrayDatos.fkMaquina = dataFk.fkMaquina;
+    arrayDatos.id = dataFk.id;
+
+    arrayDatos.recargas_granallados = JSON.stringify(arrayRecargasEditar);
+
+    url =
+      "controladores/granulometria.controlador.php?action=editar_reporte_greenbrier";
+  }
+
+  let formData = new FormData();
+
+  // 🔹 Agregar todos los campos de arrayDatos
+  for (const [key, value] of Object.entries(arrayDatos)) {
+    formData.append(key, value);
+  }
+
+  // console.log("maquina_nombre", maquina_nombre);
+
+  // console.log("arrayDatos", arrayDatos);
+
+  inputs.forEach((input) => {
+    // Si la máquina NO es GREENBRIER y el input es uno de los especiales, saltar validación
+    if (
+      maquina_nombre !== "GREENBRIER" &&
+      ["vacio_silo_1", "vacio_silo_2"].includes(input.id)
+    ) {
+      return; // Saltar este input
+    }
+
+    // Validación normal
+    if (!input.value.trim()) {
+      input.classList.add("input-invalido");
+
+      valido = false;
+    } else {
+      input.classList.remove("input-invalido");
+    }
+  });
+
+  if (!valido) {
+    var mensaje = document.getElementById("mensaje_granulometria_reporte");
+    mensaje.style.display = "block";
+    document.getElementById("mensaje_granulometria_reporte").innerHTML =
+      "Por favor, complete todos los campos obligatorios, Si no hay datos debe de poner 0.";
+    // alert("Por favor, complete todos los campos obligatorios.");
+    return;
+  } else {
+    var mensaje = document.getElementById("mensaje_granulometria_reporte");
+    mensaje.style.display = "none";
+  }
+
+  // let clienteFK = clientesData.find(
+  //   (cliente) =>
+  //     cliente.procesador_maq === parseInt(arrayDatos.procesador_maq, 10)
+  // );
+
+  let options = {
+    method: "POST",
+
+    body: formData,
+  };
+  var urlGranulometria =
+    "controladores/granulometria.controlador.php?action=editar_reporte_greenbrier";
+
+  mensaje = "Granulometria editada con exito";
+
+
+  console.log("📦 FormData enviado:", arrayDatos);
+
+  for (let [key, value] of formData.entries()) {
+    console.log(`${key}:`, value);
+  }
+
+  parametresGetFetch(url, options, mensaje);
+});
 // 🔹 Función para obtener los datos y almacenarlos en clientesData
 async function cargarGranulometriaGreenbrier() {
   const urlSelectoAlertas =
@@ -347,7 +553,6 @@ async function cargarGranulometriaGreenbrier() {
     "txtMensajeAlerta3"
   );
 
-
   cargarSelectorAlertas(
     selectorDataAlertas,
     "tituloAlerta1Edicion",
@@ -363,7 +568,6 @@ async function cargarGranulometriaGreenbrier() {
     "tituloAlerta3Edicion",
     "txtMensajeAlerta3Edicion"
   );
-  
 
   const urlGranulometria =
     "controladores/granulometria.controlador.php?action=dataGranulometriaGreenbrierSelector";

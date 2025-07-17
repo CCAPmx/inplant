@@ -6,124 +6,158 @@
 
 
     <!-- <div id="grafico-container"> -->
-        <!-- <div id="texto-centro">GRAFICO 1</div> -->
-        <canvas id="graficoGrano" width="600" height="400"></canvas>
+    <!-- <div id="texto-centro">GRAFICO 1</div> -->
+    <canvas id="graficoGrano" width="600" height="400"></canvas>
     <!-- </div> -->
+
     <script>
-        const ctx = document.getElementById('graficoGrano').getContext('2d');
+        function graficasGrano_G1(data, dataG3_b, nombre_maquina) {
+            console.log("Respuesta recibida grafica 1:", data.G1);
+            console.log("Respuesta recibida grafica 2 grano :", dataG3_b);
 
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: [
-                    '05-feb', '06-feb', '07-feb', '08-feb', '09-feb', '10-feb', '11-feb', '12-feb',
-                    '13-feb', '14-feb', '15-feb', '16-feb', '17-feb', '18-feb', '19-feb',
-                    '20-feb', '21-feb', '22-feb', '23-feb', '24-feb', '25-feb'
-                ],
-                datasets: [{
-                        label: 'Serie Azul',
-                        data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 21, 50, 43, 36, null, null, null],
-                        borderColor: 'blue',
-                        // borderWidth: 3,
-                        backgroundColor: 'blue',
-                        fill: false,
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointStyle: 'rectRot',
-                        pointBorderWidth: 1
-                    },
-                    {
-                        label: 'Serie Roja',
-                        data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 6, 6, 6, 6, 6, 6, null],
-                        borderColor: 'red',
-                        // borderWidth: 1.5,
-                        backgroundColor: 'red',
-                        fill: false,
-                        tension: 0.3,
-                        pointRadius: 2,
-                        pointStyle: 'rectRot',
-                        pointBorderWidth: 1
-                    }
-                ]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        color: '#000', // Color
-                        text: 'CG02 % Grano',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    legend: {
-                        display: false,
-                        position: 'top'
-                    },
-                    datalabels: {
-                        // color: '#000', // color negro para las líneas horizontales
-                        lineWidth: 1,
-                        display: true,
-                        color: 'black',
-                        font: {
-                            weight: 'bold'
+            if (!data.G1 || !Array.isArray(data.G1) || data.G1.length === 0) {
+                console.warn("⚠️ No hay datos para la gráfica de % Grano.");
+
+                const ctx = document.getElementById('graficoGrano').getContext('2d');
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#999";
+                ctx.textAlign = "center";
+                ctx.fillText("Sin datos disponibles", ctx.canvas.width / 2, ctx.canvas.height / 2);
+                return;
+            }
+
+            const arrayDatos = data.G1;
+
+            // Etiquetas de fechas
+            const labels = arrayDatos.map(item => {
+                const fecha = new Date(item.fecha);
+                return fecha.toLocaleDateString('es-MX', {
+                    day: '2-digit',
+                    month: 'short'
+                });
+            });
+
+            // Series reales
+            const serieAzul = arrayDatos.map(item => parseFloat(item["0.600"]).toFixed(2));
+            const serieRoja = arrayDatos.map(item => parseFloat(item["0.425"]).toFixed(2));
+
+            // Obtener valores ideales de dataG3_b
+            const ideal = dataG3_b[0]; // Primer elemento de tu array
+
+            const valorIdeal425 = parseFloat(ideal.ideal_425).toFixed(2);
+            const valorIdeal600 = parseFloat(ideal.ideal_600).toFixed(2);
+
+            // Crear series horizontales con el mismo valor repetido
+            const lineaIdeal425 = labels.map(() => valorIdeal425);
+            const lineaIdeal600 = labels.map(() => valorIdeal600);
+
+            const ctx = document.getElementById('graficoGrano').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                            label: '0.600',
+                            data: serieAzul,
+                            borderColor: 'rgba(54, 162, 235, 0.8)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            pointStyle: 'rectRot',
+                            pointBorderWidth: 1
                         },
-                        formatter: (value) => (value !== null ? `${value}%` : '')
-                    }
+                        {
+                            label: '0.425',
+                            data: serieRoja,
+                            borderColor: 'red',
+                            backgroundColor: 'red',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            pointStyle: 'rectRot',
+                            pointBorderWidth: 1
+                        },
+                        // Línea ideal 425 (rojo pálido)
+                        {
+                            label: 'Ideal 0.425',
+                            data: lineaIdeal425,
+                            borderColor: 'rgba(255, 99, 132, 0.3)',
+                            // borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false,
+                            tension: 0,
+                            datalabels: {
+                                display: false
+                            }
+                        },
+                        // Línea ideal 600 (azul pálido)
+                        {
+                            label: 'Ideal 0.600',
+                            data: lineaIdeal600,
+                            borderColor: 'rgba(54, 162, 235, 0.3)',
+                            // borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false,
+                            tension: 0,
+                            datalabels: {
+                                display: false
+                            }
+                        }
+                    ]
                 },
-                scales: {
-                    y: {
-                        grid: {
+                options: {
+                    plugins: {
+                        title: {
                             display: true,
-                            // drawOnChartArea: true,
-                            // drawTicks: true,
-                            // drawBorder: true,
-                            // color: '#000',
-                            // borderColor: 'blue', // ✅ Línea del eje Y azul
-                            // borderWidth: 2
+                            text: nombre_maquina + ' % Grano',
+                            font: {
+                                size: 18
+                            },
+                            color: '#000'
                         },
-                        ticks: {
-                            // color: '#000',
-                            callback: function(value) {
-                                return value + '%'; // ✅ Agrega % a cada número
-                            }
+                        legend: {
+                            display: true
                         },
-                        title: {
-                            display: false,
-                            // color: '#000',
-                            text: 'Porcentaje (%)'
+                        datalabels: {
+                            display: true,
+                            color: 'black',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: (value) => value !== null ? `${parseFloat(value).toFixed(2)}` : ''
                         }
                     },
-                    x: {
-                        grid: {
-                            drawOnChartArea: false,
-                            // drawTicks: false,
-                            // drawBorder: true,
-                            // borderColor: '#000', // ✅ Línea del eje X negra
-                            // borderWidth: 1.5
-                        },
-                        ticks: {
-                            // color: '#000', // Color gris medio como en tu imagen
-                            maxRotation: 45, // Rota las fechas en ángulo
-                            minRotation: 45,
-                            font: {
-                                size: 12,
-                                weight: 'normal'
+                    scales: {
+                        y: {
+                            ticks: {
+                                color: '#333',
+                                callback: (value) => value + '%'
                             }
                         },
-                        title: {
-                            display: false
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#333',
+                                maxRotation: 45,
+                                minRotation: 45,
+                                font: {
+                                    size: 12
+                                }
+                            }
                         }
                     }
                 },
-
-
-
-            },
-            plugins: [ChartDataLabels]
-        });
+                plugins: [ChartDataLabels]
+            });
+        }
     </script>
-
 
 
 </section>

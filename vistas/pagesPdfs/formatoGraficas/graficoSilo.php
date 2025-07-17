@@ -25,103 +25,122 @@
     <canvas id="graficoSilo" width="600" height="400"></canvas>
     <!-- </div> -->
     <script>
-        const graficoSilo = document.getElementById('graficoSilo').getContext('2d');
+        function generarGraficoSilo_G4(data, nombre_maquina) {
+            const ctx = document.getElementById('graficoSilo').getContext('2d');
 
-        new Chart(graficoSilo, {
-            type: 'line',
-            data: {
-                labels: [
-                    '10-feb', '11-feb', '12-feb', '13-feb', '14-feb', '15-feb', '16-feb',
-                    '17-feb', '18-feb', '19-feb', '20-feb', '21-feb', '22-feb', '23-feb', '24-feb', '25-feb'
-                ],
-                datasets: [{
-                        label: 'Nivel Medido',
-                        data: [null, null, null, null, null, null, null, null, null, null, -1.52, -1.48, -1.50, -1.47, null, null],
-                        borderColor: 'steelblue',
-                        backgroundColor: 'steelblue',
-                        fill: false,
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointBorderWidth: 2
-                    },
-                    {
-                        label: 'Límite Inferior',
-                        data: Array(16).fill(-1.35), // Línea constante
-                        borderColor: 'blue',
-                        backgroundColor: 'blue',
-                        borderWidth: 2,
-                        borderDash: [], // línea sólida
-                        fill: false,
-                        pointRadius: 0,
-                        pointHoverRadius: 0,
-                        datalabels: {
-                            display: false // 👈 Esto evita que muestre los números
-                        }
-                    }
-                ]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
+            console.log("Datos recibidos para el gráfico de Silo:", data);
 
-                        color: '#000',
-                        text: 'CG02 Nivel de Silo',
-                        font: {
-                            color: '#000',
-                            size: 18
-                        }
-                    },
-                    legend: {
-                        display: false
-                    },
-                    datalabels: {
-                        display: true,
-                        color: '#000',
-                        font: {
-                            weight: 'bold'
+            // Validación de datos
+            if (!data.G4 || !Array.isArray(data.G4) || data.G4.length === 0) {
+                console.warn("⚠️ No hay datos para el gráfico de Nivel de Silo.");
+
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+                ctx.font = "16px Arial";
+                ctx.fillStyle = "#999";
+                ctx.textAlign = "center";
+                ctx.fillText("Sin datos disponibles", ctx.canvas.width / 2, ctx.canvas.height / 2);
+                return;
+            }
+
+            // Etiquetas con fechas
+            const labels = data.G4.map(item => {
+                const fecha = new Date(item.dia);
+                return fecha.toLocaleDateString('es-MX', {
+                    day: '2-digit',
+                    month: 'short'
+                });
+            });
+
+            // Datos de nivel 1 y nivel 2 (cms)
+            const niveles1 = data.G4.map(item => item.nivel_1 !== null ? parseFloat(item.nivel_1) : 0);
+            const niveles2 = data.G4.map(item => item.nivel_2 !== null ? parseFloat(item.nivel_2) : 0);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                            label: 'Nivel 1',
+                            data: niveles1,
+                            borderColor: 'steelblue',
+                            backgroundColor: 'steelblue',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            pointBorderWidth: 0
                         },
-                        formatter: (value) => value !== null ? value.toFixed(2) : ''
-                    }
+                        {
+                            label: 'Nivel 2',
+                            data: niveles2,
+                            borderColor: 'orange',
+                            backgroundColor: 'orange',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 0,
+                            pointHoverRadius: 0,
+                            pointBorderWidth: 0
+                        }
+                    ]
                 },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: '#333',
-                            maxRotation: 60,
-                            minRotation: 60
-                        },
-                        grid: {
-                            display: false,
-                            borderColor: '#000',
-                            borderWidth: 1.5
-                        }
-                    },
-                    y: {
-                        min: -1.6,
-                        max: -0.8,
-                        ticks: {
-                            color: '#333',
-                            callback: function(value) {
-                                return value.toFixed(2);
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            color: '#000',
+                            text: `${nombre_maquina} - Nivel de Silo`,
+                            font: {
+                                size: 18
                             }
                         },
-                        grid: {
-                            drawTicks: true,
-                            drawBorder: true,
-                            borderColor: '#000',
-                            borderWidth: 1.5
+                        legend: {
+                            display: true
                         },
-                        title: {
-                            display: false,
-                            text: 'Nivel (m)',
-                            color: '#000'
+                        datalabels: {
+                            display: true,
+                            color: '#000',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: (value) => value !== null ? `${value} ` : ''
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#333',
+                                maxRotation: 60,
+                                minRotation: 60
+                            },
+                            grid: {
+                                display: false,
+                                borderColor: '#000',
+                                borderWidth: 1.5
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#333',
+                                callback: (value) => `${value} cms`
+                            },
+                            grid: {
+                                drawTicks: true,
+                                drawBorder: true,
+                                borderColor: '#000',
+                                borderWidth: 1.5
+                            },
+                            
+                            title: {
+                                display: false,
+                                text: 'Nivel (cm)',
+                                color: '#000'
+                            }
                         }
                     }
-                }
-            },
-            plugins: [ChartDataLabels]
-        });
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
     </script>
 
 </section>

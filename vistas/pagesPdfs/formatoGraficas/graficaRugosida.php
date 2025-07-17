@@ -3,98 +3,123 @@
 
 
 
-   
+
 
     <!-- <div id="grafico-container"> -->
     <!-- <div id="texto-centro">GRAFICO 1</div> -->
     <canvas id="graficoRugosidad" width="600" height="400"></canvas>
     <!-- </div> -->
     <script>
-        const graficoRugosidad = document.getElementById('graficoRugosidad').getContext('2d');
+        function graficaRugosidad_G2(data, nombre_maquina) {
+            console.log("Respuesta recibida grafica 2:", data);
+            console.log("Nombre de la máquina:", nombre_maquina);
 
-        new Chart(graficoRugosidad, {
-            type: 'line',
-            data: {
-                labels: [
-                    '05-feb', '06-feb', '07-feb', '08-feb', '09-feb', '10-feb', '11-feb', '12-feb',
-                    '13-feb', '14-feb', '15-feb', '16-feb', '17-feb', '18-feb', '19-feb',
-                    '20-feb', '21-feb', '22-feb', '23-feb', '24-feb', '25-feb'
-                ],
-                datasets: [{
-                        label: 'Ra Real Medición',
-                        data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 2.2, 3.0, 2.8, 2.6, null, null, null],
-                        borderColor: 'blue',
-                        backgroundColor: 'blue',
-                        fill: false,
-                        tension: 0.3,
-                        pointRadius: 5,
-                        pointBorderWidth: 2
-                    },
-                    {
-                        label: 'Límite Máximo',
-                        data: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, null],
-                        borderColor: 'red',
-                        backgroundColor: 'red',
-                        fill: false,
-                        tension: 0.1,
-                        pointRadius: 5,
-                        pointBorderWidth: 2
-                    }
-                ]
-            },
-            options: {
-                plugins: {
-                    title: {
-                        display: true,
-                        color: '#000',
-                        text: 'Rugosidad',
-                        font: {
-                            size: 18
+            const graficoRugosidad = document.getElementById('graficoRugosidad').getContext('2d');
+
+            // Procesar las fechas y valores de rugosidad
+            const labels = data.G2.map(item => {
+                const fecha = new Date(item.fecha);
+                return fecha.toLocaleDateString('es-MX', {
+                    day: '2-digit',
+                    month: 'short'
+                }); // Ej: 19-jun
+            });
+
+            const rugosidadReal = data.G2.map(item => item.rugosidad !== null ? parseFloat(item.rugosidad) : 0);
+
+            // Crear la gráfica
+            new Chart(graficoRugosidad, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                            label: 'Rugosidad ',
+                            data: rugosidadReal,
+                            borderColor: 'rgba(54, 162, 235, 0.8)', // Azul pálido más oscuro
+                            backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                            fill: false,
+                            tension: 0.3,
+                            pointRadius: 0, // Sin nodos
+                            pointHoverRadius: 0,
+                            pointBorderWidth: 0
+                        },
+                        // {
+                        //     label: 'Límite Máximo',
+                        //     data: rugosidadReal.map(value => 1.0), // Línea constante en 1.0
+                        //     borderColor: 'red',
+                        //     backgroundColor: 'red',
+                        //     fill: false,
+                        //     tension: 0.1,
+                        //     pointRadius: 0,
+                        //     pointHoverRadius: 0,
+                        //     borderDash: [5, 5], // Línea punteada
+                        //     pointBorderWidth: 0
+                        // }
+                    ]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            color: '#000',
+                            text: `${nombre_maquina} - Rugosidad`,
+                            font: {
+                                size: 18
+                            }
+                        },
+                        legend: {
+                            display: true
+                        },
+                        datalabels: {
+                            display: true,
+                            color: 'black',
+                            font: {
+                                weight: 'bold'
+                            },
+                            formatter: (value) => value !== null ? value.toFixed(1) : ''
                         }
                     },
-                    legend: {
-                        display: false
-                    },
-                    datalabels: {
-                        display: true,
-                        color: 'black',
-                        font: {
-                            weight: 'bold'
+                    scales: {
+                        y: {
+                            grid: {
+                                display: true
+                            },
+
+                            beginAtZero: true,
+                            max: 3.5,
+                            title: {
+                                display: true,
+                                text: 'Ra (µm)'
+                            },
+                            title: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#333',
+                                // callback: (value) => `${value} Kg` // ✅ Muestra 84 cm, 100 cm, etc. en el eje Y
+                            },
+
+
                         },
-                        formatter: (value) => value !== null ? value.toFixed(1) : ''
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            title: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#333',
+                                maxRotation: 90,
+                                minRotation: 45
+                            }
+                        }
                     }
                 },
-                scales: {
-                    y: {
-                        grid: {
-                            display: true // 👈 Oculta las líneas horizontales
-                        },
-                        beginAtZero: true,
-                        max: 3.5,
-                        title: {
-                            display: false,
-                            text: 'Ra (µm)'
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false // 👈 Oculta las líneas horizontales
-                        },
-                        title: {
-                            display: false,
-                            text: 'Fecha'
-                        },
-                        ticks: {
-                            maxRotation: 90,
-                            minRotation: 45
-                        }
-                    }
-                }
-            },
-            plugins: [ChartDataLabels]
-        });
+                plugins: [ChartDataLabels]
+            });
+        }
     </script>
-
 
 
 </section>
